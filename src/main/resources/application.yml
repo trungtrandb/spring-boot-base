@@ -7,7 +7,7 @@ server:  port: 8000  springdoc:  swagger-ui:    path: /doc/swagger-ui  api
       naming:        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   datasource:    type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://35.240.181.244:3306/test?useSSL=false
-    username: demo
+    username: demo1
     password: $GuFkrgX.2Kf5Bw  activemq:    user: admin    password: admin    broker-url: tcp://localhost:61616
   security:
     oauth2:
