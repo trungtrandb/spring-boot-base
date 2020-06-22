@@ -1,0 +1,94 @@
+<!-- Content Header (Page header) -->
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Checkin</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">DataTables</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <a href="#!create-checkin" class="btn btn-primary">Create checkin</a>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <div class="form-row mb-2">
+                <div class="col">
+                  <label for="class">Class: </label>
+                  <select class="form-control" ng-model="filter.classId" ng-change="filterCheckin()">
+                    <option value="">-- All --</option>
+                    <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="class">Subject: </label>
+                  <select class="form-control" ng-model="filter.subjectId" ng-change="filterCheckin()">
+                    <option value="">-- All --</option>
+                    <option ng-repeat="x in lstSubject" value="{{x.id}}">{{x.title}}</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="class">Date: </label>
+                  <input class="form-control datetimepicker" ng-model="filter.createdDate" ng-change="filterCheckin()"/>
+                </div>
+                <div class="col">
+                  <label for="class">Organization: </label>
+                  <select class="form-control" ng-model="filter.organizationId" ng-change="filterCheckin()">
+                    <option value="">-- All --</option>
+                    <option ng-repeat="x in lstOrganization" value="{{x.id}}">{{x.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Class Id</th>
+                    <th>Class Name</th>
+                    <th>Subject Name</th>
+                    <th>Date</th>
+                    <th>Total Student</th>
+                    <th>Total Present</th>
+                    <th>Total Absent</th>
+                    <th>% Present</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="x in lstCheckinDTO">
+                    <td>{{ x.classId }}</td>
+                    <td>{{ x.className }}</td>
+                    <td>{{ x.subjectName }}</td>
+                    <td>{{ x.createdDate | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ x.totalCheckin }}</td>
+                    <td>{{ x.totalPresent }}</td>
+                    <td>{{ x.totalAbsent }}</td>
+                    <td>{{ x.totalPresent * 100 / x.totalCheckin }}</td>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>

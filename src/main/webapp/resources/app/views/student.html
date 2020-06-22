@@ -1,0 +1,67 @@
+<!-- Content Header (Page header) -->
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Students</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">DataTables</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <a href="#!create-student" class="btn btn-primary">Thêm mới học sinh</a>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped text-center">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Parent Name</th>
+                    <th>Class</th>
+                    <th>Note</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="x in lstStudent">
+                    <td>{{ x.id }}</td>
+                    <td>{{ x.name }}</td>
+                    <td>{{ x.phone }}</td>
+                    <td>{{ x.parentName }}</td>
+                    <td>{{ x.className }}</td>
+                    <td>{{ x.note }}</td>
+                    <td>
+                      <a href="#!edit-student/{{ x.id }}" class="btn btn-sm btn-primary" ng-click=""><i class="fas fa-pencil-alt"></i></a>
+                      <button class="btn btn-sm btn-danger" ng-click="remove(x)"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+</div>

@@ -1,0 +1,113 @@
+<!-- Content Header (Page header) -->
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Subject</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">DataTables</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddSubject">Add Subject</button>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Class Name</th>
+                    <th>Start time</th>
+                    <th>End time</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="x in lstSubject">
+                    <td>{{ x.id }}</td>
+                    <td>{{ x.title }}</td>
+                    <td>{{ x.className }}</td>
+                    <td>{{ x.startTime }}</td>
+                    <td>{{ x.endTime }}</td>
+                    <td>{{ x.description }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-primary" ng-click="remove(x.id)"><i class="fas fa-pencil-alt"></i></button>
+                      <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tbody>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+
+  <!-- The Modal -->
+  <div class="modal" id="modalAddSubject">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Add new Subject</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form role="form" ng-submit="submitAddSubject()">
+            <div class="form-group">
+              <label for="name">Subject name</label>
+              <input type="text" class="form-control" id="name" ng-model="subject.title">
+            </div>
+            <div class="form-group">
+              <label for="startTime">Start</label>
+              <input type="text" ng-model="subject.startTime" class="form-control datetimepicker">
+            </div>
+            <div class="form-group">
+              <label for="endTime">End time</label>
+              <input type="text" ng-model="subject.endTime" class="form-control datetimepicker">
+            </div>
+            <div class="form-group">
+              <label for="note">Description</label>
+              <input type="text" class="form-control" id="note" ng-model="subject.note">
+            </div>
+            <div class="form-group">
+              <label>Class</label>
+              <select class="form-control" ng-model="subject.classId">
+                <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+          <!-- /.card -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
