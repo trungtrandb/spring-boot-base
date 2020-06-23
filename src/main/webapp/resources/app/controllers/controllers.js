@@ -8,6 +8,7 @@
     app.controller("SubjectController", SubjectController);
     app.controller("EditStudentController", EditStudentController);
     app.controller("CheckinController", CheckinController);
+    app.controller("UserController", UserController);
 
     /* ============================================ */
     function OrganizationController($scope, $http) {
@@ -304,38 +305,12 @@
 
     /* ============================================ */
     function UserController($scope, $http, Restangular) {
-        $scope.submitCheckin = submitCheckin;
-        $scope.selectClass = selectClass;
-        $scope.checkin = $scope.filter = {};
-        $scope.filterCheckin = filterCheckin;
-        
-        filterCheckin();
-        flatpickr(".datetimepicker",{
-            dateFormat: "Y-m-d",
-        });
+        $scope.submitForm = submitForm;
+        $scope.user = {};
+        Restangular.one('/api/user/getInfo').get().then(function (response) { $scope.user = response.data; });
 
-        Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
-        Restangular.one('/api/subject/getAll').get().then(function (response) { $scope.lstSubject = response.data; });
-        Restangular.one('/api/organization/get-by-user').get().then(function (response) { $scope.lstOrganization = response.data; });
-
-        function selectClass() {
-            $http.get("/api/student/getAll?class=" +$scope.checkin.classId).then(function (response) {$scope.lstStudent = response.data.data;});
-        }
-
-        function filterCheckin() {
-            Restangular.all('/api/checkin/getAll').post($scope.filter).then(function (response) {
-                if(response.code == 200){
-                    $scope.lstCheckinDTO = response.data;
-                }else{
-                    toastr.error(response.message);
-                }
-            });
-        }
-
-        function submitCheckin(studentId, status) {  
-            $scope.checkin.studentId = studentId;
-            $scope.checkin.status = status;  
-            Restangular.all('/api/checkin/insert').post($scope.checkin).then(function (response) {
+        function submitForm() {
+            Restangular.all('/api/user/update').post($scope.user).then(function (response) {
                 if(response.code == 200){
                     toastr.success(response.message);
                 }else{
@@ -343,5 +318,19 @@
                 }
             });
         }
+
+        $scope.uploadFile = function(files) {
+            var fd = new FormData();
+            fd.append("file", files[0]);
+            $http.post("/upload-image", fd, {
+                withCredentials: true,
+                headers: {'Content-Type': undefined },
+                transformRequest: angular.identity
+            }).then(function (response) {
+                $scope.user.avatar = response.data.data;
+            }, function (response) {
+                toastr.error(response.data.message);
+            })
+        };
     }
 })();

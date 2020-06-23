@@ -29,7 +29,7 @@
 
         function signUp() {
             $http({
-                url: "/sign_up",
+                url: "/sign-up",
                 method: "POST",
                 data: $scope.user
             })

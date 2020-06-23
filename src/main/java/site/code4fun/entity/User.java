@@ -75,7 +75,6 @@ public class User{
     @Column(name = "updated_by")
     private Integer updatedBy;
     
-    @JsonIgnore
     @Column(name = "identity_card")
     private Integer identityCard;
     

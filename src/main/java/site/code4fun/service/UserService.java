@@ -1,6 +1,7 @@
 package site.code4fun.service;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,5 +34,27 @@ public class UserService extends BaseService{
 
 	public User getUserInfo() {
 		return userRepository.findById(getCurrentId()).get();
+	}
+
+	public User updateUser(User u) throws Exception {
+		if(null != u.getPassword() && !u.getPassword().equals(u.getRePass())) 
+			throw new Exception("Password not match!");
+		
+		Optional<User> optUser = userRepository.findById(getCurrentId());
+		if(!optUser.isPresent()) throw new Exception("User not found!");
+		
+		User user = optUser.get();
+		user.setAddress(u.getAddress());
+		user.setAvatar(u.getAvatar());
+		user.setEmail(u.getEmail());
+		user.setPhone(u.getPhone());
+		user.setFullName(u.getFullName());
+		user.setIdentityCard(u.getIdentityCard());
+		user.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+		if(null != u.getPassword()) {
+			user.setPassword(new BCryptPasswordEncoder().encode(u.getPassword()));
+		}
+		
+		return userRepository.saveAndFlush(user);
 	}
 }
