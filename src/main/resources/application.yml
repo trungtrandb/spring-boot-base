@@ -1,14 +1,33 @@
-server:  port: 8000  springdoc:  swagger-ui:    path: /doc/swagger-ui  api-docs:     path: /doc/api-docs
-spring:
+server:
+  port: 8000
+  
+springdoc:
+  swagger-ui:
+    path: /doc/swagger-ui
+  api-docs: 
+    path: /doc/api-docs
+
+spring:
   application:
-    name: spring-cloud-service  jpa:    properties:      hibernate.format_sql: true
+    name: spring-cloud-service
+  jpa:
+    properties:
+      hibernate.format_sql: true
     show-sql: true
-    open-in-view: false    hibernate:      ddl-auto: update
-      naming:        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-  datasource:    type: com.zaxxer.hikari.HikariDataSource
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://35.240.181.244:3306/test?useSSL=false
-    username: demo1
-    password: $GuFkrgX.2Kf5Bw  activemq:    user: admin    password: admin    broker-url: tcp://localhost:61616
+    username: demo
+    password: $GuFkrgX.2Kf5Bw
+  activemq:
+    user: admin
+    password: admin
+    broker-url: tcp://localhost:61616
   security:
     oauth2:
       client:
@@ -19,4 +38,17 @@ server:  port: 8000  springdoc:  swagger-ui:    path: /doc/swagger-ui  api
 #            redirect-uri: http://localhost:8081/
           facebook:
             client-id: 190018635382272
-            client-secret: 9697669ed162d59126ea6948942f34b4  mail:    port: 587    host: smtp.gmail.com    username: noreply.trungtq@gmail.com    password: /PMHYs[3k2:j@gQX6rUE3zD}    properties:      mail.smtp.auth: true      mail.smtp.starttls.enable: true#logging:#  level:#    org.springframework: warn#    SpringBoot: warn#    org.apache.activemq: warn
+            client-secret: 9697669ed162d59126ea6948942f34b4
+  mail:
+    port: 587
+    host: smtp.gmail.com
+    username: noreply.trungtq@gmail.com
+    password: /PMHYs[3k2:j@gQX6rUE3zD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+#logging:
+#  level:
+#    org.springframework: warn
+#    SpringBoot: warn
+#    org.apache.activemq: warn
