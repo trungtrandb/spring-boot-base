@@ -16,6 +16,7 @@ public class UserMapper {
 				.password(user.getPassword())
 				.id(user.getId())
 				.fullName(user.getFullName())
+				.avatar(user.getAvatar())
 				.authorities(Arrays.asList(new SimpleGrantedAuthority(user.getRole().toString())))
 				.role(user.getRole())
 				.isAccountNonLocked(!user.getStatus().equals(Status.LOCK))

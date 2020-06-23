@@ -21,7 +21,12 @@
         if (response.data.token) {
           var token = response.data.token;
           var payloadToken = jwt_decode(token);
-          var user = {exp: payloadToken.exp, token: token, fullName: payloadToken.fullName}
+          var user = {
+            exp: payloadToken.exp, 
+            token: token, 
+            fullName: payloadToken.fullName,
+            avatar: payloadToken.avatar
+          }
 
           $localStorage.currentUser = $rootScope.currentUser = user;
           $http.defaults.headers.common.Authorization = "Bearer " + token;

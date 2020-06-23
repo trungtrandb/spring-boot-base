@@ -21,6 +21,10 @@ public class UserPrincipal implements UserDetails {
 	@Setter
 	private String fullName;
 	
+	@Getter
+	@Setter
+	private String avatar;
+	
 	private Long id;
 	
 	@JsonIgnore

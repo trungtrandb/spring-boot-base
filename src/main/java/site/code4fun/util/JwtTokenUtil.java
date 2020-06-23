@@ -50,6 +50,7 @@ public class JwtTokenUtil implements Serializable {
 		claims.put("id", user.getId());
 		claims.put("fullName", user.getFullName());
 		claims.put("role", user.getRole());
+		claims.put("avatar", user.getAvatar());
 		
 		String token =  Jwts.builder()
 				.setClaims(claims)
