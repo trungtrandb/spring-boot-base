@@ -86,8 +86,9 @@ public class CheckinService extends BaseService{
 				Notify noti = Notify.builder()
 						.title(title)
 						.deviceToken(item.getDeviceToken())
+						.userId(item.getUserId())
 						.content(notifyContent.toString())
-						.status(Status.PENDING)
+						.status(Status.PENDING.getVal())
 						.createdBy(getCurrentId())
 						.createdDate(new Timestamp(System.currentTimeMillis()))
 						.build();

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import site.code4fun.Response;
 import site.code4fun.entity.dto.ClassDTO;
 import site.code4fun.service.ClassService;
-import site.code4fun.util.FirebaseAdmin;
 
 @Controller
 @RequestMapping("/api/class")
@@ -21,9 +20,6 @@ public class ClassController {
 
 	@Autowired
 	ClassService classService;
-	
-	@Autowired
-	FirebaseAdmin firebaseAdmin;
 	
 	@RequestMapping(value = "/get-by-group", method = RequestMethod.GET)
 	public ResponseEntity<?> getAll(@RequestParam(required = false) Long id){
@@ -51,15 +47,5 @@ public class ClassController {
 		}catch(Exception e) {
 			return new ResponseEntity<>(new Response(null, e.getMessage(), null), HttpStatus.OK);
 		}
-	}
-	
-	@RequestMapping(value = "/notify/push")
-	public ResponseEntity<?> pushNotify(@RequestParam String token){
-		try {
-			return ResponseEntity.ok(firebaseAdmin.pushNotification(token));
-		} catch (Exception e) {
-			return ResponseEntity.ok(e.getMessage());
-		}
-	}
-	
+	}	
 }

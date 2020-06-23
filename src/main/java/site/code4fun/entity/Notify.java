@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import site.code4fun.constant.Status;
 
 @Data
 @Builder
@@ -29,9 +28,12 @@ public class Notify {
 	private String title;
 	private String content;
 	
+	@Column(name = "user_id")
+	private Long userId;
+	
 	@Column(name = "device_token")
 	private String deviceToken;
-	private Status status;
+	private String status;
 	private String note;
 	
 	@Column(name = "created_date")

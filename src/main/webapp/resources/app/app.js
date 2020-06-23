@@ -56,6 +56,10 @@
       templateUrl : "/resources/app/views/group-class.html",
       controller : "GroupClassController"
     })
+    .when("/user-info", {
+      templateUrl : "/resources/app/views/user-info.html",
+      controller : "UserController"
+    })
     .when("/login", {
       templateUrl : "/resources/app/login.html",
     })

@@ -18,7 +18,8 @@ import com.google.firebase.messaging.Notification;
 
 @Service
 public class FirebaseAdmin {
-	FirebaseMessaging firebaseMessage;
+	
+	private static FirebaseMessaging firebaseMessage;
 	
 	public FirebaseAdmin() {
 		try {
@@ -34,32 +35,12 @@ public class FirebaseAdmin {
 		}
 	}
 	
-	public String pushNotification(String token) throws FirebaseMessagingException {
-        String response = null;
-//        AndroidConfig androidConfig = getAndroidConfig("");
-//        ApnsConfig apnsConfig = getApnsConfig("");
-        try {
-			response = firebaseMessage.sendAsync(Message.builder()
-//					.setApnsConfig(apnsConfig).setAndroidConfig(androidConfig)
-	                .setNotification( new Notification("Hello", "Hello from Spring boot"))
-	                .setToken(token)
-	                .build()).get();
-		} catch (InterruptedException | ExecutionException e) {
-			e.printStackTrace();
-		}
-        return response;
+	public static String pushNotification(String title, String content, String token) throws FirebaseMessagingException, InterruptedException, ExecutionException {
+        return firebaseMessage.sendAsync(Message.builder()
+                .setNotification( new Notification(title, content))
+                .setToken(token)
+                .build()).get();
     }
 	
-//	private AndroidConfig getAndroidConfig(String topic) {
-//        return AndroidConfig.builder()
-//                .setTtl(Duration.ofMinutes(2).toMillis()).setCollapseKey(topic)
-//                .setPriority(AndroidConfig.Priority.HIGH)
-//                .setNotification(AndroidNotification.builder().setSound("default")
-//                        .setColor("#FFFF00").setTag(topic).build()).build();
-//    }
-//
-//    private ApnsConfig getApnsConfig(String topic) {
-//        return ApnsConfig.builder()
-//                .setAps(Aps.builder().setCategory(topic).setThreadId(topic).build()).build();
-//    }
+	
 }

@@ -300,4 +300,48 @@
             });
         }
     }
+
+
+    /* ============================================ */
+    function UserController($scope, $http, Restangular) {
+        $scope.submitCheckin = submitCheckin;
+        $scope.selectClass = selectClass;
+        $scope.checkin = $scope.filter = {};
+        $scope.filterCheckin = filterCheckin;
+        
+        filterCheckin();
+        flatpickr(".datetimepicker",{
+            dateFormat: "Y-m-d",
+        });
+
+        Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
+        Restangular.one('/api/subject/getAll').get().then(function (response) { $scope.lstSubject = response.data; });
+        Restangular.one('/api/organization/get-by-user').get().then(function (response) { $scope.lstOrganization = response.data; });
+
+        function selectClass() {
+            $http.get("/api/student/getAll?class=" +$scope.checkin.classId).then(function (response) {$scope.lstStudent = response.data.data;});
+        }
+
+        function filterCheckin() {
+            Restangular.all('/api/checkin/getAll').post($scope.filter).then(function (response) {
+                if(response.code == 200){
+                    $scope.lstCheckinDTO = response.data;
+                }else{
+                    toastr.error(response.message);
+                }
+            });
+        }
+
+        function submitCheckin(studentId, status) {  
+            $scope.checkin.studentId = studentId;
+            $scope.checkin.status = status;  
+            Restangular.all('/api/checkin/insert').post($scope.checkin).then(function (response) {
+                if(response.code == 200){
+                    toastr.success(response.message);
+                }else{
+                    toastr.error(response.message);
+                }
+            });
+        }
+    }
 })();
