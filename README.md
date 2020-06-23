@@ -5,3 +5,5 @@
 	### git clone https://gitlab.com/trungtrandb/adminlte-angularjs.git
 	### cd adminlte-angularjs
 	### mvn spring-boot:run
+
+http://localhost:8000
