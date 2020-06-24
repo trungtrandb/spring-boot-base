@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import site.code4fun.Response;
+import site.code4fun.entity.Response;
 import site.code4fun.entity.dto.GroupClassDTO;
 import site.code4fun.service.GroupClassService;
 
@@ -21,9 +21,19 @@ public class GroupClassController {
 	GroupClassService groupClassService;
 
 	@RequestMapping(path = "/get-by-organization", method = RequestMethod.GET)
-	public ResponseEntity<?> getById(@RequestParam(required = false) Long id){
+	public ResponseEntity<?> getByOrganizationId(@RequestParam(required = false) Long id){
 		try {
 			return ResponseEntity.ok(new Response(200, "success", groupClassService.getByOrganizationId(id)));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
+	
+	@RequestMapping(path = "/get/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> getById(@PathVariable Long id){
+		try {
+			return ResponseEntity.ok(new Response(200, "success", groupClassService.getById(id)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));

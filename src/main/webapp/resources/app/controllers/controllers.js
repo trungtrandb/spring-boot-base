@@ -11,12 +11,13 @@
     app.controller("UserController", UserController);
 
     /* ============================================ */
-    function OrganizationController($scope, $http) {
-        $scope.submitAddOrganization = submitAddOrganization;
-        loadLstOrganization();
+    function OrganizationController($scope, $http, Restangular) {
+        $scope.submitOrganization = submitOrganization;
         $scope.remove = remove;
+        $scope.edit = edit;
+        loadLstOrganization();
 
-        function submitAddOrganization() {
+        function submitOrganization() {
             $http({
                 url: "/api/organization/insert",
                 method: "POST",
@@ -26,8 +27,16 @@
                 toastr.success(response.data.message);
                 loadLstOrganization();
                 $("#modalAddOrganization").modal("hide");
+                $scope.organization = {};
             },function (response) {
                 toastr.error(response.data.message);
+            });
+        }
+
+        function edit(organizationId) {
+            Restangular.one('/api/organization/get', organizationId).get().then(function (response) {
+                $scope.organization = response.data;
+                $("#modalAddOrganization").modal("show");
             });
         }
 
@@ -36,20 +45,23 @@
         }
 
         function remove(id){
-            $http.get("/api/organization/delete/" + id).then(function (response) {
-                toastr.success(response.data.message);
-                loadLstOrganization();
-            }, function (response) {
-                toastr.error(response.data.message);
+            Restangular.one('/api/organization/delete', id).get().then(function (response) {
+                if (response.code == 200) {
+                    toastr.success(response.message);
+                    loadLstOrganization();
+                }else{
+                    toastr.error(response.message);
+                }
             });
         }
     }
 
 
     /* ============================================ */
-    function GroupClassController($scope, $http) {
+    function GroupClassController($scope, $http, Restangular) {
         $scope.submitAddGroup = submitAddGroupClass;
         $scope.remove = remove;
+        $scope.edit = edit;
         loadLstGroup();
         $http.get("/api/organization/get-by-user").then(function (response) {$scope.lstOrganization = response.data.data;});
 
@@ -67,21 +79,32 @@
                 toastr.success(response.data.message);
                 loadLstGroup();
                 $("#modalAddGroup").modal("hide");
+                $scope.group = {};
             },function (response) {
                 toastr.error(response.data.message);
             });
         }
 
+        function edit(id) {
+            Restangular.one('/api/group-class/get', id).get().then(function (response) {
+                if (response.code == 200) {
+                    $("#modalAddGroup").modal("show");
+                    $scope.group = response.data;
+                    $scope.group.organizationId = response.data.organization.id;
+                }else{
+                    toastr.error(response.message);
+                }
+            });
+        }
+
         function remove(id){
-            $http.get("/api/group-class/delete/" + id).then(function (response) {
-                if(response.data.code == 200){
-                    toastr.success(response.data.message);
+            Restangular.one('/api/group-class/delete', id).get().then(function (response) {
+                if (response.code == 200) {
+                    toastr.success(response.message);
                     loadLstGroup();
                 }else{
-                    toastr.error(response.data.message);
+                    toastr.error(response.message);
                 }
-            }, function (response) {
-                toastr.error(response.data.message);
             });
         }
     }
@@ -320,17 +343,18 @@
         }
 
         $scope.uploadFile = function(files) {
-            var fd = new FormData();
-            fd.append("file", files[0]);
-            $http.post("/upload-image", fd, {
-                withCredentials: true,
-                headers: {'Content-Type': undefined },
-                transformRequest: angular.identity
-            }).then(function (response) {
-                $scope.user.avatar = response.data.data;
-            }, function (response) {
-                toastr.error(response.data.message);
-            })
-        };
-    }
-})();
+            var data = new FormData();
+            data.append("file", files[0]);
+            $http.post("/upload-image", 
+                data, {
+                    withCredentials: true,
+                    headers: {'Content-Type': undefined },
+                    transformRequest: angular.identity
+                }).then(function (response) {
+                    $scope.user.avatar = response.data.data;
+                }, function (response) {
+                    toastr.error(response.data.message);
+                })
+            };
+        }
+    })();

@@ -4,12 +4,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Organization</h1>
+          <h1>Trường</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item active">Organization</li>
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Trường</li>
           </ol>
         </div>
       </div>
@@ -23,7 +23,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddOrganization">Add Organization</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddOrganization">Thêm trường</button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -31,10 +31,10 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Phone</th>
-                    <th>Action</th>
+                    <th>Tên trường</th>
+                    <th>Địa chỉ</th>
+                    <th>Số điện thoại</th>
+                    <th>Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -44,6 +44,7 @@
                     <td>{{ x.address }}</td>
                     <td>{{ x.phone }}</td>
                     <td>
+                      <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>
                       <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>
                     </td>
                   </tr>
@@ -69,27 +70,27 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Add Organization</h4>
+          <h4 class="modal-title">Thông tin trường</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
         <!-- Modal body -->
         <div class="modal-body">
-          <form role="form" ng-submit="submitAddOrganization()">
+          <form role="form" ng-submit="submitOrganization()">
             <div class="form-group">
-              <label for="name">Organization name</label>
+              <label for="name">Tên trường</label>
               <input type="text" class="form-control" id="name" ng-model="organization.name">
             </div>
             <div class="form-group">
-              <label for="address">Address</label>
+              <label for="address">Địa chỉ</label>
               <input type="text" class="form-control" id="address" ng-model="organization.address">
             </div>
             <div class="form-group">
-              <label for="phone">Phone</label>
+              <label for="phone">Số điện thoại</label>
               <input type="text" class="form-control" id="phone" ng-model="organization.phone">
             </div>
             <div class="form-group">
-              <label for="note">Note</label>
+              <label for="note">Ghi chú</label>
               <input type="text" class="form-control" id="note" ng-model="organization.note">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>

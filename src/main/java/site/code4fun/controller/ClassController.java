@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import site.code4fun.Response;
+import site.code4fun.entity.Response;
 import site.code4fun.entity.dto.ClassDTO;
 import site.code4fun.service.ClassService;
 

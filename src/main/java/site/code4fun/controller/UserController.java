@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import site.code4fun.Response;
+import site.code4fun.entity.Response;
 import site.code4fun.entity.User;
 import site.code4fun.service.UserService;
 

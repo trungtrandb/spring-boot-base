@@ -20,10 +20,12 @@ public class OrganizationService extends BaseService{
 	@Autowired
 	private UserRepository userRepository;
 	
-	public List<Organization> getByUserId(Long id) throws Exception {
-		List<Organization> lstItem = organizationRepository.findByUserId(id);
-		if(lstItem.size() == 0) throw new Exception("Organization not found!");
-		return lstItem;
+	public Organization getById(Long id) throws Exception {
+		Optional<Organization> item = organizationRepository.findById(id);
+		if(!item.isPresent() || item.get().getUser().getId() != getCurrentId()) 
+			throw new Exception("Organization not found!");
+		
+		return item.get();
 	}
 	
 	public List<Organization> getByUser() throws Exception {
@@ -33,6 +35,9 @@ public class OrganizationService extends BaseService{
 	}
 	
 	public Organization create(Organization item) throws Exception {
+		if(null != item.getUser() && item.getUser().getId() != getCurrentId())
+			throw new Exception("Item not found!");
+		
 		Optional<User> user = userRepository.findById(getCurrentId());
 		item.setUser(user.get());
 		item.setCreatedBy(user.get().getId());

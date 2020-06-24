@@ -47,9 +47,15 @@ public class GroupClassService extends BaseService{
 		return idsOrganization.size() > 0 ? groupClassRepository.findByOrganizationIds(idsOrganization) : new ArrayList<>();
 	}
 	
+	public GroupClass getById(Long id) throws Exception {
+		Optional<GroupClass> item = groupClassRepository.findById(id);
+		if(!item.isPresent()) throw new Exception("Item not found!");
+		return item.get();
+	}
+	
 	public boolean deleteById(Long id) throws Exception {
 		Optional<GroupClass> gc = groupClassRepository.findById(id);
-		if(!gc.isPresent()) throw new Exception("Group not found!!");
+		if(!gc.isPresent()) throw new Exception("Item not found!!");
 		
 		Optional<Organization> item = organizationRepository.findById(gc.get().getOrganization().getId());
 		if(item.get().getUser().getId() != getCurrentId()) throw new Exception("Can't delete "+ item.get().getName() +" by not owner!");

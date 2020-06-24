@@ -31,8 +31,8 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Action</th>
+                    <th>Tên khối lớp</th>
+                    <th>Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -40,6 +40,7 @@
                     <td>{{ x.id }}</td>
                     <td>{{ x.name }}</td>
                     <td>
+                      <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>
                       <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>
                     </td>
                   </tr>
@@ -65,7 +66,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Add Group</h4>
+          <h4 class="modal-title">Khối lớp</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
@@ -73,11 +74,11 @@
         <div class="modal-body">
           <form role="form" ng-submit="submitAddGroup()">
             <div class="form-group">
-              <label for="name">Group name</label>
+              <label for="name">Tên khối lớp</label>
               <input type="text" class="form-control" id="name" ng-model="group.name">
             </div>
             <div class="form-group">
-              <label>Organization</label>
+              <label>Trường</label>
               <select class="form-control" ng-model="group.organizationId">
                 <option ng-repeat="x in lstOrganization" value="{{x.id}}">{{x.name}}</option>
               </select>

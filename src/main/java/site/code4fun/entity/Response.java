@@ -1,4 +1,4 @@
-package site.code4fun;
+package site.code4fun.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

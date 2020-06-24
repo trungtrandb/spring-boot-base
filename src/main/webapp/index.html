@@ -43,10 +43,8 @@
 
     <!-- Content Wrapper. Contains page content -->    
     <div ng-view></div>   
-    <!-- /.content-wrapper -->
     
   </div>
-  <!-- ./wrapper -->
 
   <script src="/resources/plugins/jquery/jquery.min.js"></script>
   <script src="/resources/plugins/jquery-ui/jquery-ui.min.js"></script>
@@ -63,7 +61,11 @@
   <script src="/resources/app/controllers/controllers.js"></script>
   <script src="/resources/app/controllers/login.js"></script>
   <script>
-    $.widget.bridge('uibutton', $.ui.button)
+    $.widget.bridge('uibutton', $.ui.button);
+    // $(document).on('hidden.bs.modal','.modal', function () {
+    //   $("form")[0].reset();
+    //   isEdit = false;
+    // })
   </script>
 
 </body>

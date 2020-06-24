@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import site.code4fun.Response;
 import site.code4fun.entity.Organization;
+import site.code4fun.entity.Response;
 import site.code4fun.service.OrganizationService;
 
 @RestController
@@ -20,10 +20,19 @@ public class OrganizationController {
 	OrganizationService organizationService;
 	
 	
-	@RequestMapping("/get-by-user")
+	@RequestMapping(path = "/get-by-user", method = RequestMethod.GET)
 	public ResponseEntity<?> getByUserId(){
 		try {
 			return ResponseEntity.ok(new Response(200, "Success", organizationService.getByUser()));
+		}catch (Exception e) {
+			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
+		}
+	}
+	
+	@RequestMapping(path = "/get/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> getById(@PathVariable Long id){
+		try {
+			return ResponseEntity.ok(new Response(200, "Success", organizationService.getById(id)));
 		}catch (Exception e) {
 			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
 		}
@@ -38,7 +47,7 @@ public class OrganizationController {
 		}
 	}
 	
-	@RequestMapping(path = "/delete/{id}")
+	@RequestMapping(path = "/delete/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> insert(@PathVariable Long id){
 		try {
 			organizationService.deleteById(id);
