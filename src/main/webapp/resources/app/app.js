@@ -28,6 +28,10 @@
       templateUrl : "/resources/app/views/create-checkin.html",
       controller : "CheckinController"
     })
+    .when("/view-checkin", {
+      templateUrl : "/resources/app/views/view-checkin.html",
+      controller : "ViewCheckinController"
+    })
     .when("/subject", {
       templateUrl : "/resources/app/views/subject.html",
       controller : "SubjectController",

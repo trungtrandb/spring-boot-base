@@ -29,6 +29,7 @@ public class GroupClassService extends BaseService{
 		Optional<Organization> organization = organizationRepository.findById(item.getOrganizationId());
 		if(!organization.isPresent()) throw new Exception("Organization not found!!!");
 		GroupClass gc = GroupClass.builder()
+				.id(item.getId())
 				.name(item.getName())
 				.organization(organization.get())
 				.build();

@@ -23,37 +23,10 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <a href="#!create-checkin" class="btn btn-primary">Create checkin</a>
+              <a href="javascript:window.history.back()" class="btn btn-default">Quay lại</a>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <div class="form-row mb-2">
-                <div class="col">
-                  <label for="class">Class: </label>
-                  <select class="form-control" ng-model="filter.classId" ng-change="filterCheckin()">
-                    <option value="">-- All --</option>
-                    <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
-                  </select>
-                </div>
-                <div class="col">
-                  <label for="class">Subject: </label>
-                  <select class="form-control" ng-model="filter.subjectId" ng-change="filterCheckin()">
-                    <option value="">-- All --</option>
-                    <option ng-repeat="x in lstSubject" value="{{x.id}}">{{x.title}}</option>
-                  </select>
-                </div>
-                <div class="col">
-                  <label for="class">Date: </label>
-                  <input class="form-control datetimepicker" ng-model="filter.createdDate" ng-change="filterCheckin()"/>
-                </div>
-                <div class="col">
-                  <label for="class">Organization: </label>
-                  <select class="form-control" ng-model="filter.organizationId" ng-change="filterCheckin()">
-                    <option value="">-- All --</option>
-                    <option ng-repeat="x in lstOrganization" value="{{x.id}}">{{x.name}}</option>
-                  </select>
-                </div>
-              </div>
               <table id="tblCheckin" class="table table-bordered table-striped">
                 <thead>
                   <tr>
@@ -69,7 +42,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="x in lstCheckinDTO" ng-click="view(x)" style="cursor: pointer;">
+                  <tr ng-repeat="x in lstCheckinDTO">
                     <td>{{ x.id }}</td>
                     <td>{{ x.classId }}</td>
                     <td>{{ x.className }}</td>

@@ -8,6 +8,7 @@
     app.controller("SubjectController", SubjectController);
     app.controller("EditStudentController", EditStudentController);
     app.controller("CheckinController", CheckinController);
+    app.controller("ViewCheckinController", ViewCheckinController);
     app.controller("UserController", UserController);
 
     /* ============================================ */
@@ -283,9 +284,10 @@
     }
 
     /* ============================================ */
-    function CheckinController($scope, $http, Restangular) {
+    function CheckinController($scope, $http, $location, $filter, Restangular) {
         $scope.submitCheckin = submitCheckin;
         $scope.selectClass = selectClass;
+        $scope.view = view;
         $scope.checkin = $scope.filter = {};
         $scope.filterCheckin = filterCheckin;
         
@@ -300,6 +302,14 @@
 
         function selectClass() {
             $http.get("/api/student/getAll?class=" +$scope.checkin.classId).then(function (response) {$scope.lstStudent = response.data.data;});
+        }
+
+        function view(checkinItem) {
+            $location.path("/view-checkin").search({
+                'classId': checkinItem.classId, 
+                'date': $filter('date')(new Date(checkinItem.createdDate),'yyyy-MM-dd'),
+                'subjectId' :checkinItem.subjectId
+            });
         }
 
         function filterCheckin() {
@@ -323,6 +333,14 @@
                 }
             });
         }
+    }
+
+    /* ============================================ */
+    function ViewCheckinController($scope,$location, Restangular) {
+        var paramSeach = $location.search();
+        Restangular.all("/api/checkin/get").getList($location.search()).then(function(response) {
+            console.log(response);            
+        })   
     }
 
 
