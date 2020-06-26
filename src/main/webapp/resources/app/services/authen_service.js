@@ -25,7 +25,8 @@
             exp: payloadToken.exp, 
             token: token, 
             fullName: payloadToken.fullName,
-            avatar: payloadToken.avatar
+            avatar: payloadToken.avatar,
+            userName: payloadToken.sub
           }
 
           $localStorage.currentUser = $rootScope.currentUser = user;

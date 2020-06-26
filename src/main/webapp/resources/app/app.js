@@ -11,6 +11,7 @@
     $routeProvider
     .when("/", {
       templateUrl : "/resources/app/views/dashboad.html",
+      controller : "DashboardController"
     })
     .when("/create-student", {
       templateUrl : "/resources/app/views/create-student.html",

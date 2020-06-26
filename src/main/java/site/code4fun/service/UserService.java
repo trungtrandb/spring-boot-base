@@ -57,4 +57,8 @@ public class UserService extends BaseService{
 		
 		return userRepository.saveAndFlush(user);
 	}
+	
+	public User getByUserName(String userName) {
+		return userRepository.findByUserName(userName);
+	}
 }

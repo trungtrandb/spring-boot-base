@@ -1,0 +1,94 @@
+<html>
+<head>
+    <title>Chat WebSocket</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+    <script type="text/javascript">
+        var stompClient;
+      function setConnected(connected) {
+        document.getElementById('connect').disabled = connected;
+        document.getElementById('disconnect').disabled = !connected;
+        document.getElementById('conversationDiv').style.visibility 
+        = connected ? 'visible' : 'hidden';
+        document.getElementById('response').innerHTML = '';
+    }
+
+    function connect() {
+            // var socket = new SockJS('/chat');
+            // stompClient = Stomp.over(socket);  
+            // stompClient.connect({}, function(frame) {
+            //     setConnected(true);
+            //     console.log('Connected: ' + frame);
+            //     stompClient.subscribe('/topic/messages', function(messageOutput) {
+            //         showMessageOutput(JSON.parse(messageOutput.body));
+            //     });
+            // });
+            var socket = new SockJS('/secured/room'); 
+            var stompClient = Stomp.over(socket);
+            var sessionId = "";
+            var header = {
+                "Authorization" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX1VTRVIiLCJmdWxsTmFtZSI6IlRy4bqnbiBRdWFuZyBUcnVuZyIsImlkIjo2LCJhdmF0YXIiOiIvcmVzb3VyY2VzL2ltYWdlL2F2YXRhcjA0LnBuZyIsImV4cCI6MTU5MzA4ODAyMiwiaWF0IjoxNTkzMDcwMDIyfQ.Tuuu42vIq4uo0EYgyG8iAfsKkk_ZwG5F6SHanU8hP2-p_1EG_QOvafqrTxoYeOjjd4OY_AdJo0bgW6Ex3K63Gw"
+            }
+
+
+            stompClient.connect({}, function (frame) {
+                var url = stompClient.ws._transport.url;
+                url = url.replace(
+                  "ws://localhost:8080/spring-security-mvc-socket/secured/room/",  "");
+                url = url.replace("/websocket", "");
+                url = url.replace(/^[0-9]+\//, "");
+                console.log("Your current session is: " + url);
+                sessionId = url;
+                stompClient.subscribe('secured/user/queue/specific-user'+ '-user' + that.sessionId, function (msgOut) {
+
+                });
+            });
+        }
+
+        function disconnect() {
+            if(stompClient != null) {
+                stompClient.disconnect();
+            }
+            setConnected(false);
+            console.log("Disconnected");
+        }
+
+        function sendMessage() {
+            var from = document.getElementById('from').value;
+            var text = document.getElementById('text').value;
+            stompClient.send("/app/chat", {}, 
+              JSON.stringify({'from':from, 'text':text}));
+        }
+
+        function showMessageOutput(messageOutput) {
+            var response = document.getElementById('response');
+            var p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            p.appendChild(document.createTextNode(messageOutput.from + ": " 
+              + messageOutput.text + " (" + messageOutput.time + ")"));
+            response.appendChild(p);
+        }
+    </script>
+</head>
+<body onload="disconnect()">
+    <div>
+        <div>
+            <input type="text" id="from" placeholder="Choose a nickname"/>
+        </div>
+        <br />
+        <div>
+            <button id="connect" onclick="connect();">Connect</button>
+            <button id="disconnect" disabled="disabled" onclick="disconnect();">
+                Disconnect
+            </button>
+        </div>
+        <br />
+        <div id="conversationDiv">
+            <input type="text" id="text" placeholder="Write a message..."/>
+            <button id="sendMessage" onclick="sendMessage();">Send</button>
+            <p id="response"></p>
+        </div>
+    </div>
+
+</body>
+</html>

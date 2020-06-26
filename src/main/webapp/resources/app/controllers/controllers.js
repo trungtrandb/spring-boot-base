@@ -10,6 +10,7 @@
     app.controller("CheckinController", CheckinController);
     app.controller("ViewCheckinController", ViewCheckinController);
     app.controller("UserController", UserController);
+    app.controller("DashboardController", DashboardController);
 
     /* ============================================ */
     function OrganizationController($scope, $http, Restangular) {
@@ -363,16 +364,53 @@
         $scope.uploadFile = function(files) {
             var data = new FormData();
             data.append("file", files[0]);
-            $http.post("/upload-image", 
-                data, {
-                    withCredentials: true,
-                    headers: {'Content-Type': undefined },
-                    transformRequest: angular.identity
-                }).then(function (response) {
-                    $scope.user.avatar = response.data.data;
-                }, function (response) {
-                    toastr.error(response.data.message);
-                })
-            };
+            $http.post("/upload-image", data, {
+                withCredentials: true,
+                headers: {'Content-Type': undefined },
+                transformRequest: angular.identity
+            }).then(function (response) {
+                $scope.user.avatar = response.data.data;
+            }, function (response) {
+                toastr.error(response.data.message);
+            })
+        };
+    }
+
+    /* ============================================ */
+    function DashboardController($scope,$location, Restangular, $rootScope) {
+        $scope.sendMessage = sendMessage;
+
+        var socket = new SockJS('/ws');
+        var stompClient = Stomp.over(socket);
+        document.cookie = 'Authorization=' + $rootScope.currentUser.token + '; path=/';  
+        stompClient.reconnect_delay = 3000;
+        stompClient.connect({}, function(frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/message', function(messageOutput) {
+                var resMessage = JSON.parse(messageOutput.body);
+                console.log(resMessage.from == $rootScope.currentUser.userName);
+                if (resMessage.from == $rootScope.currentUser.userName) {
+                    var selfMess = "";
+                    var floatName = "float-left";
+                    var floatTime = "float-right";
+                }else{
+                    var selfMess = "right";
+                    var floatName = "float-right";
+                    var floatTime = "float-left";
+                }
+                var html = '<div class="direct-chat-msg '+ selfMess + '">';
+                html += '<div class="direct-chat-infos clearfix">';
+                html += '<span class="direct-chat-name '+ floatName +'">' + resMessage.fullName +'</span>';
+                html += '<span class="direct-chat-timestamp '+ floatTime +'">'+ resMessage.time +'</span></div>';
+                html += '<img class="direct-chat-img" src="'+ resMessage.avatar +'">';
+                html += '<div class="direct-chat-text">'+resMessage.text+'</div>';
+                $("#box-chat").append(html);
+            });
+        });
+
+        function sendMessage() {
+            stompClient.send("/app/topic/chat", {}, JSON.stringify({'text': $scope.messageContent}));
+            $scope.messageContent = "";
         }
-    })();
+    }
+})();
