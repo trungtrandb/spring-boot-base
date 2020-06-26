@@ -388,7 +388,6 @@
             console.log('Connected: ' + frame);
             stompClient.subscribe('/topic/message', function(messageOutput) {
                 var resMessage = JSON.parse(messageOutput.body);
-                console.log(resMessage.from == $rootScope.currentUser.userName);
                 if (resMessage.from == $rootScope.currentUser.userName) {
                     var selfMess = "";
                     var floatName = "float-left";

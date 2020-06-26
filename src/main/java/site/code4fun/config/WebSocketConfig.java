@@ -30,17 +30,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry config) {
     	config.enableSimpleBroker("/queue/", "/topic/");
     	config.setApplicationDestinationPrefixes("/app");
-    	config.setUserDestinationPrefix("/secured");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-        .addInterceptors(getInterceptot())
+        .addInterceptors(getInterceptor())
         .withSockJS(); // Đăng ký enpoint khởi tạo ws
     }
     
-    private HandshakeInterceptor getInterceptot() {
+    private HandshakeInterceptor getInterceptor() {
         return new HandshakeInterceptor() {	
 			@Override
 			public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,

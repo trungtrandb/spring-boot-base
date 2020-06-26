@@ -1,13 +1,11 @@
 package site.code4fun.controller;
 
-import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -28,8 +26,8 @@ public class ChatController {
 	private UserService userService;
 	
 	@MessageMapping("/topic/chat")
-    @SendTo("/topic/message")
-    public OutputMessage sendAll(@Payload Message msg, Authentication auth) throws Exception {
+//    @SendTo("/topic/message")
+    public void sendAll(@Payload Message msg, Authentication auth) throws Exception {
 		UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
 		User user = userService.getByUserName(principal.getUsername());
 		
@@ -40,16 +38,6 @@ public class ChatController {
 	    		.text(msg.getText())
 	    		.time(new SimpleDateFormat("HH:mm").format(new Date()))
 	    		.build();
-        return out;
+        simpMessagingTemplate.convertAndSend("/topic/message", out);
     }
-	
-	@MessageMapping("/secured/chat") 
-	public void sendSpecific(@Payload Message msg, Principal user) throws Exception { 		
-	    OutputMessage out = OutputMessage.builder()
-	    		.from(msg.getFrom())
-	    		.text(msg.getText())
-	    		.time(new SimpleDateFormat("HH:mm").format(new Date()))
-	    		.build();
-	    simpMessagingTemplate.convertAndSendToUser(msg.getTo(), "/secured/user/specific-user", out); 
-	}
 }
