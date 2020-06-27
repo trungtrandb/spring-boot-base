@@ -110,7 +110,7 @@ public class CheckinService extends BaseService{
 			mapOrganization = organizationRepsitory.findByUserId(getCurrentId())
 					.stream().collect(Collectors.toMap(Organization::getId, Organization::getName));
 		}
-		
+		if(mapOrganization.size() == 0 ) return new ArrayList<>();
 		Map<Long, String> mapGroup = groupClassRepository.findByOrganizationIds(new ArrayList<>(mapOrganization.keySet()))
 				.stream().collect(Collectors.toMap(GroupClass::getId, GroupClass::getName));
 		

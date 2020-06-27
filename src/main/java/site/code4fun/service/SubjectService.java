@@ -40,7 +40,7 @@ public class SubjectService extends BaseService{
 		List<Organization> lstOrganization = organizationRepository.findByUserId(getCurrentId());
 		List<Long> idsOr = lstOrganization.stream().map(Organization::getId).collect(Collectors.toList());
 		
-		if(idsOr.size() < 0 ) return new ArrayList<>();
+		if(idsOr.size() == 0 ) return new ArrayList<>();
 		
 		List<GroupClass> lstGr = groupClassRepository.findByOrganizationIds(idsOr);
 		List<Long> idsGroup = lstGr.stream().map(GroupClass::getId).collect(Collectors.toList());
