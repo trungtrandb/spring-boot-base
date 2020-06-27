@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -20,6 +21,7 @@ import site.code4fun.util.JwtTokenUtil;
 import site.code4fun.util.StringUtils;
 
 @Configuration
+@EnableWebSocket
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	
@@ -36,6 +38,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
         .addInterceptors(getInterceptor())
+        .setAllowedOrigins("*")
         .withSockJS(); // Đăng ký enpoint khởi tạo ws
     }
     
@@ -43,16 +46,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         return new HandshakeInterceptor() {	
 			@Override
 			public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-					Map<String, Object> attributes) throws Exception {			 
-				 String rawCookie = request.getHeaders().get("Cookie").get(0);
-				 String[] listCookieParam = rawCookie.split(";");
-				 String jwtToken = "";
-				 for(String cookieParam :listCookieParam)
-				 {
-				   String[] rawCookieNameAndValuePair = cookieParam.split("=");
-				   String key = rawCookieNameAndValuePair[0].trim();
-				   if(key.equalsIgnoreCase("Authorization")) jwtToken = rawCookieNameAndValuePair[1];
-				 }
+					Map<String, Object> attributes) throws Exception {	
+				System.out.println("Has New connection");
+				String rawCookie = request.getHeaders().get("Cookie").get(0);
+				String[] listCookieParam = rawCookie.split(";");
+				String jwtToken = "";
+				for(String cookieParam :listCookieParam)
+				{
+					String[] rawCookieNameAndValuePair = cookieParam.split("=");
+					String key = rawCookieNameAndValuePair[0].trim();
+					if(key.equalsIgnoreCase("Authorization")) jwtToken = rawCookieNameAndValuePair[1];
+				}
 				 
 			    if(!StringUtils.isNull(jwtToken) && !jwtTokenUtil.isTokenExpired(jwtToken)) {
 					UserDetails userDetails = jwtTokenUtil.getUserPrincipalFromToken(jwtToken);

@@ -1,5 +1,7 @@
 package site.code4fun.entity;
 
+import java.sql.Timestamp;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,8 +11,8 @@ public class OutputMessage {
 
 	private String fullName;
 	private String avatar;
-    private String from;
+    private Long from;
     private String text;
-    private String time;
+    private Timestamp time;
     private Long classId;
 }

@@ -385,7 +385,6 @@
         document.cookie = 'Authorization=' + $rootScope.currentUser.token + '; path=/';  
         stompClient.reconnect_delay = 3000;
         stompClient.connect({}, function(frame) {
-            console.log('Connected: ' + frame);
             stompClient.subscribe('/topic/message', function(messageOutput) {
                 var resMessage = JSON.parse(messageOutput.body);
                 if (resMessage.from == $rootScope.currentUser.userName) {
@@ -405,10 +404,14 @@
                 html += '<div class="direct-chat-text">'+resMessage.text+'</div>';
                 $("#box-chat").append(html);
             });
+            stompClient.subscribe("/user/queue/reply", function(messageOutput) {
+                console.log(messageOutput);
+            })
         });
 
         function sendMessage() {
-            stompClient.send("/app/topic/chat", {}, JSON.stringify({'text': $scope.messageContent}));
+            // stompClient.send("/app/topic/chat", {}, JSON.stringify({'text': $scope.messageContent}));
+            stompClient.send("/app/direct/chat", {}, JSON.stringify({'text': $scope.messageContent, 'to': 'admin'}));
             $scope.messageContent = "";
         }
     }

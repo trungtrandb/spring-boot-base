@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class Message {
-	private String token;
 	private String to;
     private String from;
     private String text;
