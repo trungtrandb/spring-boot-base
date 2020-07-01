@@ -13,6 +13,10 @@
       templateUrl : "/resources/app/views/dashboad.html",
       controller : "DashboardController"
     })
+    .when("/lession", {
+      templateUrl : "/resources/app/views/lession.html",
+      controller : "LessionController"
+    })
     .when("/create-student", {
       templateUrl : "/resources/app/views/create-student.html",
       controller : "StudentController"

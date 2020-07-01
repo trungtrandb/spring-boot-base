@@ -1,8 +1,5 @@
 package site.code4fun.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -11,40 +8,38 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@Entity
-@Table(name = "tblSubject")
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "tblSubject")
 public class Subject {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String title;
-	private String description;
+	private String name;
+	private String note;
+	@Column(name = "organization_id")
+	private Long organizationId;
+	private String status;
 	
-	@Column(name = "class_id")
-	private Long classId;
+	@Column(name = "created_by")
+	private Long createdBy;
 	
-	@Column(name = "start_time")
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
-	private Timestamp startTime;
+	@Column(name = "created_date")
+	private Timestamp createdDate;
+
+	@Column(name = "updated_by")
+	private Long updated_by;
 	
-	@Column(name = "end_time")
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
-	private Timestamp endTime;
+	@Column(name = "updated_time")
+	private Timestamp updatedTime;
 	
-	// DTO
-	@Transient
-	private String className;
 }

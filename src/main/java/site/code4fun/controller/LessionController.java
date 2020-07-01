@@ -11,30 +11,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import site.code4fun.entity.Lession;
 import site.code4fun.entity.Response;
-import site.code4fun.entity.Subject;
 import site.code4fun.service.LessionService;
-import site.code4fun.service.SubjectService;
 
 @Controller
-@RequestMapping("/api/subject")
-public class SubjectController {
+@RequestMapping("/api/lession")
+public class LessionController {
 
 	@Autowired
-	SubjectService subjectService;
+	LessionService lessionService;
 	
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
-	public ResponseEntity<?> getAll(){
+	public ResponseEntity<?> getAll(@RequestParam(name = "page", required = false, defaultValue = "1") int page,
+			@RequestParam(name = "limit", required = false, defaultValue = "10") int limit){
 		try {
-			return ResponseEntity.ok(new Response(200, "success", subjectService.getAll()));
+			return ResponseEntity.ok(new Response(200, "success", lessionService.getAll(page, limit)));
 		}catch(Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
-	public ResponseEntity<?> insert(@RequestBody Subject s) {
+	public ResponseEntity<?> insert(@RequestBody Lession s) {
 		try {
-			return ResponseEntity.ok(new Response(200, "Successful", subjectService.insert(s)));
+			return ResponseEntity.ok(new Response(200, "Successful", lessionService.insert(s)));
 		}catch(Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
@@ -43,7 +42,7 @@ public class SubjectController {
 	@RequestMapping(value = "/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		try {
-			return ResponseEntity.ok(new Response(200, "Successful", subjectService.delete(id)));
+			return ResponseEntity.ok(new Response(200, "Successful", lessionService.delete(id)));
 		}catch(Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}

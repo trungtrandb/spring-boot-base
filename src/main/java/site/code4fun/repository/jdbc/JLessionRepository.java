@@ -11,15 +11,15 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import site.code4fun.entity.Subject;
+import site.code4fun.entity.Lession;
 
 @Repository
-public class JSubjectRepository {
+public class JLessionRepository {
 	
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
-	public List<Subject> findByClassIds(List<Long> classIds, int limit, int offset) {
+	public List<Lession> findByClassIds(List<Long> classIds, int limit, int offset) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("classIds", classIds);
 		parameters.addValue("limit", limit);
@@ -28,12 +28,12 @@ public class JSubjectRepository {
 		sql.append("JOIN tblClass c on s.class_id = c.id ");
 		sql.append("WHERE s.class_id IN (:classIds) ");
 		sql.append("LIMIT :offset, :limit");
-		List<Subject> lstRes = new ArrayList<>();
+		List<Lession> lstRes = new ArrayList<>();
 		if(classIds.size() == 0) return lstRes;
 		jdbcTemplate.query(sql.toString(), parameters, new RowCallbackHandler() {
 			@Override
 			public void processRow(ResultSet rs) throws SQLException {
-				Subject st = Subject.builder()
+				Lession st = Lession.builder()
 						.id(rs.getLong("id"))
 						.className(rs.getString("class_name"))
 						.title(rs.getString("title"))

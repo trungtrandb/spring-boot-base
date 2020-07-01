@@ -62,7 +62,7 @@ public class CheckinService extends BaseService{
 	private JCheckinRepository jCheckinRepository;
 	
 	public Checkin insert(Checkin check) throws Exception {
-		if(null == check.getSubjectId()) throw new Exception("Subject not found!!");
+		if(null == check.getLessionId()) throw new Exception("Lession not found!!");
 		List<Long> idsClass = classService.getByGroupId(null).stream().map(Classes::getId).collect(Collectors.toList());
 		if(!idsClass.contains(check.getClassId())) throw new Exception("Class permision denied!!");
 		
@@ -72,7 +72,7 @@ public class CheckinService extends BaseService{
 		if(!idsStudent.contains(check.getStudentId())) throw new Exception("Student not found!!");
 		
 		// Update if has checked in
-		Optional<Checkin> checked = checkinRepository.checkExist(check.getStudentId(), check.getClassId(), check.getSubjectId());
+		Optional<Checkin> checked = checkinRepository.checkExist(check.getStudentId(), check.getClassId(), check.getLessionId());
 		check.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 		if(checked.isPresent()) check.setId(checked.get().getId());
 		

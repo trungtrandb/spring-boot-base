@@ -4,12 +4,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Môn học</h1>
+          <h1>Lession</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
-            <li class="breadcrumb-item active">Môn học</li>
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">DataTables</li>
           </ol>
         </div>
       </div>
@@ -23,7 +23,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddSubject">Thêm môn học</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddLession">Add Lession</button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -31,22 +31,27 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Tên trường</th>
-                    <th>Tên môn học</th>
-                    <th>Trạng thái</th>
-                    <th>Thao tác</th>
+                    <th>Name</th>
+                    <th>Class Name</th>
+                    <th>Start time</th>
+                    <th>End time</th>
+                    <th>Description</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="x in lstSubject">
+                  <tr ng-repeat="x in lstLession">
                     <td>{{ x.id }}</td>
-                    <td>{{ x.schoolName }}</td>
-                    <td>{{ x.name }}</td>
-                    <td>{{ x.status }}</td>
+                    <td>{{ x.title }}</td>
+                    <td>{{ x.className }}</td>
+                    <td>{{ x.startTime }}</td>
+                    <td>{{ x.endTime }}</td>
+                    <td>{{ x.description }}</td>
                     <td>
                       <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>
+                      <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>
                     </td>
-                  </tr>
+                </tbody>
                 </tbody>
               </table>
             </div>
@@ -63,42 +68,40 @@
   <!-- /.content -->
 
   <!-- The Modal -->
-  <div class="modal" id="modalAddSubject">
+  <div class="modal" id="modalAddLession">
     <div class="modal-dialog">
       <div class="modal-content">
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Thông tin trường</h4>
+          <h4 class="modal-title">Add Lession</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
         <!-- Modal body -->
         <div class="modal-body">
-          <form role="form" ng-submit="submitSubject()">
+          <form role="form" ng-submit="submitAddLession()">
             <div class="form-group">
-              <label for="address">Tên môn học</label>
-              <input type="text" class="form-control" id="address" ng-model="subject.name">
+              <label for="name">Lession name</label>
+              <input type="text" class="form-control" id="name" ng-model="lession.title">
             </div>
             <div class="form-group">
-              <label>Trường</label>
-              <select class="form-control" ng-model="subject.organizationId">
-                <option ng-repeat="x in lstOrganization" value="{{x.id}}">{{x.name}}</option>
+              <label for="startTime">Start</label>
+              <input type="text" ng-model="lession.startTime" class="form-control datetimepicker">
+            </div>
+            <div class="form-group">
+              <label for="endTime">End time</label>
+              <input type="text" ng-model="lession.endTime" class="form-control datetimepicker">
+            </div>
+            <div class="form-group">
+              <label for="note">Description</label>
+              <input type="text" class="form-control" id="note" ng-model="lession.note">
+            </div>
+            <div class="form-group">
+              <label>Class</label>
+              <select class="form-control" ng-model="lession.classId">
+                <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
               </select>
-            </div>
-            <div class="form-group">
-              <label for="note">Ghi chú</label>
-              <input type="text" class="form-control" id="note" ng-model="subject.note">
-            </div>
-            <div class="form-group">
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="radio1" value="inactive" ng-model="subject.status">
-                <label class="form-check-label">Nháp</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="radio1" value="active" ng-model="subject.status" checked="checked">
-                <label class="form-check-label">Kích hoạt</label>
-              </div>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>

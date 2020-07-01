@@ -29,8 +29,8 @@ public class Checkin {
 	@Column(name = "student_id")
 	private Long studentId;
 	
-	@Column(name = "subject_id")
-	private Long subjectId;
+	@Column(name = "lession_id")
+	private Long lessionId;
 	
 	@Column(name = "class_id")
 	private Long classId;

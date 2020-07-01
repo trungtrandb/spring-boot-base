@@ -5,12 +5,13 @@
     app.controller("GroupClassController", GroupClassController);
     app.controller("ClassController", ClassController);
     app.controller("StudentController", StudentController);
-    app.controller("SubjectController", SubjectController);
+    app.controller("LessionController", LessionController);
     app.controller("EditStudentController", EditStudentController);
     app.controller("CheckinController", CheckinController);
     app.controller("ViewCheckinController", ViewCheckinController);
     app.controller("UserController", UserController);
     app.controller("DashboardController", DashboardController);
+    app.controller("SubjectController", SubjectController);
 
     /* ============================================ */
     function OrganizationController($scope, $http, Restangular) {
@@ -233,27 +234,27 @@
 
 
     /* ============================================ */
-    function SubjectController($scope, $http) {
+    function LessionController($scope, $http) {
         flatpickr(".datetimepicker",{
             enableTime: true,
             dateFormat: "Y-m-d H:i",
         });
-        $scope.subject = {};
-        $scope.submitAddSubject = submitAddSubject;
+        $scope.lession = {};
+        $scope.submitAddLession = submitAddLession;
         $scope.remove = remove;
-        loadLstSubject();
+        loadLstLession();
         $http.get("/api/class/get-by-group").then(function (response) {$scope.lstClass = response.data.data;});
 
-        function loadLstSubject() {
-            $http.get("/api/subject/getAll").then(function (response) {$scope.lstSubject = response.data.data;});
+        function loadLstLession() {
+            $http.get("/api/lession/getAll").then(function (response) {$scope.lstLession = response.data.data;});
         }
 
 
         function remove(id){
-            $http.get("/api/subject/delete/" + id).then(function (response) {
+            $http.get("/api/lession/delete/" + id).then(function (response) {
                 if(response.data.code == 200){
                     toastr.success(response.data.message);
-                    loadLstSubject();
+                    loadLstLession();
                 }else{
                     toastr.error(response.data.message);
                 }
@@ -263,17 +264,17 @@
         }
 
 
-        function submitAddSubject() {
+        function submitAddLession() {
             $http({
-                url: "/api/subject/insert",
+                url: "/api/lession/insert",
                 method: "POST",
-                data: $scope.subject
+                data: $scope.lession
             })
             .then(function(response) {
                 if(response.data.code == 200){
                     toastr.success(response.data.message);
                     loadLstSubject();
-                    $("#modalAddSubject").modal("hide");
+                    $("#modalAddLession").modal("hide");
                 }else{
                     toastr.error(response.data.message);
                 }
@@ -413,6 +414,23 @@
             // stompClient.send("/app/topic/chat", {}, JSON.stringify({'text': $scope.messageContent}));
             stompClient.send("/app/direct/chat", {}, JSON.stringify({'text': $scope.messageContent, 'to': 'admin'}));
             $scope.messageContent = "";
+        }
+    }
+
+    function SubjectController($scope, Restangular) {
+        $scope.submitSubject = submitSubject;
+        Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.lstOrganization = response.data;});
+
+        function submitSubject() {
+            Restangular.all('/api/subject/insert').post($scope.subject).then(function (response) {
+                if(response.code == 200){
+                    toastr.success(response.message);
+                }else{
+                    toastr.error(response.message);
+                }
+            }, function(response) {
+                toastr.error(response.data.message);
+            });
         }
     }
 })();

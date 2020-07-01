@@ -2,6 +2,7 @@ package site.code4fun.constant;
 
 public enum Status {
 	ACTIVE("ACTIVE"),
+	INACTIVE("INACTIVE"),
 	PENDING("PENDING"),
 	COMPLETE("COMPLETE"),
 	ERROR("ERROR"),
