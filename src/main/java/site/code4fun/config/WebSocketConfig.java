@@ -36,10 +36,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws")
-        .addInterceptors(getInterceptor())
-        .setAllowedOrigins("*")
-        .withSockJS(); // Đăng ký enpoint khởi tạo ws
+        registry.addEndpoint("/ws").addInterceptors(getInterceptor()).setAllowedOrigins("*").withSockJS(); // Đăng ký enpoint khởi tạo ws
+        registry.addEndpoint("ws-test").withSockJS();
     }
     
     private HandshakeInterceptor getInterceptor() {
