@@ -65,6 +65,10 @@
       templateUrl : "/resources/app/views/group-class.html",
       controller : "GroupClassController"
     })
+    .when("/teacher", {
+      templateUrl : "/resources/app/views/teacher.html",
+      controller : "TeacherController"
+    })
     .when("/user-info", {
       templateUrl : "/resources/app/views/user-info.html",
       controller : "UserController"
@@ -73,7 +77,7 @@
       templateUrl : "/resources/app/login.html",
     })
     .when('/logout', {
-      template: '', //A template or templateUrl is required by AngularJS, even if your controller always redirects.
+      template: '',
       controller: 'LogoutController'
     });
   }

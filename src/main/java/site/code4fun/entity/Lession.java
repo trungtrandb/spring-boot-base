@@ -47,6 +47,9 @@ public class Lession {
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
 	private Timestamp endTime;
 	
+	@Column(name = "user_id")
+	private Long userId; // Người dạy
+	
 	// DTO
 	@Transient
 	private String className;

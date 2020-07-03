@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -26,12 +27,12 @@ public class Classes {
 	private Long id;
 	
 	private String name;
-	private String time;
 	private String note;
 	
-	@Column(name = "is_organization_class")
-	private boolean isOrganizationClass;
+	@Column(name = "owner_id")
+	private Long ownerId; //Chủ nhiệm lớp
 	
 	@ManyToOne
+	@JoinColumn(name="group_class_id")
 	private GroupClass groupClass;
 }

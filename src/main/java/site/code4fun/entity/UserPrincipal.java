@@ -12,6 +12,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+/* Author: TrungTQ
+ * Chỉ dùng để phần quyền authen, không dùng cho việc khác
+ */
+
 @Builder
 public class UserPrincipal implements UserDetails {
 	private static final long serialVersionUID = 1L;
