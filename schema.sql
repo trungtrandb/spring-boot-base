@@ -206,7 +206,16 @@ CREATE TABLE `tblStudentClass`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of tblUser
+-- Table structure for tblUserOrganization
 -- ----------------------------
+DROP TABLE IF EXISTS `tblUserOrganization`;
+CREATE TABLE `tblUserOrganization`  (
+  `user_id` bigint(20) NOT NULL,
+  `organization_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`organization_id`, `user_id`),
+  FOREIGN KEY (`user_id`) REFERENCES `tblUser` (`id`),
+  FOREIGN KEY (`organization_id`) REFERENCES `tblOrganization` (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
 
 SET FOREIGN_KEY_CHECKS = 1;

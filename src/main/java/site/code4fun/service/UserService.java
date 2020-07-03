@@ -15,6 +15,8 @@ import site.code4fun.constant.Queue;
 import site.code4fun.constant.Role;
 import site.code4fun.constant.Status;
 import site.code4fun.entity.User;
+import site.code4fun.entity.UserOrganization;
+import site.code4fun.repository.UserOrganizationRepository;
 import site.code4fun.repository.UserRepository;
 import site.code4fun.util.StringUtils;
 
@@ -26,6 +28,9 @@ public class UserService extends BaseService{
 	@Autowired
 	private QueueService queueService;
 	
+	@Autowired
+	private UserOrganizationRepository userOrganizationRepository;
+	
 	public User create(User u) throws Exception {
 		if(u.getOrganizationId() != null) { // Tạo tài khoản cho giáo viên
 			if(StringUtils.isNull(u.getEmail())) 
@@ -33,7 +38,7 @@ public class UserService extends BaseService{
 			String passWord = StringUtils.randomString();
 			u.setUsername(u.getEmail());
 			u.setPassword(passWord);
-			u.setCreatedBy(getCurrentId());			
+			u.setCreatedBy(getCurrentId());	
 			
 //			Thêm vào queue gửi mật khẩu cho tài khoản mới đăng ký
 			StringBuilder mailContent = new StringBuilder("Tài khoản của bạn đã được đăng ký.");
@@ -62,7 +67,14 @@ public class UserService extends BaseService{
 		u.setStatus(Status.ACTIVE);
 		u.setRole(Role.ROLE_USER.getVal());
 		u.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-		return userRepository.saveAndFlush(u);
+		u = userRepository.saveAndFlush(u);
+		
+		if(null != u.getOrganizationId()) {
+			UserOrganization uo = UserOrganization.builder().userId(u.getId()).organizationId(u.getOrganizationId()).build();
+			userOrganizationRepository.save(uo);
+		}
+		
+		return u;
 	}
 
 	public User getUserInfo() {

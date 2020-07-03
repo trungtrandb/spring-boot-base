@@ -50,9 +50,6 @@ public class User{
     @Column(name = "full_name")
     private String fullName;
     
-    @Column(name = "organization_id")
-    private Long organizationId;
-    
     @Email
     @NotBlank(message = "Email không đúng định dạng")
     private String email;
@@ -93,4 +90,7 @@ public class User{
     // DTO
     @Transient
     private String rePass;
+    
+    @Transient
+    private Long organizationId;
 }
