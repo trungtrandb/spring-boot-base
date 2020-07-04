@@ -411,8 +411,8 @@
         });
 
         function sendMessage() {
-            // stompClient.send("/app/topic/chat", {}, JSON.stringify({'text': $scope.messageContent}));
-            stompClient.send("/app/direct/chat", {}, JSON.stringify({'text': $scope.messageContent, 'to': 'admin'}));
+            stompClient.send("/app/topic/chat", {}, JSON.stringify({'text': $scope.messageContent}));
+            // stompClient.send("/app/direct/chat", {}, JSON.stringify({'text': $scope.messageContent, 'to': 'admin'}));
             $scope.messageContent = "";
         }
     }

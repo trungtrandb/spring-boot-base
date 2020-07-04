@@ -1,5 +1,6 @@
 package site.code4fun.config;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws").addInterceptors(getInterceptor()).setAllowedOrigins("*").withSockJS(); // Đăng ký enpoint khởi tạo ws
-        registry.addEndpoint("/ws-test").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/ws-test").addInterceptors(getPublicInterceptor()).setAllowedOrigins("*").withSockJS();
     }
     
     private HandshakeInterceptor getInterceptor() {
@@ -63,6 +64,24 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 					return true;
 				}	
 			    return false;
+			}
+			
+			@Override
+			public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
+					Exception exception) {				
+			}
+		};
+    }
+    
+    private HandshakeInterceptor getPublicInterceptor() {
+        return new HandshakeInterceptor() {	
+			@Override
+			public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
+					Map<String, Object> attributes) throws Exception {	
+				System.out.println("Has New connection public");
+				List<String> rawCookie = request.getHeaders().get("Cookie");
+				System.out.println(rawCookie);
+				return true;
 			}
 			
 			@Override
