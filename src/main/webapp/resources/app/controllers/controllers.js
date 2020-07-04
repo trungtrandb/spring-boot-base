@@ -12,6 +12,7 @@
     app.controller("UserController", UserController);
     app.controller("DashboardController", DashboardController);
     app.controller("SubjectController", SubjectController);
+    app.controller("TeacherController", TeacherController);
 
     /* ============================================ */
     function OrganizationController($scope, $http, Restangular) {
@@ -347,7 +348,7 @@
 
 
     /* ============================================ */
-    function UserController($scope, $http, Restangular) {
+    function UserController($scope, $http, Restangular, $rootScope) {
         $scope.submitForm = submitForm;
         $scope.user = {};
         Restangular.one('/api/user/getInfo').get().then(function (response) { $scope.user = response.data; });
@@ -356,6 +357,8 @@
             Restangular.all('/api/user/update').post($scope.user).then(function (response) {
                 if(response.code == 200){
                     toastr.success(response.message);
+                    $rootScope.currentUser.avatar = response.data.avatar;
+                    $rootScope.currentUser.fullName = response.data.fullName;
                 }else{
                     toastr.error(response.message);
                 }
@@ -420,11 +423,39 @@
     function SubjectController($scope, Restangular) {
         $scope.submitSubject = submitSubject;
         Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.lstOrganization = response.data;});
+        loadLstSubject();
 
+        function loadLstSubject() {
+            Restangular.one("/api/subject/getAll").get().then(function (response) {$scope.lstSubject = response.data;});
+        }
         function submitSubject() {
             Restangular.all('/api/subject/insert').post($scope.subject).then(function (response) {
                 if(response.code == 200){
+                    loadLstSubject();
+                    $("#modalAddSubject").modal("hide");
                     toastr.success(response.message);
+                    $scope.subject = {};
+                }else{
+                    toastr.error(response.message);
+                }
+            }, function(response) {
+                toastr.error(response.data.message);
+            });
+        }
+    }
+
+    function TeacherController($scope, $http, Restangular) {
+        $scope.submitUser = submitUser;
+        Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.lstOrganization = response.data;});
+
+
+        function submitUser() {
+            Restangular.all('/sign-up').post($scope.user).then(function (response) {
+                if(response.code == 200){
+                    loadLstUser();
+                    $("#modalCreateUser").modal("hide");
+                    toastr.success(response.message);
+                    $scope.subject = {};
                 }else{
                     toastr.error(response.message);
                 }

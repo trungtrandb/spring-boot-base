@@ -1,6 +1,6 @@
 server:
   port: 8000
-  
+
 springdoc:
   swagger-ui:
     path: /doc/swagger-ui
@@ -13,10 +13,11 @@ spring:
   jpa:
     properties:
       hibernate.format_sql: true
+      hibernate.dialect: org.hibernate.dialect.MySQL55Dialect
     show-sql: true
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   datasource:

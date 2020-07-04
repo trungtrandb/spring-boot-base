@@ -37,7 +37,7 @@ public class User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@NotBlank(message = "Username must not be blank")
+	@NotBlank(message = "Tên đăng nhập không được bỏ trống")
     @Column(name = "user_name", nullable = false, unique = true)
     private String username;
     
@@ -45,16 +45,13 @@ public class User{
     @Column(name = "pass_word", nullable = false)
     private String password;
     
-    @Transient
-    private String rePass;
-    
-//    @Enumerated(value = EnumType.STRING)
     private String role;
     
     @Column(name = "full_name")
     private String fullName;
     
     @Email
+    @NotBlank(message = "Email không đúng định dạng")
     private String email;
     private int gender;    
     private String address;    
@@ -67,16 +64,16 @@ public class User{
     private Timestamp createdDate;
     
     @Column(name = "created_by")
-    private Integer createdBy;
+    private Long createdBy;
     
     @Column(name = "updated_date")
     private Timestamp updatedDate;
     
     @Column(name = "updated_by")
-    private Integer updatedBy;
+    private Long updatedBy;
     
     @Column(name = "identity_card")
-    private Integer identityCard;
+    private String identityCard;
     
     @JsonIgnore
     @Column(name = "oauth2_provider")
@@ -88,4 +85,12 @@ public class User{
     
     @Column(name = "avatar")
     private String avatar;
+    
+    
+    // DTO
+    @Transient
+    private String rePass;
+    
+    @Transient
+    private Long organizationId;
 }

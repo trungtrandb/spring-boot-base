@@ -9,8 +9,9 @@ public class ClassDTO {
 
 	private Long id;
 	private String name;
-	private String time;
 	private String note;
 	private boolean isOrganizationClass;
 	private Long groupClassId; 
+	private Long ownerId;
+	private String owenerName;
 }

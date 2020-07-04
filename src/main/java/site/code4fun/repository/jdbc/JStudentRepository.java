@@ -33,14 +33,22 @@ public class JStudentRepository {
 		sql.append("JOIN tblUser u on u.id = ps.user_id ");
 		sql.append("WHERE sc.class_id IN (:classIds) ");
 		List<StudentDTO> lstRes = new ArrayList<>();
+		if (classIds.size() == 0) return lstRes;
 		jdbcTemplate.query(sql.toString(), parameters, new RowCallbackHandler() {
 			@Override
 			public void processRow(ResultSet rs) throws SQLException {
 				Long[] lstClass = { (Long) rs.getLong("class_id") };
-				StudentDTO st = StudentDTO.builder().id(rs.getLong("id")).address(rs.getString("address"))
-						.className(rs.getString("class_name")).dateOfBirth(rs.getTimestamp("date_of_birth"))
-						.name(rs.getString("name")).phone(rs.getString("phone")).note(rs.getString("note"))
-						.parentName(rs.getString("full_name")).classes(lstClass).build();
+				StudentDTO st = StudentDTO.builder()
+						.id(rs.getLong("id"))
+						.address(rs.getString("address"))
+						.className(rs.getString("class_name"))
+						.dateOfBirth(rs.getTimestamp("date_of_birth"))
+						.name(rs.getString("name"))
+						.phone(rs.getString("phone"))
+						.note(rs.getString("note"))
+						.parentName(rs.getString("full_name"))
+						.classes(lstClass)
+						.build();
 				lstRes.add(st);
 			}
 		});
