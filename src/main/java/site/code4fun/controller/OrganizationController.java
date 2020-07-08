@@ -47,6 +47,15 @@ public class OrganizationController {
 		}
 	}
 	
+	@RequestMapping(path = "/get-teacher", method = RequestMethod.POST)
+	public ResponseEntity<?> getTeacher(@RequestBody Organization item){
+		try {
+			return ResponseEntity.ok(new Response(200, "Success", organizationService.create(item)));
+		}catch (Exception e) {
+			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
+		}
+	}
+	
 	@RequestMapping(path = "/delete/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> insert(@PathVariable Long id){
 		try {

@@ -115,12 +115,19 @@
 
 
     /* ============================================ */
-    function ClassController($scope, $http) {
+    function ClassController($scope, $http, Restangular) {
         $scope.submitAddCLazz = submitAddClazz;
         $scope.remove = remove;
+        $scope.selectOrganization = selectOrganization;
         loadLstClass();
-        $http.get("/api/group-class/get-by-organization").then(function (response) {$scope.lstGroup = response.data.data;});
+        Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.lstOrganization = response.data; });
 
+        function selectOrganization() {
+            Restangular.one("/api/group-class/get-by-organization?id=" + $scope.organizationId).get().then(function (response) { $scope.lstGroup = response.data; });
+            Restangular.one("/api/organization/get-teacher?id=" + $scope.organizationId).get().then(function (response) { $scope.lstTeacher = response.data; });
+            
+        }
+        
         function loadLstClass() {
             $http.get("/api/class/get-by-group").then(function (response) {$scope.lstClass = response.data.data;});
         }
@@ -448,11 +455,14 @@
         $scope.submitUser = submitUser;
         Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.lstOrganization = response.data;});
 
+        function loadLstTeacher() {
+            Restangular.one("/api/organization/getAll").get().then(function (response) {$scope.lstTeacher = response.data;});
+        }
 
         function submitUser() {
             Restangular.all('/sign-up').post($scope.user).then(function (response) {
                 if(response.code == 200){
-                    loadLstUser();
+                    loadLstTeacher();
                     $("#modalCreateUser").modal("hide");
                     toastr.success(response.message);
                     $scope.subject = {};
