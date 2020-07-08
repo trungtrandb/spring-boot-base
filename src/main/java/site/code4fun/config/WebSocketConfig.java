@@ -30,45 +30,46 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-    	config.enableSimpleBroker("/queue/", "/topic/");
-    	config.setApplicationDestinationPrefixes("/app");
+    	config.enableSimpleBroker("/queue/", "/topic/","/checkAuthorization");
+//    	config.setApplicationDestinationPrefixes("/app");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").addInterceptors(getInterceptor()).setAllowedOrigins("*").withSockJS(); // Đăng ký enpoint khởi tạo ws
-        registry.addEndpoint("/ws-test").setAllowedOrigins("*").withSockJS();
+//        registry.addEndpoint("/ws").addInterceptors(getInterceptor()).setAllowedOrigins("*").withSockJS(); // Đăng ký enpoint khởi tạo ws
+        registry.addEndpoint("/ws-test").withSockJS();
+        registry.addEndpoint("/ws").addInterceptors(new site.code4fun.config.HandshakeInterceptor()).setAllowedOrigins("*").withSockJS(); // Đăng ký enpoint khởi tạo ws
     }
     
-    private HandshakeInterceptor getInterceptor() {
-        return new HandshakeInterceptor() {	
-			@Override
-			public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-					Map<String, Object> attributes) throws Exception {	
-				System.out.println("Has New connection");
-				String rawCookie = request.getHeaders().get("Cookie").get(0);
-				String[] listCookieParam = rawCookie.split(";");
-				String jwtToken = "";
-				for(String cookieParam :listCookieParam)
-				{
-					String[] rawCookieNameAndValuePair = cookieParam.split("=");
-					String key = rawCookieNameAndValuePair[0].trim();
-					if(key.equalsIgnoreCase("Authorization")) jwtToken = rawCookieNameAndValuePair[1];
-				}
-				 
-			    if(!StringUtils.isNull(jwtToken) && !jwtTokenUtil.isTokenExpired(jwtToken)) {
-					UserDetails userDetails = jwtTokenUtil.getUserPrincipalFromToken(jwtToken);
-					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-					SecurityContextHolder.getContext().setAuthentication(authentication);
-					return true;
-				}	
-			    return false;
-			}
-			
-			@Override
-			public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-					Exception exception) {				
-			}
-		};
-    }
+//    private HandshakeInterceptor getInterceptor() {
+//        return new HandshakeInterceptor() {	
+//			@Override
+//			public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
+//					Map<String, Object> attributes) throws Exception {	
+//				System.out.println("Has New connection");
+//				String rawCookie = request.getHeaders().get("Cookie").get(0);
+//				String[] listCookieParam = rawCookie.split(";");
+//				String jwtToken = "";
+//				for(String cookieParam :listCookieParam)
+//				{
+//					String[] rawCookieNameAndValuePair = cookieParam.split("=");
+//					String key = rawCookieNameAndValuePair[0].trim();
+//					if(key.equalsIgnoreCase("Authorization")) jwtToken = rawCookieNameAndValuePair[1];
+//				}
+//				 
+//			    if(!StringUtils.isNull(jwtToken) && !jwtTokenUtil.isTokenExpired(jwtToken)) {
+//					UserDetails userDetails = jwtTokenUtil.getUserPrincipalFromToken(jwtToken);
+//					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//					SecurityContextHolder.getContext().setAuthentication(authentication);
+//					return true;
+//				}	
+//			    return false;
+//			}
+//			
+//			@Override
+//			public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
+//					Exception exception) {				
+//			}
+//		};
+//    }
 }
