@@ -31,18 +31,22 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Tên trường</th>
-                    <th>Địa chỉ</th>
+                    <th>Họ tên</th>
+                    <th>Tên đăng nhập</th>
                     <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Email</th>
                     <th>Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="x in lstOrganization">
+                  <tr ng-repeat="x in lstTeacher">
                     <td>{{ x.id }}</td>
-                    <td>{{ x.name }}</td>
-                    <td>{{ x.address }}</td>
+                    <td>{{ x.fullName }}</td>
+                    <td>{{ x.username }}</td>
                     <td>{{ x.phone }}</td>
+                    <td>{{ x.address }}</td>
+                    <td>{{ x.email }}</td>
                     <td>
                       <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>
                       <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>

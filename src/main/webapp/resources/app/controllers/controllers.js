@@ -453,10 +453,11 @@
 
     function TeacherController($scope, $http, Restangular) {
         $scope.submitUser = submitUser;
+        loadLstTeacher();
         Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.lstOrganization = response.data;});
 
         function loadLstTeacher() {
-            Restangular.one("/api/organization/getAll").get().then(function (response) {$scope.lstTeacher = response.data;});
+            Restangular.one("/api/organization/get-teacher").get().then(function (response) {$scope.lstTeacher = response.data;});
         }
 
         function submitUser() {

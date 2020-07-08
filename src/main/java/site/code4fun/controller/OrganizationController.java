@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import site.code4fun.entity.Organization;
@@ -47,10 +48,10 @@ public class OrganizationController {
 		}
 	}
 	
-	@RequestMapping(path = "/get-teacher", method = RequestMethod.POST)
-	public ResponseEntity<?> getTeacher(@RequestBody Organization item){
+	@RequestMapping(path = "/get-teacher", method = RequestMethod.GET)
+	public ResponseEntity<?> getTeacher(@RequestParam(required = false)Long id){
 		try {
-			return ResponseEntity.ok(new Response(200, "Success", organizationService.create(item)));
+			return ResponseEntity.ok(new Response(200, "Success", organizationService.getLstTeacherOfOrg(id)));
 		}catch (Exception e) {
 			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
 		}

@@ -123,7 +123,7 @@ public class StudentService {
 					.fullName(s.getParentName())
 					.password(new BCryptPasswordEncoder().encode(passWord))
 					.role(Role.ROLE_USER.getVal())
-					.status(Status.PENDING).build();
+					.status(Status.PENDING.getVal()).build();
 			u = userRepository.saveAndFlush(u);
 			
 //			Thêm vào queue gửi mật khẩu cho tài khoản mới đăng ký
@@ -184,7 +184,7 @@ public class StudentService {
 					.fullName(s.getParentName())
 					.password(new BCryptPasswordEncoder().encode(passWord))
 					.role(Role.ROLE_USER.getVal())
-					.status(Status.PENDING).build();
+					.status(Status.PENDING.getVal()).build();
 			u = userRepository.saveAndFlush(u);
 			
 //			Thêm vào queue gửi mật khẩu cho tài khoản mới đăng ký

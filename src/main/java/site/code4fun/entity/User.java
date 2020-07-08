@@ -4,8 +4,6 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,8 +19,6 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import site.code4fun.constant.Status;
-
 
 @Entity 
 @Table(name = "tblUser")
@@ -35,62 +31,64 @@ public class User{
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
 	@NotBlank(message = "Tên đăng nhập không được bỏ trống")
     @Column(name = "user_name", nullable = false, unique = true)
-    private String username;
+	protected String username;
     
 	@JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "pass_word", nullable = false)
-    private String password;
+	protected String password;
     
-    private String role;
+	protected String role;
     
     @Column(name = "full_name")
-    private String fullName;
+    protected String fullName;
     
     @Email
     @NotBlank(message = "Email không đúng định dạng")
-    private String email;
-    private int gender;    
-    private String address;    
-    private String phone;
+    protected String email;
+    protected int gender;    
+    protected String address;    
+    protected String phone;
     
-    @Enumerated(value = EnumType.STRING)
-    private Status status;
+    protected String status;
     
     @Column(name = "created_date")
-    private Timestamp createdDate;
+    protected Timestamp createdDate;
     
     @Column(name = "created_by")
-    private Long createdBy;
+    protected Long createdBy;
     
     @Column(name = "updated_date")
-    private Timestamp updatedDate;
+    protected Timestamp updatedDate;
     
     @Column(name = "updated_by")
-    private Long updatedBy;
+    protected Long updatedBy;
     
     @Column(name = "identity_card")
-    private String identityCard;
+    protected String identityCard;
     
     @JsonIgnore
     @Column(name = "oauth2_provider")
-    private String oauth2Provider;
+    protected String oauth2Provider;
     
     @JsonIgnore
     @Column(name = "oauth2_id")
-    private String oauth2Id;
+    protected String oauth2Id;
     
     @Column(name = "avatar")
-    private String avatar;
+    protected String avatar;
     
     
     // DTO
     @Transient
-    private String rePass;
+    protected String rePass;
     
     @Transient
-    private Long organizationId;
+    protected Long OrganizationId;
+    
+    @Transient
+    protected String organizationName;
 }
