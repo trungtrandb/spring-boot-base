@@ -23,7 +23,7 @@ public class JUserOrganizationRepository {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("organizationIds", organizationIds);
 		
-		StringBuilder sql = new StringBuilder("Select * FROM tblUser u");
+		StringBuilder sql = new StringBuilder("Select u.*, uo.organization_id FROM tblUser u");
 		sql.append(" JOIN tblUserOrganization uo ON u.id = uo.user_id"); 
 		sql.append(" WHERE uo.organization_id IN (:organizationIds)");
 		return jdbcTemplate.query(sql.toString(), parameters, new UserMapper());

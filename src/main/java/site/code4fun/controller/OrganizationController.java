@@ -66,5 +66,16 @@ public class OrganizationController {
 			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
 		}
 	}
+	
+	@RequestMapping(path = "/delete-teacher", method = RequestMethod.GET)
+	public ResponseEntity<?> deleteTeacher(@RequestParam(value = "teacher_id") Long teacherId,
+			@RequestParam(value = "org_id") Long orgId){
+		try {
+			organizationService.deleteTeacher(teacherId, orgId);
+			return ResponseEntity.ok(new Response(200, "Success", null));
+		}catch (Exception e) {
+			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
+		}
+	}
 
 }

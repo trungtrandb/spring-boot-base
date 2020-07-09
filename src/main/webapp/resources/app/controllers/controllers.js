@@ -315,6 +315,7 @@
 
         Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
         Restangular.one('/api/organization/get-by-user').get().then(function (response) { $scope.lstOrganization = response.data; });
+        Restangular.one('/api/lession/getAll').get().then(function (response) { $scope.lstLession = response.data; });
 
         function selectClass() {
             Restangular.one("/api/student/getAll?class=" +$scope.checkin.classId).get().then(function (response) { $scope.lstStudent = response.data; });
@@ -460,6 +461,8 @@
 
     function TeacherController($scope, $http, Restangular) {
         $scope.submitUser = submitUser;
+        $scope.remove = remove;
+
         loadLstTeacher();
         Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.lstOrganization = response.data;});
 
@@ -478,6 +481,19 @@
                     toastr.error(response.message);
                 }
             }, function(response) {
+                toastr.error(response.data.message);
+            });
+        }
+
+        function remove(teacherId, orgId){
+            $http.get("/api/organization/delete-teacher?teacher_id="+ teacherId + "&org_id=" + orgId).then(function (response) {
+                if(response.data.code == 200){
+                    toastr.success(response.data.message);
+                    loadLstTeacher();
+                }else{
+                    toastr.error(response.data.message);
+                }
+            }, function (response) {
                 toastr.error(response.data.message);
             });
         }

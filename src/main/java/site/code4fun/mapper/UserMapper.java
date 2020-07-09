@@ -39,6 +39,7 @@ public class UserMapper implements RowMapper<User>{
 				.fullName(rs.getString("full_name"))
 				.phone(rs.getString("phone"))
 				.username(rs.getString("user_name"))
+				.OrganizationId(rs.getLong("organization_id"))
 				.build();
 	}
 }
