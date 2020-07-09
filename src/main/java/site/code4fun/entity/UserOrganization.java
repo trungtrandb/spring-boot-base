@@ -3,6 +3,7 @@ package site.code4fun.entity;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -21,20 +22,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @IdClass(UserOrganizationKey.class)
 public class UserOrganization{
-
+	
 	@Id
-	@Column(name = "user_id")
 	private Long userId;
 	
 	@Id
-	@Column(name = "organization_id")
 	private Long organizationId;
 }
 
-@Data
+@Embeddable
 class UserOrganizationKey implements Serializable{
-	private static final long serialVersionUID = 1L;
 	
+	private static final long serialVersionUID = 1L;
+
+	@Column(name = "user_id")
 	private Long userId;
+	
+	@Column(name = "organization_id")
 	private Long organizationId;
+	
 }
