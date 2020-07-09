@@ -10,8 +10,8 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>vn.sopen</groupId>
-	<artifactId>SpringBootProject</artifactId>
-	<version>0.0.1</version>
+	<artifactId>Edu</artifactId>
+	<version>0.1</version>
 	<name>Demo</name>
 	<description>Demo Sopen</description>
 
