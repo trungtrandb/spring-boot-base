@@ -12,8 +12,8 @@ public class CheckinDTO {
 	private String className;
 	
 	
-	private Long subjectId;
-	private String subjectName;
+	private Long lessionId;
+	private String lessionName;
 	private Timestamp createdDate;
 	private String createdName;
 	private int totalCheckin;

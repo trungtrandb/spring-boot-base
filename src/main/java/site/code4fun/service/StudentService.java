@@ -123,6 +123,7 @@ public class StudentService {
 					.fullName(s.getParentName())
 					.password(new BCryptPasswordEncoder().encode(passWord))
 					.role(Role.ROLE_USER.getVal())
+					.email(s.getParentPhoneOrEmail())
 					.status(Status.PENDING.getVal()).build();
 			u = userRepository.saveAndFlush(u);
 			

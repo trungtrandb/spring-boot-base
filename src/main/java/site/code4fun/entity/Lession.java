@@ -53,4 +53,7 @@ public class Lession {
 	// DTO
 	@Transient
 	private String className;
+	
+	@Transient
+	private String subjectName;
 }

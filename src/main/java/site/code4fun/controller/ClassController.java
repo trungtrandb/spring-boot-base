@@ -24,7 +24,7 @@ public class ClassController {
 	@RequestMapping(value = "/get-by-group", method = RequestMethod.GET)
 	public ResponseEntity<?> getAll(@RequestParam(required = false) Long id){
 		try {
-			return new ResponseEntity<>(new Response(null, "success", classService.getByGroupId(id)), HttpStatus.OK);
+			return new ResponseEntity<>(new Response(200, "Successfull!!!", classService.getByGroupId(id)), HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
 		}
@@ -33,19 +33,19 @@ public class ClassController {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public ResponseEntity<?> insert(@RequestBody ClassDTO c) {
 		try {
-			return new ResponseEntity<>(new Response(null, "success", classService.insert(c)), HttpStatus.OK);
+			return new ResponseEntity<>(new Response(200, "Successfull!!!", classService.insert(c)), HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
 		}
 	}
 	
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		try {
 			classService.delete(id);
-			return new ResponseEntity<>(new Response(null, "success", null), HttpStatus.OK);
+			return new ResponseEntity<>(new Response(200, "Successfull!!!", null), HttpStatus.OK);
 		}catch(Exception e) {
-			return new ResponseEntity<>(new Response(null, e.getMessage(), null), HttpStatus.OK);
+			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
 		}
 	}	
 }

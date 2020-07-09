@@ -1,17 +1,14 @@
 package site.code4fun.entity.dto;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import site.code4fun.entity.Classes;
 
 @Data
-@Builder
-public class ClassDTO {
+@EqualsAndHashCode(callSuper = false)
+public class ClassDTO extends Classes{
 
-	private Long id;
-	private String name;
-	private String note;
-	private boolean isOrganizationClass;
-	private Long groupClassId; 
-	private Long ownerId;
-	private String owenerName;
+	protected Long groupClassId; 
+	protected Long ownerId;
+	protected String owenerName;
 }

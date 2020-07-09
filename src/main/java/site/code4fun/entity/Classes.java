@@ -1,6 +1,5 @@
 package site.code4fun.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,15 +23,16 @@ public class Classes {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	protected Long id;
 	
-	private String name;
-	private String note;
-	
-	@Column(name = "owner_id")
-	private Long ownerId; //Chủ nhiệm lớp
+	protected String name;
+	protected String note;
+
+	@ManyToOne
+	@JoinColumn(name="owner_id")
+	protected User owner; //Chủ nhiệm lớp
 	
 	@ManyToOne
 	@JoinColumn(name="group_class_id")
-	private GroupClass groupClass;
+	protected GroupClass groupClass;
 }

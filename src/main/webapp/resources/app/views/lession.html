@@ -4,11 +4,11 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Lession</h1>
+          <h1>Thời khóa biểu</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
             <li class="breadcrumb-item active">DataTables</li>
           </ol>
         </div>
@@ -23,7 +23,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddLession">Add Lession</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddLession">Thêm buổi học</button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -31,11 +31,12 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Class Name</th>
-                    <th>Start time</th>
-                    <th>End time</th>
-                    <th>Description</th>
+                    <th>Tên buổi học</th>
+                    <th>Lớp</th>
+                    <th>Môn học</th>
+                    <th>Thời gian bắt đầu</th>
+                    <th>Thời gian kết thúc</th>
+                    <th>Ghi chú</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -44,6 +45,7 @@
                     <td>{{ x.id }}</td>
                     <td>{{ x.title }}</td>
                     <td>{{ x.className }}</td>
+                    <td>{{ x.subjectName }}</td>
                     <td>{{ x.startTime }}</td>
                     <td>{{ x.endTime }}</td>
                     <td>{{ x.description }}</td>
@@ -74,7 +76,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Add Lession</h4>
+          <h4 class="modal-title">Thêm buổi học</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
@@ -82,26 +84,44 @@
         <div class="modal-body">
           <form role="form" ng-submit="submitAddLession()">
             <div class="form-group">
-              <label for="name">Lession name</label>
+              <label for="name">Tên buổi học: <span class="text-danger">*</span></label>
               <input type="text" class="form-control" id="name" ng-model="lession.title">
             </div>
             <div class="form-group">
-              <label for="startTime">Start</label>
-              <input type="text" ng-model="lession.startTime" class="form-control datetimepicker">
+              <label>Trường <span class="text-danger">*</span></label>
+              <select class="form-control" ng-model="organizationId" ng-change="selectOrganization()">
+                <option ng-repeat="x in lstOrganization" value="{{x.id}}">{{x.name}}</option>
+              </select>
             </div>
             <div class="form-group">
-              <label for="endTime">End time</label>
-              <input type="text" ng-model="lession.endTime" class="form-control datetimepicker">
-            </div>
-            <div class="form-group">
-              <label for="note">Description</label>
-              <input type="text" class="form-control" id="note" ng-model="lession.note">
-            </div>
-            <div class="form-group">
-              <label>Class</label>
+              <label>Lớp: </label>
               <select class="form-control" ng-model="lession.classId">
                 <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
               </select>
+            </div>
+            <div class="form-group" ng-show="organizationId">
+              <label>Thuộc môn học: <span class="text-danger">*</span></label>
+              <select class="form-control" ng-model="lession.subjectId">
+                <option ng-repeat="x in lstSubject" value="{{x.id}}">{{x.name}}</option>
+              </select>
+            </div>
+            <div class="form-group" ng-show="organizationId">
+              <label>GV giảng dạy: <span class="text-danger">*</span></label>
+              <select class="form-control" ng-model="lession.userId">
+                <option ng-repeat="x in lstTeacher" value="{{x.id}}">{{x.fullName}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="startTime">Thời gian bắt đầu</label>
+              <input type="text" ng-model="lession.startTime" class="form-control datetimepicker">
+            </div>
+            <div class="form-group">
+              <label for="endTime">Thời gian kết thúc</label>
+              <input type="text" ng-model="lession.endTime" class="form-control datetimepicker">
+            </div>
+            <div class="form-group">
+              <label for="note">Ghi chú</label>
+              <input type="text" class="form-control" id="note" ng-model="lession.note">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>

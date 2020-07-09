@@ -125,7 +125,6 @@
         function selectOrganization() {
             Restangular.one("/api/group-class/get-by-organization?id=" + $scope.organizationId).get().then(function (response) { $scope.lstGroup = response.data; });
             Restangular.one("/api/organization/get-teacher?id=" + $scope.organizationId).get().then(function (response) { $scope.lstTeacher = response.data; });
-            
         }
         
         function loadLstClass() {
@@ -148,7 +147,7 @@
         }
 
         function remove(id){
-            $http.get("/api/group-class/delete/" + id).then(function (response) {
+            $http.get("/api/class/delete/" + id).then(function (response) {
                 if(response.data.code == 200){
                     toastr.success(response.data.message);
                     loadLstClass();
@@ -242,16 +241,24 @@
 
 
     /* ============================================ */
-    function LessionController($scope, $http) {
+    function LessionController($scope, $http, Restangular) {
+        $scope.lession = {};
+        $scope.submitAddLession = submitAddLession;
+        $scope.remove = remove;
+        $scope.selectOrganization = selectOrganization;
+
         flatpickr(".datetimepicker",{
             enableTime: true,
             dateFormat: "Y-m-d H:i",
         });
-        $scope.lession = {};
-        $scope.submitAddLession = submitAddLession;
-        $scope.remove = remove;
         loadLstLession();
-        $http.get("/api/class/get-by-group").then(function (response) {$scope.lstClass = response.data.data;});
+        Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.lstOrganization = response.data; });
+        Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
+
+        function selectOrganization() {
+            Restangular.one("/api/organization/get-teacher?id=" + $scope.organizationId).get().then(function (response) { $scope.lstTeacher = response.data; });
+            Restangular.one("/api/subject/get-by-org?id=" + $scope.organizationId).get().then(function (response) { $scope.lstSubject = response.data; });            
+        }
 
         function loadLstLession() {
             $http.get("/api/lession/getAll").then(function (response) {$scope.lstLession = response.data.data;});
@@ -281,7 +288,7 @@
             .then(function(response) {
                 if(response.data.code == 200){
                     toastr.success(response.data.message);
-                    loadLstSubject();
+                    loadLstLession();
                     $("#modalAddLession").modal("hide");
                 }else{
                     toastr.error(response.data.message);
@@ -307,11 +314,11 @@
         });
 
         Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
-        Restangular.one('/api/subject/getAll').get().then(function (response) { $scope.lstSubject = response.data; });
         Restangular.one('/api/organization/get-by-user').get().then(function (response) { $scope.lstOrganization = response.data; });
 
         function selectClass() {
-            $http.get("/api/student/getAll?class=" +$scope.checkin.classId).then(function (response) {$scope.lstStudent = response.data.data;});
+            Restangular.one("/api/student/getAll?class=" +$scope.checkin.classId).get().then(function (response) { $scope.lstStudent = response.data; });
+            Restangular.one('/api/lession/get-by-class?id='+$scope.checkin.classId).get().then(function (response) { $scope.lstLession = response.data; });
         }
 
         function view(checkinItem) {

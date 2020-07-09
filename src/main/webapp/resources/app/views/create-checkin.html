@@ -25,15 +25,15 @@
             <div class="card-header">
               <div class="form-row">
                 <div class="col">
-                  <label for="">Class: </label>
+                  <label for="">Lớp: </label>
                   <select class="form-control" ng-model="checkin.classId" ng-change="selectClass()">
                     <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
                   </select>
                 </div>
                 <div class="col">
-                  <label for="">Subject: </label>
-                  <select class="form-control" ng-model="checkin.subjectId">
-                    <option ng-repeat="x in lstSubject" value="{{x.id}}">{{x.title}}</option>
+                  <label for="">Buổi học: </label>
+                  <select class="form-control" ng-model="checkin.lessionId">
+                    <option ng-repeat="x in lstLession" value="{{x.id}}">{{x.title}}</option>
                   </select>
                 </div>
               </div>

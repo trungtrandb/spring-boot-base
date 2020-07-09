@@ -21,10 +21,18 @@ public class LessionController {
 	LessionService lessionService;
 	
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
-	public ResponseEntity<?> getAll(@RequestParam(name = "page", required = false, defaultValue = "1") int page,
-			@RequestParam(name = "limit", required = false, defaultValue = "10") int limit){
+	public ResponseEntity<?> getAll(){
 		try {
-			return ResponseEntity.ok(new Response(200, "success", lessionService.getAll(page, limit)));
+			return ResponseEntity.ok(new Response(200, "success", lessionService.getAll()));
+		}catch(Exception e) {
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
+	
+	@RequestMapping(value = "/get-by-class", method = RequestMethod.GET)
+	public ResponseEntity<?> getByClass(@RequestParam(value = "id")Long id){
+		try {
+			return ResponseEntity.ok(new Response(200, "success", lessionService.getByClassId(id)));
 		}catch(Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}

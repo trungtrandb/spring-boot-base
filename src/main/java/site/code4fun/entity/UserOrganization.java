@@ -31,6 +31,7 @@ public class UserOrganization{
 }
 
 @Embeddable
+@Data
 class UserOrganizationKey implements Serializable{
 	
 	private static final long serialVersionUID = 1L;

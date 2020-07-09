@@ -11,7 +11,7 @@ import lombok.Data;
 @Builder
 public class CheckinFilterDTO {
 	private Long classId;
-	private Long subjectId;
+	private Long lessionId;
 	private Long organizationId;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")

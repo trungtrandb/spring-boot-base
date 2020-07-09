@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import site.code4fun.entity.Classes;
 import site.code4fun.entity.GroupClass;
+import site.code4fun.entity.User;
 import site.code4fun.entity.dto.ClassDTO;
 
 @Service
@@ -23,12 +24,13 @@ public class ClassService extends BaseService{
 	
 	public Classes insert(ClassDTO c) throws Exception {
 		Optional<GroupClass> group = groupClassRepository.findById(c.getGroupClassId());
+		Optional<User> user = userRepository.findById(c.getOwnerId());
 		if(!group.isPresent()) throw new Exception("Group not found!!");
 		Classes clazz = Classes.builder()
 				.name(c.getName())
 				.note(c.getNote())
 				.groupClass(group.get())
-				.ownerId(c.getOwnerId())
+				.owner(user.get())
 				.build();
 		return classRepository.saveAndFlush(clazz);
 	}

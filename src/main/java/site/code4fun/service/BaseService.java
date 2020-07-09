@@ -15,6 +15,7 @@ import site.code4fun.entity.UserPrincipal;
 import site.code4fun.repository.ClassRepository;
 import site.code4fun.repository.GroupClassRepository;
 import site.code4fun.repository.OrganizationRepository;
+import site.code4fun.repository.UserRepository;
 
 @Service
 public class BaseService {
@@ -27,6 +28,9 @@ public class BaseService {
 	
 	@Autowired 
 	protected ClassRepository classRepository;
+	
+	@Autowired 
+	protected UserRepository userRepository;
 	
 	protected final Long getCurrentId() {
 		UserPrincipal currentUser = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();

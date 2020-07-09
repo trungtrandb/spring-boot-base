@@ -19,15 +19,13 @@ public class JLessionRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
-	public List<Lession> findByClassIds(List<Long> classIds, int limit, int offset) {
+	public List<Lession> findByClassIds(List<Long> classIds) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("classIds", classIds);
-		parameters.addValue("limit", limit);
-		parameters.addValue("offset", offset);
-		StringBuilder sql= new StringBuilder("SELECT s.*, c.name as class_name FROM tblSubject s ");
-		sql.append("JOIN tblClass c on s.class_id = c.id ");
-		sql.append("WHERE s.class_id IN (:classIds) ");
-		sql.append("LIMIT :offset, :limit");
+		StringBuilder sql= new StringBuilder("SELECT ls.*, c.name as class_name, s.name as subject_name FROM tblLession ls ");
+		sql.append("JOIN tblClass c on ls.class_id = c.id ");
+		sql.append("JOIN tblSubject s ON ls.subject_id = s.id ");
+		sql.append("WHERE ls.class_id IN (:classIds) ");
 		List<Lession> lstRes = new ArrayList<>();
 		if(classIds.size() == 0) return lstRes;
 		jdbcTemplate.query(sql.toString(), parameters, new RowCallbackHandler() {
@@ -40,6 +38,10 @@ public class JLessionRepository {
 						.description(rs.getString("description"))
 						.endTime(rs.getTimestamp("end_time"))
 						.startTime(rs.getTimestamp("start_time"))
+						.subjectId(rs.getLong("subject_id"))
+						.userId(rs.getLong("user_id"))
+						.classId(rs.getLong("class_id"))
+						.subjectName(rs.getNString("subject_name"))
 						.build();
 				lstRes.add(st);
 			}

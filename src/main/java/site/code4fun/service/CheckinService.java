@@ -124,7 +124,7 @@ public class CheckinService extends BaseService{
 					.stream().collect(Collectors.toMap(Classes::getId, Classes::getName));
 		}
 		
-		List<CheckinDTO> lstRes = jCheckinRepository.getAllCheckin(filter.getSubjectId(), new ArrayList<>(mapClass.keySet()), filter.getCreatedDate());
+		List<CheckinDTO> lstRes = jCheckinRepository.getAllCheckin(filter.getLessionId(), new ArrayList<>(mapClass.keySet()), filter.getCreatedDate());
 
 		for(CheckinDTO _item : lstRes) {
 			if(mapClass.containsKey(_item.getClassId())) _item.setClassName(mapClass.get(_item.getClassId()));
