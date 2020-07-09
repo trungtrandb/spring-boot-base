@@ -40,8 +40,8 @@ public class MailUtil{
 				sendmail(map.get("receiver"), map.get("subject"), map.get("content"));
 			} catch (Exception e) {
 				e.printStackTrace();
+				sendmail("trungtrandb@gmail.com", "Lỗi send mail Edu", e.getMessage());
 			}
-            
         }
     }
 }
