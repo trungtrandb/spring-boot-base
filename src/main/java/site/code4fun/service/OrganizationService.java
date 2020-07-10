@@ -1,5 +1,6 @@
 package site.code4fun.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -8,11 +9,15 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import site.code4fun.entity.Classes;
+import site.code4fun.entity.GroupClass;
 import site.code4fun.entity.Organization;
 import site.code4fun.entity.User;
+import site.code4fun.entity.dto.UserDTO;
 import site.code4fun.repository.OrganizationRepository;
 import site.code4fun.repository.UserOrganizationRepository;
 import site.code4fun.repository.UserRepository;
+import site.code4fun.repository.jdbc.JStudentRepository;
 import site.code4fun.repository.jdbc.JUserOrganizationRepository;
 
 @Service
@@ -29,6 +34,9 @@ public class OrganizationService extends BaseService{
 	
 	@Autowired
 	private UserOrganizationRepository userOrganizationRepository;
+	
+	@Autowired
+	private JStudentRepository jStudentRepository;
 	
 	public Organization getById(Long id) throws Exception {
 		Optional<Organization> item = organizationRepository.findById(id);
@@ -76,6 +84,20 @@ public class OrganizationService extends BaseService{
 		if(item.get().getUser().getId() != getCurrentId()) throw new Exception("Không có quyền xóa!");
 		userOrganizationRepository.deleteTeacherOrg(teacherId, orgId);
 		return true;
+	}
+
+	public List<UserDTO> getLstParentOfOrg(Long orgId) throws Exception {
+		List<Long> classIds = new ArrayList<>();
+		if(orgId != null) {
+			Optional<Organization> org = organizationRepository.findById(orgId);
+			if(!org.isPresent() || org.get().getUser().getId() != getCurrentId()) throw new Exception("Không tìm thấy hoặc không có quyền xem!");
+			List<Long> groupClassIds = groupClassRepository.findByOrganizationIds(Arrays.asList(org.get().getId())).stream().map(GroupClass::getId).collect(Collectors.toList());
+			if(groupClassIds.size() == 0 )return new ArrayList<>();
+			classIds = classRepository.findByGroupId(groupClassIds).stream().map(Classes::getId).collect(Collectors.toList());
+		}else {
+			classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
+		}
+		return jStudentRepository.findParentByClassIds(classIds);
 	}
 
 }

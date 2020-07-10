@@ -53,7 +53,6 @@ public class ChatController {
 		OutputMessage out = OutputMessage.builder().from(user.getId()).avatar(user.getAvatar())
 				.fullName(user.getFullName()).text(msg.getText()).time(new Timestamp(System.currentTimeMillis()))
 				.build();
-		log.info(msg.getFrom()+"-"+msg.getTo()+"-"+msg.getText());
 		simpMessagingTemplate.convertAndSendToUser(msg.getTo(), "/queue/reply", out);
 	}
 

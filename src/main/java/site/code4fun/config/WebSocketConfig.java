@@ -32,6 +32,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
     	config.enableSimpleBroker("/queue/", "/topic/","/checkAuthorization");
+    	config.setApplicationDestinationPrefixes("/app");
+    	config.setUserDestinationPrefix("/user");
     }
 
     @Override
@@ -46,16 +48,26 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 			public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 					Map<String, Object> attributes) throws Exception {	
 				System.out.println("Has New connection");
-				String rawCookie = request.getHeaders().get("Cookie").get(0);
-				String[] listCookieParam = rawCookie.split(";");
 				String jwtToken = "";
-				for(String cookieParam :listCookieParam)
-				{
-					String[] rawCookieNameAndValuePair = cookieParam.split("=");
-					String key = rawCookieNameAndValuePair[0].trim();
-					if(key.equalsIgnoreCase("Authorization")) jwtToken = rawCookieNameAndValuePair[1];
+				List<String> cookieHeader = request.getHeaders().get("Cookie");
+				if(cookieHeader != null) {
+					String rawCookie = cookieHeader.get(0);
+					String[] listCookieParam = rawCookie.split(";");
+					for(String cookieParam :listCookieParam)
+					{
+						String[] rawCookieNameAndValuePair = cookieParam.split("=");
+						String key = rawCookieNameAndValuePair[0].trim();
+						if(key.equalsIgnoreCase("Authorization")) jwtToken = rawCookieNameAndValuePair[1].trim();
+					}
 				}
-				 
+				
+				String requestParam = request.getURI().getQuery();
+				if(!StringUtils.isNull(requestParam)) {
+					String[] rawNameAndValuePair = requestParam.split("=");
+					String key = rawNameAndValuePair[0].trim();
+					if(key.equalsIgnoreCase("Authorization")) jwtToken = rawNameAndValuePair[1].trim();
+				}
+
 			    if(!StringUtils.isNull(jwtToken) && !jwtTokenUtil.isTokenExpired(jwtToken)) {
 					UserDetails userDetails = jwtTokenUtil.getUserPrincipalFromToken(jwtToken);
 					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -78,8 +90,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 			public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 					Map<String, Object> attributes) throws Exception {	
 				System.out.println("Has New connection public");
-				List<String> rawCookie = request.getHeaders().get("Cookie");
-				System.out.println(rawCookie);
 				return true;
 			}
 			

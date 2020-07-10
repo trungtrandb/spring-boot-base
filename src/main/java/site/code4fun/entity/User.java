@@ -17,14 +17,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 @Entity 
 @Table(name = "tblUser")
 @Data
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class User{
 	
 	public User() {}
@@ -81,14 +81,9 @@ public class User{
     @Column(name = "avatar")
     protected String avatar;
     
+    @Transient
+    protected Long organizationId;
     
-    // DTO
     @Transient
     protected String rePass;
-    
-    @Transient
-    protected Long OrganizationId;
-    
-    @Transient
-    protected String organizationName;
 }

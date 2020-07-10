@@ -16,6 +16,7 @@ import site.code4fun.entity.Classes;
 import site.code4fun.entity.NotifyDevice;
 import site.code4fun.entity.User;
 import site.code4fun.entity.dto.StudentDTO;
+import site.code4fun.entity.dto.UserDTO;
 
 @Repository
 public class JStudentRepository {
@@ -75,6 +76,35 @@ public class JStudentRepository {
 		sql.append("WHERE s.id = :studentId");
 		return jdbcTemplate.query(sql.toString(), parameters,
 				(rs, rowNum) -> Classes.builder().name(rs.getString("name")).id(rs.getLong("id")).build());
+	}
+	
+	public List<UserDTO> findParentByClassIds(List<Long> classIds) {
+		if(classIds.size() == 0 ) return new ArrayList<>();
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("classIds", classIds);
+		StringBuilder sql = new StringBuilder("SELECT u.*, d.device_token, s.name as student_name FROM tblUser u ");
+		sql.append("LEFT JOIN tblNotifyDevice d on d.user_id = u.id ");
+		sql.append("JOIN tblParentStudent ps ON u.id = ps.user_id ");
+		sql.append("JOIN tblStudentClass sc ON ps.student_id = sc.student_id ");
+		sql.append("JOIN tblStudent s ON s.id = sc.student_id ");
+		sql.append("WHERE sc.class_id IN (:classIds)");
+		return jdbcTemplate.query(sql.toString(), parameters,
+				(rs, rowNum) -> UserDTO.builder()
+				.id(rs.getLong("id"))
+				.fullName(rs.getString("full_name"))
+				.avatar(rs.getString("avatar"))
+				.phone(rs.getString("phone"))
+				.email(rs.getString("email"))
+				.address(rs.getString("address"))
+				.createdBy(rs.getLong("created_by"))
+				.createdDate(rs.getTimestamp("created_date"))
+				.updatedDate(rs.getTimestamp("updated_date"))
+				.updatedBy(rs.getLong("updated_by"))
+				.status(rs.getString("status"))
+				.username(rs.getString("user_name"))
+				.studentName(rs.getString("student_name"))
+				.deviceToken(rs.getString("device_token"))
+				.build());
 	}
 
 	public List<NotifyDevice> findParentDeviceByStudentId(Long id) {

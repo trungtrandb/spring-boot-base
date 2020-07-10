@@ -69,6 +69,19 @@
       templateUrl : "/resources/app/views/teacher.html",
       controller : "TeacherController"
     })
+    .when("/parent", {
+      templateUrl : "/resources/app/views/parent.html",
+      controller : "ParentController"
+    })
+    .when("/chat/:userName", {
+      templateUrl : "/resources/app/views/chat.html",
+      controller : "ChatController",
+      resolve: {
+          userName: function ($route) {
+              return $route.current.params.userName;
+          }
+      }
+    })
     .when("/user-info", {
       templateUrl : "/resources/app/views/user-info.html",
       controller : "UserController"

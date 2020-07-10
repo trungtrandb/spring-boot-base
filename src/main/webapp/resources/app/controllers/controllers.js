@@ -13,6 +13,8 @@
     app.controller("DashboardController", DashboardController);
     app.controller("SubjectController", SubjectController);
     app.controller("TeacherController", TeacherController);
+    app.controller("ParentController", ParentController);
+    app.controller("ChatController", ChatController);
 
     /* ============================================ */
     function OrganizationController($scope, $http, Restangular) {
@@ -396,42 +398,69 @@
     }
 
     /* ============================================ */
-    function DashboardController($scope,$location, Restangular, $rootScope) {
+    function DashboardController($scope, $rootScope, Restangular) {
+        // body...
+    }
+
+    /* ============================================ */
+    function ChatController($scope, userName, Restangular, $rootScope) {
         $scope.sendMessage = sendMessage;
+        $scope.pressSend = pressSend;
 
         var socket = new SockJS('/ws');
         var stompClient = Stomp.over(socket);
         document.cookie = 'Authorization=' + $rootScope.currentUser.token + '; path=/';  
         stompClient.reconnect_delay = 3000;
         stompClient.connect({}, function(frame) {
-            stompClient.subscribe('/topic/message', function(messageOutput) {
+            // stompClient.subscribe('/topic/message', function(messageOutput) {
+            //     var resMessage = JSON.parse(messageOutput.body);
+            //     if (resMessage.from == $rootScope.currentUser.userName) {
+            //         var selfMess = "";
+            //         var floatName = "float-left";
+            //         var floatTime = "float-right";
+            //     }else{
+            //         var selfMess = "right";
+            //         var floatName = "float-right";
+            //         var floatTime = "float-left";
+            //     }
+            //     var html = '<div class="direct-chat-msg '+ selfMess + '">';
+            //     html += '<div class="direct-chat-infos clearfix">';
+            //     html += '<span class="direct-chat-name '+ floatName +'">' + resMessage.fullName +'</span>';
+            //     html += '<span class="direct-chat-timestamp '+ floatTime +'">'+ resMessage.time +'</span></div>';
+            //     html += '<img class="direct-chat-img" src="'+ resMessage.avatar +'">';
+            //     html += '<div class="direct-chat-text">'+resMessage.text+'</div>';
+            //     $("#box-chat").append(html);
+            // });
+            stompClient.subscribe("/user/queue/reply", function(messageOutput) {
                 var resMessage = JSON.parse(messageOutput.body);
-                if (resMessage.from == $rootScope.currentUser.userName) {
-                    var selfMess = "";
-                    var floatName = "float-left";
-                    var floatTime = "float-right";
-                }else{
-                    var selfMess = "right";
-                    var floatName = "float-right";
-                    var floatTime = "float-left";
-                }
-                var html = '<div class="direct-chat-msg '+ selfMess + '">';
+                var html = '<div class="direct-chat-msg right">';
                 html += '<div class="direct-chat-infos clearfix">';
-                html += '<span class="direct-chat-name '+ floatName +'">' + resMessage.fullName +'</span>';
-                html += '<span class="direct-chat-timestamp '+ floatTime +'">'+ resMessage.time +'</span></div>';
+                html += '<span class="direct-chat-name float-right">' + resMessage.fullName +'</span>';
+                html += '<span class="direct-chat-timestamp float-left">'+ resMessage.time +'</span></div>';
                 html += '<img class="direct-chat-img" src="'+ resMessage.avatar +'">';
                 html += '<div class="direct-chat-text">'+resMessage.text+'</div>';
                 $("#box-chat").append(html);
-            });
-            stompClient.subscribe("/user/queue/reply", function(messageOutput) {
-                console.log(messageOutput);
             })
         });
 
+        function pressSend(event) {
+            if(event.keyCode == 13) {
+                sendMessage();
+            }
+        }
+
         function sendMessage() {
-            stompClient.send("/app/topic/chat", {}, JSON.stringify({'text': $scope.messageContent}));
-            // stompClient.send("/app/direct/chat", {}, JSON.stringify({'text': $scope.messageContent, 'to': 'admin'}));
+            var html = '<div class="direct-chat-msg">';
+                html += '<div class="direct-chat-infos clearfix">';
+                html += '<span class="direct-chat-name float-left">' + $rootScope.currentUser.fullName +'</span>';
+                html += '<span class="direct-chat-timestamp float-right">'+ Date.now() +'</span></div>';
+                html += '<img class="direct-chat-img" src="'+ $rootScope.currentUser.avatar +'">';
+                html += '<div class="direct-chat-text">'+ $scope.messageContent +'</div>';
+                $("#box-chat").append(html);
+            // stompClient.send("/app/topic/chat", {}, JSON.stringify({'text': $scope.messageContent}));
+            stompClient.send("/app/direct/chat", {}, JSON.stringify({'text': $scope.messageContent, 'to': userName}));
             $scope.messageContent = "";
+            return;
         }
     }
 
@@ -497,5 +526,10 @@
                 toastr.error(response.data.message);
             });
         }
+    }
+
+    function ParentController($scope, Restangular) {
+        $scope.orgId = "";
+        Restangular.one("/api/organization/get-parent?id=" + $scope.orgId).get().then(function (response) { $scope.lstParent = response.data; });
     }
 })();

@@ -57,6 +57,15 @@ public class OrganizationController {
 		}
 	}
 	
+	@RequestMapping(path = "/get-parent", method = RequestMethod.GET)
+	public ResponseEntity<?> getParent(@RequestParam(required = false)Long id){
+		try {
+			return ResponseEntity.ok(new Response(200, "Success", organizationService.getLstParentOfOrg(id)));
+		}catch (Exception e) {
+			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
+		}
+	}
+	
 	@RequestMapping(path = "/delete/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> insert(@PathVariable Long id){
 		try {

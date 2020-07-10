@@ -1,5 +1,5 @@
 package site.code4fun.service;
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +14,9 @@ public class NotifyDeviceService extends BaseService{
 	NotifyDeviceRepository notifyDeviceRepository;
 	
 	public NotifyDevice insert(String deviceToken) {
-		Optional<NotifyDevice> device = notifyDeviceRepository.findByUserIdAndDevice(getCurrentId(), deviceToken);
-		if (device.isPresent()) 
-			return device.get();
+		List<NotifyDevice> device = notifyDeviceRepository.findByUserIdAndDevice(getCurrentId(), deviceToken);
+		if (device.size() > 0) 
+			return device.get(0);
 		
 		NotifyDevice item = NotifyDevice.builder().userId(getCurrentId()).deviceToken(deviceToken).build();
 		
