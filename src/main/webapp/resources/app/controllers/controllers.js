@@ -403,7 +403,7 @@
     }
 
     /* ============================================ */
-    function ChatController($scope, userName, Restangular, $rootScope) {
+    function ChatController($scope, userName, Restangular, $rootScope, $filter) {
         $scope.sendMessage = sendMessage;
         $scope.pressSend = pressSend;
 
@@ -433,10 +433,12 @@
             // });
             stompClient.subscribe("/user/queue/reply", function(messageOutput) {
                 var resMessage = JSON.parse(messageOutput.body);
+
+                var time = $filter('date')(new Date(resMessage.time),'yyyy-MM-dd HH:MM:ss');
                 var html = '<div class="direct-chat-msg right">';
                 html += '<div class="direct-chat-infos clearfix">';
                 html += '<span class="direct-chat-name float-right">' + resMessage.fullName +'</span>';
-                html += '<span class="direct-chat-timestamp float-left">'+ resMessage.time +'</span></div>';
+                html += '<span class="direct-chat-timestamp float-left">'+ time +'</span></div>';
                 html += '<img class="direct-chat-img" src="'+ resMessage.avatar +'">';
                 html += '<div class="direct-chat-text">'+resMessage.text+'</div>';
                 $("#box-chat").append(html);
@@ -450,10 +452,12 @@
         }
 
         function sendMessage() {
+
+            var time = $filter('date')(Date.now(),'yyyy-MM-dd HH:MM:ss');
             var html = '<div class="direct-chat-msg">';
                 html += '<div class="direct-chat-infos clearfix">';
                 html += '<span class="direct-chat-name float-left">' + $rootScope.currentUser.fullName +'</span>';
-                html += '<span class="direct-chat-timestamp float-right">'+ Date.now() +'</span></div>';
+                html += '<span class="direct-chat-timestamp float-right">'+ time +'</span></div>';
                 html += '<img class="direct-chat-img" src="'+ $rootScope.currentUser.avatar +'">';
                 html += '<div class="direct-chat-text">'+ $scope.messageContent +'</div>';
                 $("#box-chat").append(html);
