@@ -4,18 +4,20 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "tblParentStudent")
+/*
+ * Author: TrungTQ 
+ * Không dùng entity này, chỉ để tham khảo
+*/
+//@Entity
+//@Table(name = "tblParentStudent")
 @Data
 @Builder
 @NoArgsConstructor

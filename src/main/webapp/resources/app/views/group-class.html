@@ -32,6 +32,8 @@
                   <tr>
                     <th>ID</th>
                     <th>Tên khối lớp</th>
+                    <th>Trường</th>
+                    <th>Năm học</th>
                     <th>Thao tác</th>
                   </tr>
                 </thead>
@@ -39,6 +41,8 @@
                   <tr ng-repeat="x in lstGroupClass">
                     <td>{{ x.id }}</td>
                     <td>{{ x.name }}</td>
+                    <td>{{ x.organization.name }}</td>
+                    <td>{{ x.schoolYear }}</td>
                     <td>
                       <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>
                       <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>
@@ -76,6 +80,10 @@
             <div class="form-group">
               <label for="name">Tên khối lớp</label>
               <input type="text" class="form-control" id="name" ng-model="group.name">
+            </div>
+            <div class="form-group">
+              <label for="name">Năm học</label>
+              <input type="text" class="form-control datetimepicker" id="name" ng-model="group.schoolYear">
             </div>
             <div class="form-group">
               <label>Trường</label>

@@ -1,5 +1,6 @@
 package site.code4fun.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,13 +10,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "tblGroupClass")
-@Builder
+@SuperBuilder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,8 +24,11 @@ public class GroupClass {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String name;
+	protected Long id;
+	protected String name;
+	
+	@Column(name = "school_year")
+	protected Integer schoolYear;
 	
 	@ManyToOne
 	@JoinColumn(name = "organization_id")

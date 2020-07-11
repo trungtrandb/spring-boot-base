@@ -19,20 +19,16 @@ import site.code4fun.constant.Queue;
 import site.code4fun.constant.Role;
 import site.code4fun.constant.Status;
 import site.code4fun.entity.Classes;
-import site.code4fun.entity.ParentStudent;
 import site.code4fun.entity.Student;
-import site.code4fun.entity.StudentClass;
 import site.code4fun.entity.User;
 import site.code4fun.entity.dto.StudentDTO;
-import site.code4fun.repository.ParentStudentRepository;
-import site.code4fun.repository.StudentClassRepository;
 import site.code4fun.repository.StudentRepository;
 import site.code4fun.repository.UserRepository;
 import site.code4fun.repository.jdbc.JStudentRepository;
 import site.code4fun.util.StringUtils;
 
 @Service
-public class StudentService {
+public class StudentService extends BaseService{
 	@Autowired
 	private StudentRepository studentRepository;
 	
@@ -41,12 +37,6 @@ public class StudentService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
-	private ParentStudentRepository parentStudentRepository;
-
-	@Autowired
-	private StudentClassRepository studentClassRepository;
 
 	@Autowired
 	private QueueService queueService;
@@ -62,56 +52,20 @@ public class StudentService {
 		if (null != classId && idsClass.contains(classId)) {
 			idsClass = Arrays.asList(classId);
 		}
-//		List<Student> lst = studentRepository.findStudentByClassId(idsClass, limit, offset);
-		
-//		List<StudentDTO> lstDTO = new ArrayList<>();
-//		lst.forEach(s -> {
-//			StudentDTO dto = StudentDTO.builder()
-//					.id(s.getId())
-//					.dateOfBirth(s.getDateOfBirth())
-//					.email(s.getEmail())
-//					.address(s.getAddress())
-//					.phone(s.getPhone())
-//					.note(s.getNote()).build();
-//			lstDTO.add(dto);
-//		});
 		return jStudentRepository.findStudentByClassId(idsClass);
 	}
 
 	public StudentDTO getById(Long id) throws Exception {
-		Optional<Student> s = studentRepository.findById(id);
-		if (!s.isPresent())
-			throw new Exception("Student not found");
-		
-		StudentDTO dto = StudentDTO.builder()
-				.address(s.get().getAddress())
-				.phone(s.get().getPhone())
-				.name(s.get().getName())
-				.note(s.get().getNote())
-				.dateOfBirth(s.get().getDateOfBirth())
-				.email(s.get().getEmail())
-				.id(s.get().getId())
-				.build();
-		
-		List<User> u = jStudentRepository.findParentByStudentId(id);
-		if(u.size() > 0) {
-			dto.setParentName(u.get(0).getFullName());
-			dto.setParentPhoneOrEmail(u.get(0).getUsername());
-		}
-		
-		List<Classes> clazz = jStudentRepository.findClassByStudentId(id);
-		Long[] idsClass = new Long[clazz.size()];
-		for(int i = 0; i < clazz.size(); i++ ) {
-			idsClass[i] = clazz.get(i).getId();
-		}
-		dto.setClasses(idsClass);
-		
+		StudentDTO dto = jStudentRepository.findById(id);
+		List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
+		if(dto == null || !classIds.contains(dto.getClassId())) throw new Exception("Không tồn tại!");
 		return dto;
+		
 	}
 
 	public Student create(StudentDTO s) throws Exception {
-		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Parent phone or mail is null!");
-		if (StringUtils.isNull(s.getName())) throw new Exception("Student name is null!");
+		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Email phụ huynh không được bỏ trống!");
+		if (StringUtils.isNull(s.getName())) throw new Exception("Tên học sinh không được bỏ trống!");
 		
 		String passWord = StringUtils.randomString();
 		User u = userRepository.findByUserName(s.getParentPhoneOrEmail());
@@ -148,21 +102,11 @@ public class StudentService {
 				.dateOfBirth(s.getDateOfBirth())
 				.email(s.getEmail())
 				.phone(s.getPhone())
+				.classId(s.getClassId())
+				.parentId(u.getId())
 				.note(s.getNote()).build();
+				
 		student = studentRepository.saveAndFlush(student);
-		
-		ParentStudent ps = ParentStudent.builder().studentId(student.getId()).userId(u.getId()).build();
-		parentStudentRepository.save(ps);
-
-		if (s.getClasses() != null) {
-			List<StudentClass> lstStudentClass = new ArrayList<>();
-			for (int i = 0; i < s.getClasses().length; i++) {
-				StudentClass sc = StudentClass.builder().studentId(student.getId()).classId(s.getClasses()[i]).build();
-				lstStudentClass.add(sc);
-			}
-			studentClassRepository.saveAll(lstStudentClass);
-		}
-
 		return student;
 	}
 
@@ -171,8 +115,8 @@ public class StudentService {
 		if (!item.isPresent())
 			throw new Exception("Student not found!");
 		
-		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Parent phone or mail is null!");
-		if (StringUtils.isNull(s.getName())) throw new Exception("Student name is null!");
+		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Email phụ huynh không được bỏ trống!");
+		if (StringUtils.isNull(s.getName())) throw new Exception("Tên học sinh không được bỏ trống!");
 		
 		
 		User u = userRepository.findByUserName(s.getParentPhoneOrEmail());
@@ -210,36 +154,27 @@ public class StudentService {
 				.dateOfBirth(s.getDateOfBirth())
 				.email(s.getEmail())
 				.phone(s.getPhone())
+				.classId(s.getClassId())
+				.parentId(s.getParentId())
 				.note(s.getNote()).build();
-		student = studentRepository.saveAndFlush(student);
-		
-		parentStudentRepository.deleteByStudentId(s.getId());
-		ParentStudent ps = ParentStudent.builder().studentId(student.getId()).userId(u.getId()).build();
-		parentStudentRepository.save(ps);
-
-		studentClassRepository.deleteByStudentId(s.getId());
-		if (s.getClasses() != null) {
-			List<StudentClass> lstStudentClass = new ArrayList<>();
-			for (int i = 0; i < s.getClasses().length; i++) {
-				StudentClass sc = StudentClass.builder().studentId(student.getId()).classId(s.getClasses()[i]).build();
-				lstStudentClass.add(sc);
-			}
-			studentClassRepository.saveAll(lstStudentClass);
-		}
-
-		return student;
+		return studentRepository.saveAndFlush(student);
 	}
 
 	public boolean delete(Long studentId, Long classId) throws Exception {
 		Optional<Student> item = studentRepository.findById(studentId);
-		if (!item.isPresent())
-			throw new Exception("Student not found!");
 		if(null != classId) {
-			studentClassRepository.deleteByStudentIdAndClassId(studentId, classId);;
-		}else {
-			studentRepository.deleteById(studentId);
-			parentStudentRepository.deleteByStudentId(studentId);
+			if(item.isPresent() && item.get().getClassId() == classId ) {
+				item.get().setClassId(null);
+				studentRepository.save(item.get());
+				return true;
+			}
+		}else {			
+			List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
+			if(item.isPresent() & classIds.contains(item.get().getClassId())) {
+				studentRepository.deleteById(studentId);	
+				return true;
+			}
 		}
-		return true;
+		throw new Exception("Không có quyền xóa!");
 	}
 }

@@ -12,11 +12,10 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import site.code4fun.entity.Classes;
 import site.code4fun.entity.NotifyDevice;
-import site.code4fun.entity.User;
 import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.entity.dto.UserDTO;
+import site.code4fun.mapper.StudentDTOMapper;
 
 @Repository
 public class JStudentRepository {
@@ -27,18 +26,15 @@ public class JStudentRepository {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("classIds", classIds);
 		StringBuilder sql = new StringBuilder(
-				"SELECT s.*, c.name as class_name, u.full_name, sc.class_id FROM tblStudent s ");
-		sql.append("JOIN tblParentStudent ps ON s.id = ps.student_id ");
-		sql.append("JOIN tblStudentClass sc ON s.id = sc.student_id ");
-		sql.append("JOIN tblClass c on sc.class_id = c.id ");
-		sql.append("JOIN tblUser u on u.id = ps.user_id ");
-		sql.append("WHERE sc.class_id IN (:classIds) ");
+				"SELECT s.*, c.name as class_name, u.full_name FROM tblStudent s ");
+		sql.append("JOIN tblClass c on s.class_id = c.id ");
+		sql.append("JOIN tblUser u on u.id = s.parent_id ");
+		sql.append("WHERE s.class_id IN (:classIds) ");
 		List<StudentDTO> lstRes = new ArrayList<>();
 		if (classIds.size() == 0) return lstRes;
 		jdbcTemplate.query(sql.toString(), parameters, new RowCallbackHandler() {
 			@Override
 			public void processRow(ResultSet rs) throws SQLException {
-				Long[] lstClass = { (Long) rs.getLong("class_id") };
 				StudentDTO st = StudentDTO.builder()
 						.id(rs.getLong("id"))
 						.address(rs.getString("address"))
@@ -48,7 +44,7 @@ public class JStudentRepository {
 						.phone(rs.getString("phone"))
 						.note(rs.getString("note"))
 						.parentName(rs.getString("full_name"))
-						.classes(lstClass)
+						.classId(rs.getLong("class_id"))
 						.build();
 				lstRes.add(st);
 			}
@@ -56,26 +52,14 @@ public class JStudentRepository {
 		return lstRes;
 	}
 
-	public List<User> findParentByStudentId(Long studentId) {
+	public StudentDTO findById(Long studentId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("studentId", studentId);
-		StringBuilder sql = new StringBuilder("SELECT u.* FROM tblStudent s ");
-		sql.append("JOIN tblParentStudent ps ON s.id = ps.student_id ");
-		sql.append("JOIN tblUser u ON u.id = ps.user_id ");
+		StringBuilder sql = new StringBuilder("SELECT s.*, u.email as user_email, u.full_name, u.id as user_id FROM tblStudent s ");
+		sql.append("JOIN tblUser u ON u.id = s.parent_id ");
 		sql.append("WHERE s.id = :studentId");
-		return jdbcTemplate.query(sql.toString(), parameters, (rs, rowNum) -> User.builder()
-				.username(rs.getString("user_name")).fullName(rs.getString("full_name")).build());
-	}
-
-	public List<Classes> findClassByStudentId(Long studentId) {
-		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("studentId", studentId);
-		StringBuilder sql = new StringBuilder("SELECT c.* FROM tblStudent s ");
-		sql.append("JOIN tblStudentClass sc ON s.id = sc.student_id ");
-		sql.append("JOIN tblClass c ON c.id = sc.class_id ");
-		sql.append("WHERE s.id = :studentId");
-		return jdbcTemplate.query(sql.toString(), parameters,
-				(rs, rowNum) -> Classes.builder().name(rs.getString("name")).id(rs.getLong("id")).build());
+		List<StudentDTO> lst = jdbcTemplate.query(sql.toString(), parameters,new StudentDTOMapper());
+		return lst.size() > 0 ? lst.get(0) : null;
 	}
 	
 	public List<UserDTO> findParentByClassIds(List<Long> classIds) {
@@ -84,10 +68,8 @@ public class JStudentRepository {
 		parameters.addValue("classIds", classIds);
 		StringBuilder sql = new StringBuilder("SELECT u.*, d.device_token, s.name as student_name FROM tblUser u ");
 		sql.append("LEFT JOIN tblNotifyDevice d on d.user_id = u.id ");
-		sql.append("JOIN tblParentStudent ps ON u.id = ps.user_id ");
-		sql.append("JOIN tblStudentClass sc ON ps.student_id = sc.student_id ");
-		sql.append("JOIN tblStudent s ON s.id = sc.student_id ");
-		sql.append("WHERE sc.class_id IN (:classIds)");
+		sql.append("JOIN tblStudent s ON u.id = s.parent_id ");
+		sql.append("WHERE s.class_id IN (:classIds)");
 		return jdbcTemplate.query(sql.toString(), parameters,
 				(rs, rowNum) -> UserDTO.builder()
 				.id(rs.getLong("id"))

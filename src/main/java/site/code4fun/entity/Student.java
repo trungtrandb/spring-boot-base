@@ -12,12 +12,12 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @Entity
 @Table(name = "tblStudent")
 @NoArgsConstructor
@@ -26,23 +26,20 @@ public class Student {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String name;
-	private String address;
-	private String phone;
-	private String email;
-	private String note;
+	protected Long id;
+	protected String name;
+	protected String address;
+	protected String phone;
+	protected String email;
+	protected String note;
+	
+	@Column(name = "class_id")
+	protected Long classId;
+	
+	@Column(name = "parent_id")
+	protected Long parentId;
 	
 	@Column(name = "date_of_birth")
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-	private Timestamp dateOfBirth;
-	
-//	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
-//    @JoinTable(
-//        name = "tblStudentClass", 
-//        joinColumns = { @JoinColumn(name = "student_id") }, 
-//        inverseJoinColumns = { @JoinColumn(name = "class_id") }
-//    )	
-//	@JsonIgnore
-//	private List<Classes> classes;
+	protected Timestamp dateOfBirth;
 }
