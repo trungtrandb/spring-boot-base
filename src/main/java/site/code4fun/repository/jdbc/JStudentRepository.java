@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import site.code4fun.entity.NotifyDevice;
+import site.code4fun.entity.UserDevice;
 import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.entity.dto.UserDTO;
 import site.code4fun.mapper.StudentDTOMapper;
@@ -89,13 +89,17 @@ public class JStudentRepository {
 				.build());
 	}
 
-	public List<NotifyDevice> findParentDeviceByStudentId(Long id) {
+	public List<UserDevice> findParentDeviceByStudentId(Long id) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("studentId", id);
-		StringBuilder sql = new StringBuilder("SELECT nd.* FROM tblNotifyDevice nd ");
-		sql.append("JOIN tblParentStudent ps ON ps.user_id = nd.user_id ");
-		sql.append("WHERE ps.student_id = :studentId");
-		return jdbcTemplate.query(sql.toString(), parameters, (rs, rowNum) -> NotifyDevice.builder()
-				.id(rs.getLong("id")).deviceToken(rs.getString("device_token")).userId(rs.getLong("user_id")).build());
+		StringBuilder sql = new StringBuilder("SELECT ud.* FROM tblStudent s ");
+		sql.append("JOIN tblUserDevice ud ON s.parent_id = ud.user_id ");
+		sql.append("WHERE s.id = :studentId");
+		return jdbcTemplate.query(sql.toString(), parameters, (rs, rowNum) -> 
+			UserDevice.builder()
+				.id(rs.getLong("id"))
+				.deviceToken(rs.getString("device_token"))
+				.userId(rs.getLong("user_id"))
+				.build());
 	}
 }

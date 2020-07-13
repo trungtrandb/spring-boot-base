@@ -1,7 +1,5 @@
 package site.code4fun.entity;
 
-import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,31 +8,25 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
-@Entity
-@Table(name = "tblNotify")
 @Data
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Notify {
+@Entity
+@Table(name = "tblUserDevice")
+public class UserDevice {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
-	protected String title;
-	protected String content;
-	protected String status; // ACTIVE/INACTIVE
+	private Long id;
 	
-	@Column(name = "class_id")
-	protected Long classId;
+	@Column(name = "device_token")
+	private String deviceToken;
 	
-	@Column(name = "created_by")
-	protected Long createdBy;
-	
-	@Column(name = "created_date")
-	protected Timestamp createdDate;
+	@Column(name = "user_id")
+	private Long userId;
 }

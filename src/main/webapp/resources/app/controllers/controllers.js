@@ -15,6 +15,7 @@
     app.controller("TeacherController", TeacherController);
     app.controller("ParentController", ParentController);
     app.controller("ChatController", ChatController);
+    app.controller("NotifyController", NotifyController);
 
     /* ============================================ */
     function OrganizationController($scope, $http, Restangular) {
@@ -365,6 +366,11 @@
         Restangular.all("/api/checkin/get").getList($location.search()).then(function(response) {
             console.log(response);            
         })   
+    }
+
+    /* ============================================ */
+    function NotifyController($scope,$location, Restangular) {
+        Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
     }
 
 

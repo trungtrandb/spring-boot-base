@@ -1,10 +1,13 @@
 package site.code4fun.entity;
 
+import java.io.Serializable;
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -18,15 +21,36 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "tblNotifyDevice")
+@IdClass(NotifyDeviceKey.class)
 public class NotifyDevice {
-
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	protected Long notifyId;
+	
+	@Id
+	protected String deviceToken;
+	protected String status; // COMPLETE/ERROR/PENDING
+	protected String note;
+	
+	@Column(name = "created_by")
+	protected Long createdBy;
+	
+	@Column(name = "created_date")
+	protected Timestamp createdDate;
+	
+	@Column(name = "updated_date")
+	protected Timestamp updatedDate;
+}
+
+@Embeddable
+@Data
+class NotifyDeviceKey implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+
+	@Column(name = "notify_id")
+	protected Long notifyId;
 	
 	@Column(name = "device_token")
-	private String deviceToken;
-	
-	@Column(name = "user_id")
-	private Long userId;
+	protected String deviceToken;
 }

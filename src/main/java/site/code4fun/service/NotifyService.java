@@ -45,21 +45,21 @@ public class NotifyService {
 	    });
 	}
 	
-	@JmsListener(destination = "notify.queue")
-    private void pushNotifyFromQueue(final javax.jms.Message jsonMessage) throws JMSException {
-        if(jsonMessage instanceof TextMessage) {
-        	TextMessage textMessage = (TextMessage)jsonMessage;
-			Notify noti = new Gson().fromJson(textMessage.getText(), Notify.class);
-            try {
-				FirebaseAdmin.pushNotification(noti.getTitle(), noti.getContent(), noti.getDeviceToken());
-				noti.setStatus(Status.COMPLETE.getVal());
-			} catch (Exception e) {
-				noti.setStatus(Status.ERROR.getVal());
-				noti.setNote(e.getMessage());
-				e.printStackTrace();
-			}
-            notifyRepository.saveAndFlush(noti);
-        }
-    }
+//	@JmsListener(destination = "notify.queue")
+//    private void pushNotifyFromQueue(final javax.jms.Message jsonMessage) throws JMSException {
+//        if(jsonMessage instanceof TextMessage) {
+//        	TextMessage textMessage = (TextMessage)jsonMessage;
+//			Notify noti = new Gson().fromJson(textMessage.getText(), Notify.class);
+//            try {
+//				FirebaseAdmin.pushNotification(noti.getTitle(), noti.getContent(), noti.getDeviceToken());
+//				noti.setStatus(Status.COMPLETE.getVal());
+//			} catch (Exception e) {
+//				noti.setStatus(Status.ERROR.getVal());
+//				noti.setNote(e.getMessage());
+//				e.printStackTrace();
+//			}
+//            notifyRepository.saveAndFlush(noti);
+//        }
+//    }
 
 }

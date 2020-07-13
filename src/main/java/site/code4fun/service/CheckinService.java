@@ -2,7 +2,6 @@ package site.code4fun.service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +15,10 @@ import site.code4fun.constant.Status;
 import site.code4fun.entity.Checkin;
 import site.code4fun.entity.Classes;
 import site.code4fun.entity.GroupClass;
+import site.code4fun.entity.Lession;
 import site.code4fun.entity.Notify;
 import site.code4fun.entity.NotifyDevice;
+import site.code4fun.entity.UserDevice;
 import site.code4fun.entity.Organization;
 import site.code4fun.entity.Student;
 import site.code4fun.entity.dto.CheckinDTO;
@@ -25,6 +26,8 @@ import site.code4fun.entity.dto.CheckinFilterDTO;
 import site.code4fun.repository.CheckinRepository;
 import site.code4fun.repository.ClassRepository;
 import site.code4fun.repository.GroupClassRepository;
+import site.code4fun.repository.LessionRepository;
+import site.code4fun.repository.NotifyDeviceRepository;
 import site.code4fun.repository.NotifyRepository;
 import site.code4fun.repository.OrganizationRepository;
 import site.code4fun.repository.StudentRepository;
@@ -33,10 +36,7 @@ import site.code4fun.repository.jdbc.JStudentRepository;
 
 @Service
 public class CheckinService extends BaseService{
-	
-	@Autowired 
-	private ClassService classService;
-	
+
 	@Autowired
 	private StudentRepository studentRepository;
 	
@@ -45,6 +45,9 @@ public class CheckinService extends BaseService{
 	
 	@Autowired
 	private NotifyRepository notifyRepository;
+	
+	@Autowired
+	private NotifyDeviceRepository notifyDeviceRepository;
 	
 	@Autowired
 	private CheckinRepository checkinRepository;
@@ -59,44 +62,56 @@ public class CheckinService extends BaseService{
 	private ClassRepository classRepository;
 	
 	@Autowired
+	private LessionRepository lessionRepository;
+	
+	@Autowired
 	private JCheckinRepository jCheckinRepository;
 	
 	public Checkin insert(Checkin check) throws Exception {
-		if(null == check.getLessionId()) throw new Exception("Lession not found!!");
-		List<Long> idsClass = classService.getByGroupId(null).stream().map(Classes::getId).collect(Collectors.toList());
-		if(!idsClass.contains(check.getClassId())) throw new Exception("Class permision denied!!");
+		if(null == check.getLessionId()) throw new Exception("Chưa chọn buổi học!");
+		List<Long> idsClass = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
+		if(!idsClass.contains(check.getClassId())) throw new Exception("Không tìm thấy lớp học!");
 		
-		List<Long> idsStudent = studentRepository.findStudentByClassId(Arrays.asList(check.getClassId()))
-				.stream().map(Student::getId).collect(Collectors.toList());
+		Optional<Student> student = studentRepository.findById(check.getStudentId());
+		if(!student.isPresent() || student.get().getClassId() != check.getClassId()) throw new Exception("Không tìm thấy học sinh!");
 		
-		if(!idsStudent.contains(check.getStudentId())) throw new Exception("Student not found!!");
+		Optional<Lession> lession = lessionRepository.findById(check.getId());
+		if(!lession.isPresent() || lession.get().getClassId() != check.getClassId()) throw new Exception("Không tìm thấy buổi học!");
 		
-		// Update if has checked in
+		// Update nếu điểm danh lại
 		Optional<Checkin> checked = checkinRepository.checkExist(check.getStudentId(), check.getClassId(), check.getLessionId());
-		check.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 		if(checked.isPresent()) check.setId(checked.get().getId());
 		
-		if (!check.isPresent()) {
-			List<NotifyDevice> lstDevice = jStudentRepository.findParentDeviceByStudentId(check.getStudentId());
-			String title = "Notify Checkin";
-			StringBuilder notifyContent = new StringBuilder("Student is absent from class today!");
-			
-			List<Notify> lstNotify = new ArrayList<>();
-			lstDevice.forEach(item ->{
+		if (!check.isPresent()) { // Vắng mặt
+			List<UserDevice> lstDevice = jStudentRepository.findParentDeviceByStudentId(check.getStudentId());
+			if(lstDevice.size() > 0) {
+				String title = "Thông báo điểm danh";
+				StringBuilder notifyContent = new StringBuilder(student.get().getName() + "đã điểm danh vắng trong buổi học " + lession.get().getTitle() + "!");
 				Notify noti = Notify.builder()
 						.title(title)
-						.deviceToken(item.getDeviceToken())
-						.userId(item.getUserId())
 						.content(notifyContent.toString())
 						.status(Status.PENDING.getVal())
 						.createdBy(getCurrentId())
 						.createdDate(new Timestamp(System.currentTimeMillis()))
 						.build();
-				lstNotify.add(noti);		
-			});
-			notifyRepository.saveAll(lstNotify);
+				noti = notifyRepository.saveAndFlush(noti);
+				
+				List<NotifyDevice> lstNotifyDevice = new ArrayList<>();
+				for(UserDevice _item : lstDevice) {
+					NotifyDevice notiDevice = NotifyDevice.builder()
+							.deviceToken(_item.getDeviceToken())
+							.notifyId(noti.getId())
+							.createdDate(new Timestamp(System.currentTimeMillis()))
+							.createdBy(noti.getCreatedBy())
+							.status(Status.PENDING.getVal())
+							.build();
+					lstNotifyDevice.add(notiDevice);
+				};
+				notifyDeviceRepository.saveAll(lstNotifyDevice);	
+			}
 		}
 		
+		check.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 		check.setCreatedBy(getCurrentId());
 		return checkinRepository.saveAndFlush(check);
 	}
