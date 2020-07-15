@@ -21,6 +21,14 @@ import lombok.NoArgsConstructor;
 @Table(name = "tblClass")
 public class Classes {
 	
+	public Classes(Long id, String name, String note, GroupClass groupClass, User owner) {
+		this.id = id;
+		this.name = name;
+		this.note = note;
+		this.groupClass = groupClass;
+		this.owner = owner;
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;

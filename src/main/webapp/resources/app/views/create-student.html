@@ -48,8 +48,8 @@
  								</div>
  								<div class="form-group">
  									<label>Class</label>
- 									<select class="form-control" ng-model="student.classes" multiple="true">
- 										<option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
+ 									<select class="form-control" ng-model="student.classId">
+ 										<option ng-selected="x.id == student.classId" ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
  									</select>
  								</div>
  							</div>

@@ -4,12 +4,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Group class</h1>
+          <h1>Thông báo</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item active">Group class</li>
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Thông báo</li>
           </ol>
         </div>
       </div>
@@ -23,7 +23,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddGroup">Add Group</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddNotify">Tạo mới thông báo</button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -31,18 +31,18 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Tên khối lớp</th>
-                    <th>Trường</th>
-                    <th>Năm học</th>
+                    <th>Tên trường</th>
+                    <th>Tên môn học</th>
+                    <th>Trạng thái</th>
                     <th>Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="x in lstGroupClass">
+                  <tr ng-repeat="x in lstSubject">
                     <td>{{ x.id }}</td>
+                    <td>{{ x.organizationName }}</td>
                     <td>{{ x.name }}</td>
-                    <td>{{ x.organization.name }}</td>
-                    <td>{{ x.schoolYear }}</td>
+                    <td>{{ x.status }}</td>
                     <td>
                       <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>
                       <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>
@@ -64,31 +64,32 @@
   <!-- /.content -->
 
   <!-- The Modal -->
-  <div class="modal" id="modalAddGroup">
+  <div class="modal" id="modalAddNotify">
     <div class="modal-dialog">
       <div class="modal-content">
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Khối lớp</h4>
+          <h4 class="modal-title">Thông báo</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
         <!-- Modal body -->
         <div class="modal-body">
-          <form role="form" ng-submit="submitAddGroup()">
+          <form role="form" ng-submit="submitNotify()">
             <div class="form-group">
-              <label for="name">Tên khối lớp</label>
-              <input type="text" class="form-control" id="name" ng-model="group.name">
+              <label for="address">Tiêu đề thông báo</label>
+              <input type="text" class="form-control" id="address" ng-model="subject.name">
             </div>
             <div class="form-group">
-              <label for="name">Năm học</label>
-              <input type="text" class="form-control datetimepicker" id="name" ng-model="group.schoolYear">
+              <label>Nội dung thông báo</label>
+              <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
             </div>
             <div class="form-group">
-              <label>Trường</label>
-              <select class="form-control" ng-model="group.organizationId">
-                <option ng-selected="x.id == group.organizationId" ng-repeat="x in lstOrganization" value="{{x.id}}">{{x.name}}</option>
+              <label>Đối tượng thông báo</label>
+              <select class="form-control" ng-model="subject.organizationId">
+                <option value="all">Toàn trường</option>
+                <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
               </select>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>

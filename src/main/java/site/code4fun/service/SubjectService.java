@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import site.code4fun.entity.Organization;
 import site.code4fun.entity.Subject;
 import site.code4fun.entity.dto.SubjectDTO;
 import site.code4fun.repository.SubjectRepository;
+import site.code4fun.util.StringUtils;
 
 @Service
 public class SubjectService extends BaseService{
@@ -50,7 +52,9 @@ public class SubjectService extends BaseService{
 		return lstDTO;
 	}
 	
-	public Subject insert(Subject s) {
+	public Subject insert(Subject s) throws Exception {
+		if(null == s.getOrganizationId()) throw new Exception("Chưa chọn trường!");
+		if(StringUtils.isNull(s.getName())) throw new Exception("Tên môn học không được bỏ trống!");
 		String status = s.getStatus().equals(Status.ACTIVE.getVal()) || s.getStatus().equals(Status.INACTIVE.getVal()) ? s.getStatus() : Status.ACTIVE.getVal();
 		s.setStatus(status);
 		s.setCreatedBy(getCurrentId());
@@ -58,7 +62,10 @@ public class SubjectService extends BaseService{
 		return subjectRepository.save(s);
 	}
 	
-	public boolean delete(Long id) {
+	public boolean delete(Long id) throws Exception {
+		Optional<Subject> item = subjectRepository.findById(id);
+		List<Long> orgIds = getCurrentOrganization().stream().map(Organization::getId).collect(Collectors.toList());
+		if(!item.isPresent() || !orgIds.contains(item.get().getOrganizationId())) throw new Exception("Không có quyền xóa!");
 		subjectRepository.deleteById(id);
 		return true;
 	}

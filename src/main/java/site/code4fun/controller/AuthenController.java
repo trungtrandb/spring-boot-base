@@ -26,7 +26,7 @@ import site.code4fun.entity.Response;
 import site.code4fun.entity.SignInRequest;
 import site.code4fun.entity.User;
 import site.code4fun.entity.UserPrincipal;
-import site.code4fun.service.NotifyDeviceService;
+import site.code4fun.service.UserDeviceService;
 import site.code4fun.service.UserService;
 import site.code4fun.util.JwtTokenUtil;
 
@@ -43,14 +43,14 @@ public class AuthenController {
 	private UserService userService;
 	
 	@Autowired
-	private NotifyDeviceService notifyDeviceService;
+	private UserDeviceService userDeviceService;
 	
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody SignInRequest authenticationRequest) throws Exception {
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-		if(authenticationRequest.getDeviceToken() != null) notifyDeviceService.insert(authenticationRequest.getDeviceToken());
+		if(authenticationRequest.getDeviceToken() != null) userDeviceService.insert(authenticationRequest.getDeviceToken());
 		return ResponseEntity.ok(jwtTokenUtil.generateToken(userPrincipal));
 	}
 	

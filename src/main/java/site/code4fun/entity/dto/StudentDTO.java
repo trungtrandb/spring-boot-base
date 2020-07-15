@@ -1,22 +1,16 @@
 package site.code4fun.entity.dto;
 
-import java.sql.Timestamp;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import site.code4fun.entity.Student;
 
-import lombok.Builder;
-import lombok.Data;
-
-@Data
-@Builder
-public class StudentDTO {
-	private Long id;
-	private String name;
-	private Timestamp dateOfBirth;
-	private String address;
-	private String phone;
-	private String email;
-	private String note;
-	private Long[] classes;	
-	private Long[] subjects;
+@Setter
+@Getter
+@SuperBuilder
+@AllArgsConstructor
+public class StudentDTO extends Student{
 	private String parentPhoneOrEmail;
 	private String parentName;
 	private String className;

@@ -41,6 +41,10 @@
       templateUrl : "/resources/app/views/subject.html",
       controller : "SubjectController",
     })
+    .when("/notify", {
+      templateUrl : "/resources/app/views/notify.html",
+      controller : "NotifyController",
+    })
     .when("/edit-student/:id", {
       templateUrl : "/resources/app/views/create-student.html",
       controller : "EditStudentController",

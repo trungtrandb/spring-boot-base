@@ -12,11 +12,10 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import site.code4fun.entity.Classes;
-import site.code4fun.entity.NotifyDevice;
-import site.code4fun.entity.User;
+import site.code4fun.entity.UserDevice;
 import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.entity.dto.UserDTO;
+import site.code4fun.mapper.StudentDTOMapper;
 
 @Repository
 public class JStudentRepository {
@@ -27,18 +26,15 @@ public class JStudentRepository {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("classIds", classIds);
 		StringBuilder sql = new StringBuilder(
-				"SELECT s.*, c.name as class_name, u.full_name, sc.class_id FROM tblStudent s ");
-		sql.append("JOIN tblParentStudent ps ON s.id = ps.student_id ");
-		sql.append("JOIN tblStudentClass sc ON s.id = sc.student_id ");
-		sql.append("JOIN tblClass c on sc.class_id = c.id ");
-		sql.append("JOIN tblUser u on u.id = ps.user_id ");
-		sql.append("WHERE sc.class_id IN (:classIds) ");
+				"SELECT s.*, c.name as class_name, u.full_name FROM tblStudent s ");
+		sql.append("JOIN tblClass c on s.class_id = c.id ");
+		sql.append("JOIN tblUser u on u.id = s.parent_id ");
+		sql.append("WHERE s.class_id IN (:classIds) ");
 		List<StudentDTO> lstRes = new ArrayList<>();
 		if (classIds.size() == 0) return lstRes;
 		jdbcTemplate.query(sql.toString(), parameters, new RowCallbackHandler() {
 			@Override
 			public void processRow(ResultSet rs) throws SQLException {
-				Long[] lstClass = { (Long) rs.getLong("class_id") };
 				StudentDTO st = StudentDTO.builder()
 						.id(rs.getLong("id"))
 						.address(rs.getString("address"))
@@ -48,7 +44,7 @@ public class JStudentRepository {
 						.phone(rs.getString("phone"))
 						.note(rs.getString("note"))
 						.parentName(rs.getString("full_name"))
-						.classes(lstClass)
+						.classId(rs.getLong("class_id"))
 						.build();
 				lstRes.add(st);
 			}
@@ -56,32 +52,21 @@ public class JStudentRepository {
 		return lstRes;
 	}
 
-	public List<User> findParentByStudentId(Long studentId) {
+	public StudentDTO findById(Long studentId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("studentId", studentId);
-		StringBuilder sql = new StringBuilder("SELECT u.* FROM tblStudent s ");
-		sql.append("JOIN tblParentStudent ps ON s.id = ps.student_id ");
-		sql.append("JOIN tblUser u ON u.id = ps.user_id ");
+		StringBuilder sql = new StringBuilder("SELECT s.*, u.email as user_email, u.full_name, u.id as user_id FROM tblStudent s ");
+		sql.append("JOIN tblUser u ON u.id = s.parent_id ");
 		sql.append("WHERE s.id = :studentId");
-		return jdbcTemplate.query(sql.toString(), parameters, (rs, rowNum) -> User.builder()
-				.username(rs.getString("user_name")).fullName(rs.getString("full_name")).build());
-	}
-
-	public List<Classes> findClassByStudentId(Long studentId) {
-		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("studentId", studentId);
-		StringBuilder sql = new StringBuilder("SELECT c.* FROM tblStudent s ");
-		sql.append("JOIN tblStudentClass sc ON s.id = sc.student_id ");
-		sql.append("JOIN tblClass c ON c.id = sc.class_id ");
-		sql.append("WHERE s.id = :studentId");
-		return jdbcTemplate.query(sql.toString(), parameters,
-				(rs, rowNum) -> Classes.builder().name(rs.getString("name")).id(rs.getLong("id")).build());
+		List<StudentDTO> lst = jdbcTemplate.query(sql.toString(), parameters,new StudentDTOMapper());
+		return lst.size() > 0 ? lst.get(0) : null;
 	}
 	
 	public List<UserDTO> findParentByClassIds(List<Long> classIds) {
 		if(classIds.size() == 0 ) return new ArrayList<>();
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("classIds", classIds);
+
 		StringBuilder sql = new StringBuilder("SELECT u.*, ud.device_token, s.name as student_name FROM tblUser u ");
 		sql.append("LEFT JOIN tblUserDevice ud on ud.user_id = u.id ");
 		sql.append("JOIN tblStudent s ON s.parent_id = u.id ");
@@ -105,13 +90,17 @@ public class JStudentRepository {
 				.build());
 	}
 
-	public List<NotifyDevice> findParentDeviceByStudentId(Long id) {
+	public List<UserDevice> findParentDeviceByStudentId(Long id) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("studentId", id);
-		StringBuilder sql = new StringBuilder("SELECT nd.* FROM tblNotifyDevice nd ");
-		sql.append("JOIN tblParentStudent ps ON ps.user_id = nd.user_id ");
-		sql.append("WHERE ps.student_id = :studentId");
-		return jdbcTemplate.query(sql.toString(), parameters, (rs, rowNum) -> NotifyDevice.builder()
-				.id(rs.getLong("id")).deviceToken(rs.getString("device_token")).userId(rs.getLong("user_id")).build());
+		StringBuilder sql = new StringBuilder("SELECT ud.* FROM tblStudent s ");
+		sql.append("JOIN tblUserDevice ud ON s.parent_id = ud.user_id ");
+		sql.append("WHERE s.id = :studentId");
+		return jdbcTemplate.query(sql.toString(), parameters, (rs, rowNum) -> 
+			UserDevice.builder()
+				.id(rs.getLong("id"))
+				.deviceToken(rs.getString("device_token"))
+				.userId(rs.getLong("user_id"))
+				.build());
 	}
 }

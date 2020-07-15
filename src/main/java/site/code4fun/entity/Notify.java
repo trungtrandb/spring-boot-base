@@ -10,35 +10,31 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "tblNotify")
+@Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Notify {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String title;
-	private String content;
+	protected Long id;
+	protected String title;
+	protected String content;
+	protected String status; // ACTIVE/INACTIVE
 	
-	@Column(name = "user_id")
-	private Long userId;
-	
-	@Column(name = "device_token")
-	private String deviceToken;
-	private String status;
-	private String note;
-	
-	@Column(name = "created_date")
-	private Timestamp createdDate;
+	@Column(name = "class_id")
+	protected Long classId;
 	
 	@Column(name = "created_by")
-	private Long createdBy;
+	protected Long createdBy;
+	
+	@Column(name = "created_date")
+	protected Timestamp createdDate;
 }
