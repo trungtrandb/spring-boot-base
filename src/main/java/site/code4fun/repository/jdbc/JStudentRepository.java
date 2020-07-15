@@ -98,7 +98,6 @@ public class JStudentRepository {
 		sql.append("WHERE s.id = :studentId");
 		return jdbcTemplate.query(sql.toString(), parameters, (rs, rowNum) -> 
 			UserDevice.builder()
-				.id(rs.getLong("id"))
 				.deviceToken(rs.getString("device_token"))
 				.userId(rs.getLong("user_id"))
 				.build());
