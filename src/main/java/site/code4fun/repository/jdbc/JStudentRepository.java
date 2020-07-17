@@ -66,9 +66,10 @@ public class JStudentRepository {
 		if(classIds.size() == 0 ) return new ArrayList<>();
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("classIds", classIds);
-		StringBuilder sql = new StringBuilder("SELECT u.*, d.device_token, s.name as student_name FROM tblUser u ");
-		sql.append("LEFT JOIN tblNotifyDevice d on d.user_id = u.id ");
-		sql.append("JOIN tblStudent s ON u.id = s.parent_id ");
+
+		StringBuilder sql = new StringBuilder("SELECT u.*, ud.device_token, s.name as student_name FROM tblUser u ");
+		sql.append("LEFT JOIN tblUserDevice ud on ud.user_id = u.id ");
+		sql.append("JOIN tblStudent s ON s.parent_id = u.id ");
 		sql.append("WHERE s.class_id IN (:classIds)");
 		return jdbcTemplate.query(sql.toString(), parameters,
 				(rs, rowNum) -> UserDTO.builder()
@@ -97,7 +98,6 @@ public class JStudentRepository {
 		sql.append("WHERE s.id = :studentId");
 		return jdbcTemplate.query(sql.toString(), parameters, (rs, rowNum) -> 
 			UserDevice.builder()
-				.id(rs.getLong("id"))
 				.deviceToken(rs.getString("device_token"))
 				.userId(rs.getLong("user_id"))
 				.build());

@@ -1,0 +1,1 @@
+giới hạn quản lý học sinh trong 1 niên khóa, sang khóa mới nhập lại data
