@@ -35,6 +35,11 @@ public class ChatController {
 				.build();
 		simpMessagingTemplate.convertAndSend("/topic/message", out);
 	}
+	
+	@MessageMapping("/esp/send")
+	public void sendFromEsp(@Payload Message msg) throws Exception {
+		System.out.println(msg);
+	}
 
 	@MessageMapping("/direct/chat")
 	public void sendDirect(@Payload Message msg, Authentication auth) {

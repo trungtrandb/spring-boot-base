@@ -34,6 +34,7 @@ public class CheckinController {
 		try {
 			return ResponseEntity.ok(new Response(200, "Successful", checkinService.insert(s)));
 		}catch(Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
 	}	

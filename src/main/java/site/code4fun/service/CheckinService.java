@@ -75,7 +75,7 @@ public class CheckinService extends BaseService{
 		Optional<Student> student = studentRepository.findById(check.getStudentId());
 		if(!student.isPresent() || student.get().getClassId() != check.getClassId()) throw new Exception("Không tìm thấy học sinh!");
 		
-		Optional<Lession> lession = lessionRepository.findById(check.getId());
+		Optional<Lession> lession = lessionRepository.findById(check.getLessionId());
 		if(!lession.isPresent() || lession.get().getClassId() != check.getClassId()) throw new Exception("Không tìm thấy buổi học!");
 		
 		// Update nếu điểm danh lại
