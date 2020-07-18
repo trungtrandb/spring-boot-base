@@ -49,9 +49,6 @@ public class OrganizationService extends BaseService{
 	}
 	
 	public boolean deleteById(Long id) throws Exception {
-		Optional<Organization> item = organizationRepository.findById(id);
-		if(!item.isPresent()) throw new Exception("Item not found!");
-		if(item.get().getUser().getId() != getCurrentId()) throw new Exception("Không có quyền xóa!");
 		organizationRepository.deleteById(id);
 		return true;
 	}
@@ -65,9 +62,6 @@ public class OrganizationService extends BaseService{
 	}
 
 	public boolean deleteTeacher(Long teacherId, Long orgId) throws Exception {
-		Optional<Organization> item = organizationRepository.findById(orgId);
-		if(!item.isPresent()) throw new Exception("Item not found!");
-		if(item.get().getUser().getId() != getCurrentId()) throw new Exception("Không có quyền xóa!");
 		userOrganizationRepository.deleteTeacherOrg(teacherId, orgId);
 		return true;
 	}
@@ -76,7 +70,6 @@ public class OrganizationService extends BaseService{
 		List<Long> classIds = new ArrayList<>();
 		if(orgId != null) {
 			Optional<Organization> org = organizationRepository.findById(orgId);
-			if(!org.isPresent() || org.get().getUser().getId() != getCurrentId()) throw new Exception("Không tìm thấy hoặc không có quyền xem!");
 			List<Long> groupClassIds = groupClassRepository.findByOrganizationIds(Arrays.asList(org.get().getId())).stream().map(GroupClass::getId).collect(Collectors.toList());
 			if(groupClassIds.size() == 0 )return new ArrayList<>();
 			classIds = classRepository.findByGroupId(groupClassIds).stream().map(Classes::getId).collect(Collectors.toList());

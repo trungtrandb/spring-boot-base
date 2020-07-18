@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import site.code4fun.constant.Status;
 import site.code4fun.mapper.UserMapper;
 import site.code4fun.repository.UserRepository;
 
@@ -19,6 +20,11 @@ public class JwtUserDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		site.code4fun.entity.User user = userRepository.findByUserName(userName);
 		if(user == null) throw new UsernameNotFoundException(userName);
+		if(user.getStatus().equalsIgnoreCase(Status.PENDING.getVal())) {
+			user.setStatus(Status.ACTIVE.getVal());
+			userRepository.save(user);
+		}
+		
 		return UserMapper.userToUserPrinciple(user);
 	}
 }

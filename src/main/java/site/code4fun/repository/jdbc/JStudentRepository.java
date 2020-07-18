@@ -70,7 +70,8 @@ public class JStudentRepository {
 		StringBuilder sql = new StringBuilder("SELECT u.*, ud.device_token, s.name as student_name FROM tblUser u ");
 		sql.append("LEFT JOIN tblUserDevice ud on ud.user_id = u.id ");
 		sql.append("JOIN tblStudent s ON s.parent_id = u.id ");
-		sql.append("WHERE s.class_id IN (:classIds)");
+		sql.append("WHERE s.class_id IN (:classIds) ");
+		sql.append("GROUP BY u.id");
 		return jdbcTemplate.query(sql.toString(), parameters,
 				(rs, rowNum) -> UserDTO.builder()
 				.id(rs.getLong("id"))
@@ -85,7 +86,6 @@ public class JStudentRepository {
 				.updatedBy(rs.getLong("updated_by"))
 				.status(rs.getString("status"))
 				.username(rs.getString("user_name"))
-				.studentName(rs.getString("student_name"))
 				.deviceToken(rs.getString("device_token"))
 				.build());
 	}

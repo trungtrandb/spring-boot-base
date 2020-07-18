@@ -66,6 +66,7 @@ public class OrganizationController {
 		try {
 			return ResponseEntity.ok(new Response(200, "Success", organizationService.getLstParentOfOrg(id)));
 		}catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
 		}
 	}
