@@ -6,23 +6,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import site.code4fun.entity.GroupClass;
 import site.code4fun.entity.Organization;
 import site.code4fun.entity.dto.GroupClassDTO;
-import site.code4fun.repository.GroupClassRepository;
-import site.code4fun.repository.OrganizationRepository;
 
 @Service
 public class GroupClassService extends BaseService{
-
-	@Autowired
-	GroupClassRepository groupClassRepository;
-	
-	@Autowired
-	OrganizationRepository organizationRepository;
 	
 	public GroupClass create(GroupClassDTO item) throws Exception {
 		if(null == item.getOrganizationId()) throw new Exception("Select 1 Organization!");

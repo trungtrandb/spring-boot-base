@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,23 +15,10 @@ import site.code4fun.constant.Role;
 import site.code4fun.constant.Status;
 import site.code4fun.entity.User;
 import site.code4fun.entity.UserOrganization;
-import site.code4fun.repository.UserOrganizationRepository;
-import site.code4fun.repository.UserRepository;
-import site.code4fun.util.MailUtil;
 import site.code4fun.util.StringUtils;
 
 @Service
 public class UserService extends BaseService{
-
-	@Autowired UserRepository userRepository;
-	
-	@Autowired
-	private QueueService queueService;
-	
-	@Autowired MailUtil mailUtil;
-	
-	@Autowired
-	private UserOrganizationRepository userOrganizationRepository;
 	
 	public User create(User u) throws Exception {
 		if(u.getOrganizationId() != null) { // Tạo tài khoản cho giáo viên
@@ -97,7 +83,6 @@ public class UserService extends BaseService{
 			throw new Exception("Password not match!");
 		
 		Optional<User> optUser = userRepository.findById(getCurrentId());
-		if(!optUser.isPresent()) throw new Exception("User not found!");
 		
 		User user = optUser.get();
 		user.setAddress(u.getAddress());

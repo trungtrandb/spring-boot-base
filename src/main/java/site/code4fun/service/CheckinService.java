@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import site.code4fun.constant.Status;
@@ -23,49 +22,9 @@ import site.code4fun.entity.Organization;
 import site.code4fun.entity.Student;
 import site.code4fun.entity.dto.CheckinDTO;
 import site.code4fun.entity.dto.CheckinFilterDTO;
-import site.code4fun.repository.CheckinRepository;
-import site.code4fun.repository.ClassRepository;
-import site.code4fun.repository.GroupClassRepository;
-import site.code4fun.repository.LessionRepository;
-import site.code4fun.repository.NotifyDeviceRepository;
-import site.code4fun.repository.NotifyRepository;
-import site.code4fun.repository.OrganizationRepository;
-import site.code4fun.repository.StudentRepository;
-import site.code4fun.repository.jdbc.JCheckinRepository;
-import site.code4fun.repository.jdbc.JStudentRepository;
 
 @Service
 public class CheckinService extends BaseService{
-
-	@Autowired
-	private StudentRepository studentRepository;
-	
-	@Autowired
-	private JStudentRepository jStudentRepository;
-	
-	@Autowired
-	private NotifyRepository notifyRepository;
-	
-	@Autowired
-	private NotifyDeviceRepository notifyDeviceRepository;
-	
-	@Autowired
-	private CheckinRepository checkinRepository;
-	
-	@Autowired
-	private OrganizationRepository organizationRepsitory;
-	
-	@Autowired
-	private GroupClassRepository groupClassRepository;
-	
-	@Autowired
-	private ClassRepository classRepository;
-	
-	@Autowired
-	private LessionRepository lessionRepository;
-	
-	@Autowired
-	private JCheckinRepository jCheckinRepository;
 	
 	public Checkin insert(Checkin check) throws Exception {
 		if(null == check.getLessionId()) throw new Exception("Chưa chọn buổi học!");

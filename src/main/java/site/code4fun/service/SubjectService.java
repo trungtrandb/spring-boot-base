@@ -8,21 +8,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import site.code4fun.constant.Status;
 import site.code4fun.entity.Organization;
 import site.code4fun.entity.Subject;
 import site.code4fun.entity.dto.SubjectDTO;
-import site.code4fun.repository.SubjectRepository;
 import site.code4fun.util.StringUtils;
 
 @Service
 public class SubjectService extends BaseService{
-	
-	@Autowired
-	private SubjectRepository subjectRepository;
 	
 	public List<SubjectDTO> getAll(){
 		Map<Long, String> mapOrganization = getCurrentOrganization().stream().collect(Collectors.toMap(Organization::getId, Organization::getName));

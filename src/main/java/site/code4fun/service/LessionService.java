@@ -5,37 +5,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import site.code4fun.entity.Classes;
 import site.code4fun.entity.GroupClass;
 import site.code4fun.entity.Lession;
 import site.code4fun.entity.Organization;
-import site.code4fun.repository.ClassRepository;
-import site.code4fun.repository.GroupClassRepository;
-import site.code4fun.repository.OrganizationRepository;
-import site.code4fun.repository.LessionRepository;
-import site.code4fun.repository.jdbc.JLessionRepository;
 import site.code4fun.util.StringUtils;
 
 @Service
 public class LessionService extends BaseService{
-	
-	@Autowired
-	private LessionRepository lessionRepository;
-	
-	@Autowired
-	private JLessionRepository jLessionRepository;
-	
-	@Autowired
-	private OrganizationRepository organizationRepository;
-
-	@Autowired
-	private GroupClassRepository groupClassRepository;
-	
-	@Autowired
-	private ClassRepository classRepository;
 	
 	public List<Lession> getAll(){
 		List<Organization> lstOrganization = organizationRepository.findByUserId(getCurrentId());

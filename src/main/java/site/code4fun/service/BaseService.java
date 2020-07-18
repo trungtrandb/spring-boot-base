@@ -12,14 +12,23 @@ import site.code4fun.entity.Classes;
 import site.code4fun.entity.GroupClass;
 import site.code4fun.entity.Organization;
 import site.code4fun.entity.UserPrincipal;
+import site.code4fun.repository.CheckinRepository;
 import site.code4fun.repository.ClassRepository;
 import site.code4fun.repository.GroupClassRepository;
+import site.code4fun.repository.LessionRepository;
+import site.code4fun.repository.NotifyDeviceRepository;
+import site.code4fun.repository.NotifyRepository;
 import site.code4fun.repository.OrganizationRepository;
 import site.code4fun.repository.StudentRepository;
+import site.code4fun.repository.SubjectRepository;
+import site.code4fun.repository.UserDeviceRepository;
 import site.code4fun.repository.UserOrganizationRepository;
 import site.code4fun.repository.UserRepository;
+import site.code4fun.repository.jdbc.JCheckinRepository;
+import site.code4fun.repository.jdbc.JLessionRepository;
 import site.code4fun.repository.jdbc.JStudentRepository;
 import site.code4fun.repository.jdbc.JUserOrganizationRepository;
+import site.code4fun.util.MailUtil;
 
 @Service
 public class BaseService {
@@ -54,13 +63,42 @@ public class BaseService {
 	@Autowired
 	protected ClassService classService;
 	
+	@Autowired 
+	protected MailUtil mailUtil;
+	
+	@Autowired
+	protected NotifyRepository notifyRepository;
+	
+	@Autowired
+	protected NotifyDeviceRepository notifyDeviceRepository;
+	
+	@Autowired
+	protected CheckinRepository checkinRepository;
+	
+	@Autowired
+	protected OrganizationRepository organizationRepsitory;
+	
+	@Autowired
+	protected LessionRepository lessionRepository;
+	
+	@Autowired
+	protected JCheckinRepository jCheckinRepository;
+	
+	@Autowired
+	protected JLessionRepository jLessionRepository;
+
+	@Autowired
+	protected SubjectRepository subjectRepository;
+	
+	@Autowired
+	UserDeviceRepository userDeviceRepository;
+	
 	protected final Long getCurrentId() {
 		UserPrincipal currentUser = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return currentUser.getId();
 	}
 	
 	protected final List<Organization> getCurrentOrganization(){
-		System.out.println(getCurrentId());
 		return organizationRepository.findByUserId(getCurrentId());
 	}
 	
