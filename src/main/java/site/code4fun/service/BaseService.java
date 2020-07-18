@@ -60,7 +60,6 @@ public class BaseService {
 	}
 	
 	protected final List<Organization> getCurrentOrganization(){
-		System.out.println(getCurrentId());
 		return organizationRepository.findByUserId(getCurrentId());
 	}
 	
