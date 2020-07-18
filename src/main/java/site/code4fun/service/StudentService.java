@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,27 +21,10 @@ import site.code4fun.entity.Classes;
 import site.code4fun.entity.Student;
 import site.code4fun.entity.User;
 import site.code4fun.entity.dto.StudentDTO;
-import site.code4fun.repository.StudentRepository;
-import site.code4fun.repository.UserRepository;
-import site.code4fun.repository.jdbc.JStudentRepository;
 import site.code4fun.util.StringUtils;
 
 @Service
 public class StudentService extends BaseService{
-	@Autowired
-	private StudentRepository studentRepository;
-	
-	@Autowired
-	private JStudentRepository jStudentRepository;
-
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private QueueService queueService;
-
-	@Autowired
-	private ClassService classService;
 
 	public List<StudentDTO> getAll(Long classId, Long groupId, Long organizationId){
 		List<Classes> lstClass = classService.getByGroupId(groupId);
@@ -66,6 +48,7 @@ public class StudentService extends BaseService{
 	public Student create(StudentDTO s) throws Exception {
 		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Email phụ huynh không được bỏ trống!");
 		if (StringUtils.isNull(s.getName())) throw new Exception("Tên học sinh không được bỏ trống!");
+		if(s.getClassId() == null) throw new Exception("Chưa chọn lớp cho học sinh!");
 		
 		String passWord = StringUtils.randomString();
 		User u = userRepository.findByUserName(s.getParentPhoneOrEmail());
@@ -102,6 +85,7 @@ public class StudentService extends BaseService{
 				.dateOfBirth(s.getDateOfBirth())
 				.email(s.getEmail())
 				.phone(s.getPhone())
+				.avatar(s.getAvatar())
 				.classId(s.getClassId())
 				.parentId(u.getId())
 				.note(s.getNote()).build();
@@ -151,6 +135,7 @@ public class StudentService extends BaseService{
 				.id(s.getId())
 				.address(s.getAddress())
 				.name(s.getName())
+				.avatar(s.getAvatar())
 				.dateOfBirth(s.getDateOfBirth())
 				.email(s.getEmail())
 				.phone(s.getPhone())
@@ -176,5 +161,9 @@ public class StudentService extends BaseService{
 			}
 		}
 		throw new Exception("Không có quyền xóa!");
+	}
+
+	public List<Student> getByCurrentParent() {
+		return studentRepository.findByParentId(getCurrentId());
 	}
 }

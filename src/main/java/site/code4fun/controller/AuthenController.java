@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +60,16 @@ public class AuthenController {
 		try {
 			return ResponseEntity.ok(new Response(200, "Success", userService.create(user)));
 		}catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
+	
+	@RequestMapping(value = "/reset", method = RequestMethod.POST )
+	public ResponseEntity<?> resetPassByEmail(@RequestBody Map<String, String> payload){
+		try {
+			return ResponseEntity.ok(new Response(200, "Mật khẩu mới đã được gửi về email đăng ký!", userService.resetPassByUserName(payload.get("userName"))));
+		}catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}

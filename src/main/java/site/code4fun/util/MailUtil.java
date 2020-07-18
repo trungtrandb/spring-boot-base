@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 public class MailUtil{
 	
 	@Autowired
-    public JavaMailSender emailSender;
+    private JavaMailSender emailSender;
  
     public void sendmail(String receiverAddress, String mailSubject, String content) {
         SimpleMailMessage message = new SimpleMailMessage(); 

@@ -9,4 +9,6 @@ import site.code4fun.entity.Student;
 public interface StudentRepository extends JpaRepository<Student, Long>{
 	
 	public List<Student> findByClassId(Long classId);
+
+	public List<Student> findByParentId(Long parentId);
 }

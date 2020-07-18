@@ -32,6 +32,7 @@ public class Student {
 	protected String phone;
 	protected String email;
 	protected String note;
+	protected String avatar;
 	
 	@Column(name = "class_id")
 	protected Long classId;

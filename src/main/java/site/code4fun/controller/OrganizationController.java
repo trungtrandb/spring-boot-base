@@ -2,6 +2,7 @@ package site.code4fun.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ public class OrganizationController {
 		}
 	}
 	
+	@PreAuthorize("@organizationService.authorizeOrg(#id, true)")
 	@RequestMapping(path = "/get/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getById(@PathVariable Long id){
 		try {
@@ -48,6 +50,7 @@ public class OrganizationController {
 		}
 	}
 	
+	@PreAuthorize("@organizationService.authorizeOrg(#id, false)")
 	@RequestMapping(path = "/get-teacher", method = RequestMethod.GET)
 	public ResponseEntity<?> getTeacher(@RequestParam(required = false)Long id){
 		try {
@@ -57,6 +60,7 @@ public class OrganizationController {
 		}
 	}
 	
+	@PreAuthorize("@organizationService.authorizeOrg(#id, false)")
 	@RequestMapping(path = "/get-parent", method = RequestMethod.GET)
 	public ResponseEntity<?> getParent(@RequestParam(required = false)Long id){
 		try {
@@ -66,6 +70,7 @@ public class OrganizationController {
 		}
 	}
 	
+	@PreAuthorize("@organizationService.authorizeOrg(#id, true)")
 	@RequestMapping(path = "/delete/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> insert(@PathVariable Long id){
 		try {
@@ -76,6 +81,7 @@ public class OrganizationController {
 		}
 	}
 	
+	@PreAuthorize("@organizationService.authorizeOrg(#orgId, true)")
 	@RequestMapping(path = "/delete-teacher", method = RequestMethod.GET)
 	public ResponseEntity<?> deleteTeacher(@RequestParam(value = "teacher_id") Long teacherId,
 			@RequestParam(value = "org_id") Long orgId){

@@ -174,6 +174,7 @@ DROP TABLE IF EXISTS `tblStudent`;
 CREATE TABLE `tblStudent`  (
   `id` bigint(20) AUTO_INCREMENT PRIMARY KEY,
   `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
   `date_of_birth` datetime(0) NULL ,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,

@@ -18,6 +18,7 @@ import site.code4fun.entity.User;
 import site.code4fun.entity.UserOrganization;
 import site.code4fun.repository.UserOrganizationRepository;
 import site.code4fun.repository.UserRepository;
+import site.code4fun.util.MailUtil;
 import site.code4fun.util.StringUtils;
 
 @Service
@@ -27,6 +28,8 @@ public class UserService extends BaseService{
 	
 	@Autowired
 	private QueueService queueService;
+	
+	@Autowired MailUtil mailUtil;
 	
 	@Autowired
 	private UserOrganizationRepository userOrganizationRepository;
@@ -112,5 +115,15 @@ public class UserService extends BaseService{
 	
 	public User getByUserName(String userName) {
 		return userRepository.findByUserName(userName);
+	}
+
+	public boolean resetPassByUserName(String userName) throws Exception {
+		User u = userRepository.findByUserName(userName);
+		if(null == u) throw new Exception("Tên đăng nhập không tồn tại!");
+		String rawPass = StringUtils.randomString();
+		u.setPassword(new BCryptPasswordEncoder().encode(rawPass));
+		userRepository.save(u);
+		mailUtil.sendmail(u.getEmail(), "Thay đổi mật khẩu", "Mật khẩu đã được thay đổi: " + rawPass);
+		return true;
 	}
 }

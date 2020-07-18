@@ -172,6 +172,10 @@
     function StudentController($scope, $http, $location) {
         $scope.submitStudent = submitAddStudent;
         $scope.remove = remove;
+        bsCustomFileInput.init();
+        $scope.uploadFile = uploadFile;
+        $scope.student = {};
+
         loadLstStudent();
         $http.get("/api/class/get-by-group").then(function (response) {$scope.lstClass = response.data.data;});
 
@@ -215,12 +219,28 @@
                 toastr.error(response.data.message);
             });
         }
+
+        function uploadFile(files) {
+            var data = new FormData();
+            data.append("file", files[0]);
+            $http.post("/upload-image", data, {
+                withCredentials: true,
+                headers: {'Content-Type': undefined },
+                transformRequest: angular.identity
+            }).then(function (response) {
+                $scope.student.avatar = response.data.data;
+            }, function (response) {
+                toastr.error(response.data.message);
+            })
+        };
     }
 
 
     /* ============================================ */
     function EditStudentController($scope, $http, $location, studentId) {
         $scope.submitStudent = submitStudent;
+        $scope.uploadFile = uploadFile;
+        bsCustomFileInput.init();
         $http.get("/api/class/get-by-group").then(function (response) {$scope.lstClass = response.data.data;});
         $http.get("/api/student/get/" + studentId).then(function (response) {
             $scope.student = response.data.data;
@@ -244,6 +264,20 @@
                 toastr.error(response.data.message);
             });
         }
+
+        function uploadFile(files) {
+            var data = new FormData();
+            data.append("file", files[0]);
+            $http.post("/upload-image", data, {
+                withCredentials: true,
+                headers: {'Content-Type': undefined },
+                transformRequest: angular.identity
+            }).then(function (response) {
+                $scope.student.avatar = response.data.data;
+            }, function (response) {
+                toastr.error(response.data.message);
+            })
+        };
     }
 
 

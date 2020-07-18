@@ -22,6 +22,10 @@ public class ClassService extends BaseService{
 		}
 	}
 	
+	public Boolean authorizeClass(Long groupClassId) {
+		return true;
+	}
+	
 	public Classes insert(ClassDTO c) throws Exception {
 		Optional<GroupClass> group = groupClassRepository.findById(c.getGroupClassId());
 		Optional<User> user = userRepository.findById(c.getOwnerId());

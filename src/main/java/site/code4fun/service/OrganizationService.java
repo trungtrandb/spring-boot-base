@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import site.code4fun.entity.Classes;
@@ -14,36 +13,23 @@ import site.code4fun.entity.GroupClass;
 import site.code4fun.entity.Organization;
 import site.code4fun.entity.User;
 import site.code4fun.entity.dto.UserDTO;
-import site.code4fun.repository.OrganizationRepository;
-import site.code4fun.repository.UserOrganizationRepository;
-import site.code4fun.repository.UserRepository;
-import site.code4fun.repository.jdbc.JStudentRepository;
-import site.code4fun.repository.jdbc.JUserOrganizationRepository;
 
 @Service
 public class OrganizationService extends BaseService{
 	
-	@Autowired
-	private OrganizationRepository organizationRepository;
-	
-	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private JUserOrganizationRepository jUserOrganizationRepository;
-	
-	@Autowired
-	private UserOrganizationRepository userOrganizationRepository;
-	
-	@Autowired
-	private JStudentRepository jStudentRepository;
-	
+	public boolean authorizeOrg(Long orgId, boolean required) {
+		if(!required && orgId == null) {
+			return true;
+		}else {
+			if(orgId == null) return false;
+			Optional<Organization> org = organizationRepository.findById(orgId);
+			if(!org.isPresent() || org.get().getUser().getId() != getCurrentId()) return true;
+		}	
+		return false;
+	}
+
 	public Organization getById(Long id) throws Exception {
-		Optional<Organization> item = organizationRepository.findById(id);
-		if(!item.isPresent() || item.get().getUser().getId() != getCurrentId()) 
-			throw new Exception("Organization not found!");
-		
-		return item.get();
+		return organizationRepository.findById(id).get();
 	}
 	
 	public List<Organization> getByUser() throws Exception {

@@ -10,6 +10,7 @@
         $scope.signUp = signUp;
         $scope.changeUserName = changeUserName;
         $scope.changePassword = changePassword;
+        $scope.resetPass = resetPass;
 
         function changeUserName() {
             $scope.username = $scope.user.username;
@@ -36,6 +37,24 @@
             .then(function(response) {
                 if (response.data.code == 200) {
                     $("#modalCreateUser").modal("hide");
+                    toastr.success(response.data.message);
+                } else {
+                    toastr.error(response.data.message);
+                }
+            },function(response) {
+                toastr.error(response.data.message);
+            });
+        }
+
+        function resetPass(){
+            $http({
+                url: "/reset",
+                method: "POST",
+                data: {'userName': $scope.email}
+            })
+            .then(function(response) {
+                if (response.data.code == 200) {
+                    $("#modalResetPass").modal("hide");
                     toastr.success(response.data.message);
                 } else {
                     toastr.error(response.data.message);

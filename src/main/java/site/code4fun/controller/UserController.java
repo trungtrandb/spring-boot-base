@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import site.code4fun.entity.Response;
 import site.code4fun.entity.User;
+import site.code4fun.service.StudentService;
 import site.code4fun.service.UserService;
 
 @Controller
@@ -17,6 +18,9 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	StudentService studentService;
 	
 	@RequestMapping(value = "/getInfo", method = RequestMethod.GET )
 	public ResponseEntity<?> getById(){
@@ -36,5 +40,12 @@ public class UserController {
 		}
 	}
 	
-
+	@RequestMapping(value = "/get-list-student", method = RequestMethod.GET )
+	public ResponseEntity<?> getListStudent(){
+		try {
+			return ResponseEntity.ok(new Response(200, "Successful", studentService.getByCurrentParent()));
+		}catch(Exception e) {
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
 }

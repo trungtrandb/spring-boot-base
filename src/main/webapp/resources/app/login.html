@@ -28,7 +28,7 @@
           <button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#modalCreateUser">SignUp</button>
         </form>
         <p class="mb-1">
-          <a href="forgot-password.html">I forgot my password</a>
+          <a href="javascript:;" data-toggle="modal" data-target="#modalResetPass">Quên mật khẩu</a>
         </p>
       </div>
       <!-- /.login-card-body -->
@@ -77,6 +77,32 @@
             <div class="form-group">
               <label for="rpwd">RePassword:</label>
               <input type="password" class="form-control" id="rpwd" placeholder="Enter password" ng-model="user.rePass" autocomplete="true">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /Modal -->
+
+  <!-- The Modal -->
+  <div class="modal" id="modalResetPass">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Add User</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form ng-submit="resetPass()">
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="text" class="form-control" id="email" placeholder="Email" ng-model="email">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
