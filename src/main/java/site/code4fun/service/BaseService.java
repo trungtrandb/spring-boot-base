@@ -14,10 +14,12 @@ import site.code4fun.entity.Organization;
 import site.code4fun.entity.UserPrincipal;
 import site.code4fun.repository.ClassRepository;
 import site.code4fun.repository.GroupClassRepository;
+import site.code4fun.repository.LessionRepository;
 import site.code4fun.repository.OrganizationRepository;
 import site.code4fun.repository.StudentRepository;
 import site.code4fun.repository.UserOrganizationRepository;
 import site.code4fun.repository.UserRepository;
+import site.code4fun.repository.jdbc.JLessionRepository;
 import site.code4fun.repository.jdbc.JStudentRepository;
 import site.code4fun.repository.jdbc.JUserOrganizationRepository;
 
@@ -37,7 +39,16 @@ public class BaseService {
 	protected UserRepository userRepository;
 	
 	@Autowired
-	protected JUserOrganizationRepository jUserOrganizationRepository;
+	protected StudentRepository studentRepository;
+
+	@Autowired
+	protected QueueService queueService;
+
+	@Autowired
+	protected ClassService classService;
+	
+	@Autowired
+	protected LessionRepository lessionRepository;
 	
 	@Autowired
 	protected UserOrganizationRepository userOrganizationRepository;
@@ -46,13 +57,10 @@ public class BaseService {
 	protected JStudentRepository jStudentRepository;
 	
 	@Autowired
-	protected StudentRepository studentRepository;
-
+	protected JUserOrganizationRepository jUserOrganizationRepository;
+	
 	@Autowired
-	protected QueueService queueService;
-
-	@Autowired
-	protected ClassService classService;
+	protected JLessionRepository jLessionRepository;
 	
 	protected final Long getCurrentId() {
 		UserPrincipal currentUser = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
