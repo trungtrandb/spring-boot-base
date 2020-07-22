@@ -24,8 +24,8 @@
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary btn-block" ng-click="login()">SignIn</button>
-          <button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#modalCreateUser">SignUp</button>
+          <button type="submit" class="btn btn-primary btn-block" ng-click="login()">Đăng nhập</button>
+          <button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#modalCreateUser">Đăng ký</button>
         </form>
         <p class="mb-1">
           <a href="javascript:;" data-toggle="modal" data-target="#modalResetPass">Quên mật khẩu</a>
@@ -43,7 +43,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Add User</h4>
+          <h4 class="modal-title">Đăng ký</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
@@ -51,15 +51,15 @@
         <div class="modal-body">
           <form ng-submit="signUp()">
             <div class="form-group">
-              <label for="username">UserName:</label>
-              <input type="text" class="form-control" id="username" placeholder="UserName" ng-model="user.username" ng-change="changeUserName()">
-            </div>
-            <div class="form-group">
-              <label for="fullName">Full Name:</label>
+              <label for="fullName">Họ tên:</label>
               <input type="text" class="form-control" id="fullName" placeholder="FullName" ng-model="user.fullName">
             </div>
             <div class="form-group">
-              <label for="phone">Phone:</label>
+              <label for="username">Tên đăng nhập:</label>
+              <input type="text" class="form-control" id="username" placeholder="UserName" ng-model="user.username" ng-change="changeUserName()">
+            </div>
+            <div class="form-group">
+              <label for="phone">Số điện thoại:</label>
               <input type="text" class="form-control" id="phone" placeholder="Phone" ng-model="user.phone">
             </div>
             <div class="form-group">
@@ -67,15 +67,15 @@
               <input type="text" class="form-control" id="email" placeholder="Email" ng-model="user.email">
             </div>
             <div class="form-group">
-              <label for="address">Address:</label>
+              <label for="address">Địa chỉ:</label>
               <input type="text" class="form-control" id="address" placeholder="Address" ng-model="user.address">
             </div>
             <div class="form-group">
-              <label for="pwd">Password:</label>
+              <label for="pwd">Mật khẩu:</label>
               <input type="password" class="form-control" id="pwd" placeholder="Enter password" ng-model="user.password" autocomplete="true" ng-change="changePassword()">
             </div>
             <div class="form-group">
-              <label for="rpwd">RePassword:</label>
+              <label for="rpwd">Nhập lại mật khẩu:</label>
               <input type="password" class="form-control" id="rpwd" placeholder="Enter password" ng-model="user.rePass" autocomplete="true">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -93,7 +93,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Add User</h4>
+          <h4 class="modal-title">Quên mật khẩu</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
@@ -101,7 +101,7 @@
         <div class="modal-body">
           <form ng-submit="resetPass()">
             <div class="form-group">
-              <label for="email">Email:</label>
+              <label for="email">Tên đăng nhập:<span class="text-danger">*</span></label>
               <input type="text" class="form-control" id="email" placeholder="Email" ng-model="email">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>

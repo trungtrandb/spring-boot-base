@@ -49,7 +49,9 @@ spring:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
 #logging:
-#  level:
+#    level:
+#      root: WARN
+  
 #    org.springframework: warn
 #    SpringBoot: warn
 #    org.apache.activemq: warn
