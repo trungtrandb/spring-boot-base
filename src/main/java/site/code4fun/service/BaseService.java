@@ -46,7 +46,16 @@ public class BaseService {
 	protected UserRepository userRepository;
 	
 	@Autowired
-	protected JUserOrganizationRepository jUserOrganizationRepository;
+	protected StudentRepository studentRepository;
+
+	@Autowired
+	protected QueueService queueService;
+
+	@Autowired
+	protected ClassService classService;
+	
+	@Autowired
+	protected LessionRepository lessionRepository;
 	
 	@Autowired
 	protected UserOrganizationRepository userOrganizationRepository;
@@ -55,13 +64,10 @@ public class BaseService {
 	protected JStudentRepository jStudentRepository;
 	
 	@Autowired
-	protected StudentRepository studentRepository;
-
+	protected JUserOrganizationRepository jUserOrganizationRepository;
+	
 	@Autowired
-	protected QueueService queueService;
-
-	@Autowired
-	protected ClassService classService;
+	protected JLessionRepository jLessionRepository;
 	
 	@Autowired 
 	protected MailUtil mailUtil;
@@ -79,13 +85,8 @@ public class BaseService {
 	protected OrganizationRepository organizationRepsitory;
 	
 	@Autowired
-	protected LessionRepository lessionRepository;
-	
-	@Autowired
 	protected JCheckinRepository jCheckinRepository;
-	
-	@Autowired
-	protected JLessionRepository jLessionRepository;
+
 
 	@Autowired
 	protected SubjectRepository subjectRepository;

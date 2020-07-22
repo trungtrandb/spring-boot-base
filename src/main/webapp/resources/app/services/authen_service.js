@@ -32,6 +32,7 @@
 
           $localStorage.currentUser = $rootScope.currentUser = user;
           $http.defaults.headers.common.Authorization = "Bearer " + token;
+          toastr.success("Đăng nhập thành công. Chào mừng " + user.fullName + "!");
           callback(true);
         } else {
           callback(false);
@@ -44,7 +45,7 @@
     function Logout() {
       delete $localStorage.currentUser;
       $http.defaults.headers.common.Authorization = "";
-      setTimeout(function(){ location.reload(); }, 1000);
+      setTimeout(function(){ location.reload(); }, 100);
     }
   }
 })();
