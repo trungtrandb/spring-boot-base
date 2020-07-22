@@ -22,6 +22,7 @@ public class StudentDTOMapper implements RowMapper<StudentDTO>{
 				.dateOfBirth(rs.getTimestamp("date_of_birth"))
 				.id(rs.getLong("id"))
 				.name(rs.getString("name"))
+				.avatar(rs.getString("avatar"))
 				.build();
 	}
 

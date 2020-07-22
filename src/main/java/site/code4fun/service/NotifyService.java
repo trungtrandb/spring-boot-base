@@ -24,20 +24,13 @@ import site.code4fun.util.FirebaseAdmin;
  *
  */
 @Service
-public class NotifyService {
-	
-	@Autowired
-	JNotifyRepository jNotifyRepository;
-	
-	@Autowired
-	private QueueService queueService;
-
+public class NotifyService extends BaseService{
 	/*
 	 * Every 1'
 	 * Run at 21h00 every day: "0 21 * * *"
 	*/
 	@Scheduled(cron = "0 */1 * * * *")
-	public void schedulePushNotify() {
+	private void schedulePushNotify() {
 	    List<NotifyDTO> lstNoti = jNotifyRepository.getNotifyOfDevicePending();
 	    Gson gson = new Gson();
 	    lstNoti.forEach(_noti -> {
@@ -63,5 +56,4 @@ public class NotifyService {
             jNotifyRepository.updateNoti(notiDevice);
         }
     }
-
 }

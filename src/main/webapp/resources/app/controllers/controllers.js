@@ -408,9 +408,7 @@
         Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
 
         function submitNotify() {  
-            $scope.checkin.studentId = studentId;
-            $scope.checkin.status = status;  
-            Restangular.all('/api/checkin/insert').post($scope.checkin).then(function (response) {
+            Restangular.all('/api/notify/insert').post($scope.checkin).then(function (response) {
                 if(response.code == 200){
                     toastr.success(response.message);
                 }else{

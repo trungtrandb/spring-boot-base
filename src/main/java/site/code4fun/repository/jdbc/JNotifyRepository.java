@@ -21,7 +21,7 @@ public class JNotifyRepository {
 		StringBuilder sql = new StringBuilder("SELECT n.*, nd.device_token ");
 		sql.append("FROM tblNotify n ");
 		sql.append("JOIN tblNotifyDevice nd ON n.id = nd.notify_id ");
-		sql.append("WHERE nd.status IN ('PENDING', 'ERROR')");
+		sql.append("WHERE nd.status IN ('PENDING')");
 		return jdbcTemplate.query(sql.toString(), new NotifyDTOMapper());
 	}
 

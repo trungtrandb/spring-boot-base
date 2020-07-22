@@ -26,6 +26,7 @@ import site.code4fun.repository.UserOrganizationRepository;
 import site.code4fun.repository.UserRepository;
 import site.code4fun.repository.jdbc.JCheckinRepository;
 import site.code4fun.repository.jdbc.JLessionRepository;
+import site.code4fun.repository.jdbc.JNotifyRepository;
 import site.code4fun.repository.jdbc.JStudentRepository;
 import site.code4fun.repository.jdbc.JUserOrganizationRepository;
 import site.code4fun.util.MailUtil;
@@ -87,12 +88,15 @@ public class BaseService {
 	@Autowired
 	protected JCheckinRepository jCheckinRepository;
 
-
 	@Autowired
 	protected SubjectRepository subjectRepository;
 	
 	@Autowired
-	UserDeviceRepository userDeviceRepository;
+	protected UserDeviceRepository userDeviceRepository;
+	
+	@Autowired
+	protected JNotifyRepository jNotifyRepository;
+
 	
 	protected final Long getCurrentId() {
 		UserPrincipal currentUser = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
