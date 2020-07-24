@@ -8,7 +8,8 @@ public enum Status {
 	ERROR("ERROR"),
 	PUBLIC("PUBLIC"),
 	PRIVATE("PRIVATE"),
-	LOCK("LOCK");
+	LOCK("LOCK"),
+	DRAFT("DRAFT");
 	
 	
 	private String val;

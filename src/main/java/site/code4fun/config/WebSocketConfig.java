@@ -3,19 +3,28 @@ package site.code4fun.config;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import site.code4fun.util.JwtTokenUtil;
@@ -28,6 +37,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 	
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -90,6 +102,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 			public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 					Map<String, Object> attributes) throws Exception {	
 				System.out.println("Has New connection public");
+				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("admin", "123456");
+				Authentication authentication = authenticationManager.authenticate(token);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
 				return true;
 			}
 			
@@ -99,4 +114,20 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 			}
 		};
     }
+}
+
+@SuppressWarnings("deprecation")
+@Configuration
+@EnableWebSocket
+class WebSocketConfig1 extends AbstractWebSocketMessageBrokerConfigurer implements WebSocketConfigurer {
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+        registration.setMessageSizeLimit(50 * 1024 * 1024);
+    }
+
+	@Override
+	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+		
+		
+	}
 }

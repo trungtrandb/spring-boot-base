@@ -111,7 +111,7 @@ CREATE TABLE `tblNotify`  (
   `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
-  `class_id` bigint(20), 
+  `school_id` bigint(20), 
   `created_by` bigint(20) NULL ,
   `created_date` datetime(0) NULL ,
   `updated_date` datetime(0) NULL ,
@@ -137,6 +137,7 @@ CREATE TABLE `tblUserDevice` (
 DROP TABLE IF EXISTS `tblNotifyDevice`;
 CREATE TABLE `tblNotifyDevice`  (
   `notify_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
   `device_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
   `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
@@ -247,3 +248,36 @@ CREATE TABLE `tblUserOrganization`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+-- Stored Procedure
+DROP procedure IF EXISTS `getStudentByClassIds`;
+
+DELIMITER $$
+USE `test`$$
+CREATE PROCEDURE `getStudentByClassIds` (
+	IN classIds VARCHAR(100)
+)
+BEGIN
+	SELECT s.*, c.name as class_name, u.full_name FROM tblStudent s
+    JOIN tblClass c on s.class_id = c.id 
+    JOIN tblUser u on u.id = s.parent_id 
+    WHERE FIND_IN_SET(s.class_id, classIds);
+END$$
+
+DELIMITER ;
+
+DROP procedure IF EXISTS `getDeviceByClassIds`;
+
+DELIMITER $$
+USE `test`$$
+CREATE PROCEDURE `getDeviceByClassIds` (
+	IN classIds VARCHAR(250)
+)
+BEGIN
+	SELECT ud.* FROM tblUserDevice ud
+    JOIN tblStudent s on s.parent_id = ud.user_id 
+    WHERE FIND_IN_SET(s.class_id, classIds);
+END$$
+
+DELIMITER ;
