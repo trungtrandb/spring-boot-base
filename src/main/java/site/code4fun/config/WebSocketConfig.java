@@ -102,7 +102,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 			public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 					Map<String, Object> attributes) throws Exception {	
 				System.out.println("Has New connection public");
-				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("admin", "123456");
+				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("trungtrandb1@gmail.com", "123456");
 				Authentication authentication = authenticationManager.authenticate(token);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 				return true;
