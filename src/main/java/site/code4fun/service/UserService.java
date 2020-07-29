@@ -34,7 +34,7 @@ public class UserService extends BaseService{
 				u.setPassword(passWord);
 				u.setCreatedBy(getCurrentId());					
 				u.setPassword(new BCryptPasswordEncoder().encode(u.getPassword()));
-				u.setStatus(Status.ACTIVE.getVal());
+				u.setStatus(Status.ACTIVE);
 				u.setRole(Role.ROLE_USER.getVal());
 				u.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 				u = userRepository.saveAndFlush(u);	
@@ -66,7 +66,7 @@ public class UserService extends BaseService{
 				throw new Exception("Tài khoản đã tồn tại!");
 			
 			u.setPassword(new BCryptPasswordEncoder().encode(u.getPassword()));
-			u.setStatus(Status.ACTIVE.getVal());
+			u.setStatus(Status.ACTIVE);
 			u.setRole(Role.ROLE_USER.getVal());
 			u.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 			u = userRepository.saveAndFlush(u);

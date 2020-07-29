@@ -46,26 +46,19 @@
                   <label for="class">Ngày điểm danh: </label>
                   <input class="form-control datetimepicker" ng-model="filter.createdDate" ng-change="filterCheckin()"/>
                 </div>
-                <div class="col">
-                  <label for="class">Trường: </label>
-                  <select class="form-control" ng-model="filter.organizationId" ng-change="filterCheckin()">
-                    <option value="">-- All --</option>
-                    <option ng-repeat="x in lstOrganization" value="{{x.id}}">{{x.name}}</option>
-                  </select>
-                </div>
               </div>
               <table id="tblCheckin" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Class Id</th>
-                    <th>Class Name</th>
-                    <th>Subject Name</th>
-                    <th>Date</th>
-                    <th>Total Student</th>
-                    <th>Total Present</th>
-                    <th>Total Absent</th>
-                    <th>% Present</th>
+                    <th>ID lớp</th>
+                    <th>Tên lớp</th>
+                    <th>Tên môn học</th>
+                    <th>Ngày</th>
+                    <th>Tổng số học sinh</th>
+                    <th>Tổng số tham gia</th>
+                    <th>Tổng số vắng</th>
+                    <th>% Tham gia</th>
                   </tr>
                 </thead>
                 <tbody>

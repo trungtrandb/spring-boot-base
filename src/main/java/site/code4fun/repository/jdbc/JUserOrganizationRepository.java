@@ -1,6 +1,5 @@
 package site.code4fun.repository.jdbc;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +16,14 @@ public class JUserOrganizationRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 	
-	public List<User> getTeachersByOrgIds(List<Long> organizationIds){
-		if(organizationIds.size() == 0) return new ArrayList<>();
+	public List<User> getTeachersByOrgId(Long organizationId){
 		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("organizationIds", organizationIds);
+		parameters.addValue("organizationIds", organizationId);
 		
 		StringBuilder sql = new StringBuilder("Select u.*, uo.organization_id FROM tblUser u");
 		sql.append(" JOIN tblUserOrganization uo ON u.id = uo.user_id"); 
-		sql.append(" WHERE uo.organization_id IN (:organizationIds)");
+		sql.append(" WHERE uo.organization_id = :organizationIds");
 		return jdbcTemplate.query(sql.toString(), parameters, new UserMapper());
 	}
 

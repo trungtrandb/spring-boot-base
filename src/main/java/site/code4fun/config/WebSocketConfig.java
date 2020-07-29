@@ -3,28 +3,24 @@ package site.code4fun.config;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import site.code4fun.util.JwtTokenUtil;
@@ -43,7 +39,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-    	config.enableSimpleBroker("/queue/", "/topic/","/checkAuthorization");
+    	ThreadPoolTaskScheduler te = new ThreadPoolTaskScheduler();
+        te.setPoolSize(1);
+        te.setThreadNamePrefix("wss-heartbeat-thread-");
+        te.initialize();
+        
+    	config.enableSimpleBroker("/queue/", "/topic/")
+    		.setHeartbeatValue(new long[]{0, 0})
+    		.setTaskScheduler(te);;
     	config.setApplicationDestinationPrefixes("/app");
     	config.setUserDestinationPrefix("/user");
     }
@@ -114,20 +117,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 			}
 		};
     }
-}
-
-@SuppressWarnings("deprecation")
-@Configuration
-@EnableWebSocket
-class WebSocketConfig1 extends AbstractWebSocketMessageBrokerConfigurer implements WebSocketConfigurer {
-    @Override
-    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
-        registration.setMessageSizeLimit(50 * 1024 * 1024);
-    }
-
-	@Override
-	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		
-		
-	}
 }

@@ -22,7 +22,7 @@ public class UserMapper implements RowMapper<User>{
 				.avatar(user.getAvatar())
 				.authorities(Arrays.asList(new SimpleGrantedAuthority(user.getRole().toString())))
 				.role(user.getRole())
-				.isAccountNonLocked(!user.getStatus().equals(Status.LOCK.getVal()))
+				.isAccountNonLocked(!user.getStatus().equals(Status.LOCK))
 				.build();
 	}
 

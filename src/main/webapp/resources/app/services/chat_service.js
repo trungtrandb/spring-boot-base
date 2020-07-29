@@ -3,7 +3,7 @@ angular.module("app").service("ChatService", function($q, $timeout, $rootScope) 
   var service = {}, listener = $q.defer(), socket = {
     client: null,
     stomp: null
-  }, messageIds = [];
+  };
 
   service.RECONNECT_TIMEOUT = 5000;
   service.SOCKET_URL = "/ws";
@@ -18,9 +18,7 @@ angular.module("app").service("ChatService", function($q, $timeout, $rootScope) 
   };
 
   service.sendDirect = function(message) {
-    socket.stomp.send(service.CHAT_DIRECT, {
-      priority: 9
-    }, message);
+    socket.stomp.send(service.CHAT_DIRECT, {}, message);
   };
 
   var reconnect = function() {

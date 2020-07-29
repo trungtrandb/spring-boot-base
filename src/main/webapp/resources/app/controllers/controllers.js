@@ -76,7 +76,7 @@
         $http.get("/api/organization/get-by-user").then(function (response) {$scope.lstOrganization = response.data.data;});
 
         function loadLstGroup() {
-            $http.get("/api/group-class/get-by-organization").then(function (response) {$scope.lstGroupClass = response.data.data;});
+            $http.get("/api/group-class/get-all").then(function (response) {$scope.lstGroupClass = response.data.data;});
         }
 
         function submitAddGroupClass() {
@@ -129,7 +129,7 @@
         Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.lstOrganization = response.data; });
 
         function selectOrganization() {
-            Restangular.one("/api/group-class/get-by-organization?id=" + $scope.organizationId).get().then(function (response) { $scope.lstGroup = response.data; });
+            Restangular.one("/api/group-class/get-all").get().then(function (response) { $scope.lstGroup = response.data; });
             Restangular.one("/api/organization/get-teacher?id=" + $scope.organizationId).get().then(function (response) { $scope.lstTeacher = response.data; });
         }
         
@@ -297,8 +297,8 @@
         Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
 
         function selectOrganization() {
-            Restangular.one("/api/organization/get-teacher?id=" + $scope.organizationId).get().then(function (response) { $scope.lstTeacher = response.data; });
-            Restangular.one("/api/subject/get-by-org?id=" + $scope.organizationId).get().then(function (response) { $scope.lstSubject = response.data; });            
+            Restangular.one("/api/organization/get-teacher").get().then(function (response) { $scope.lstTeacher = response.data; });
+            Restangular.one("/api/subject/getAll").get().then(function (response) { $scope.lstSubject = response.data; });            
         }
 
         function loadLstLession() {
@@ -405,12 +405,33 @@
     /* ============================================ */
     function NotifyController($scope,$location, Restangular) {
         $scope.submitNotify = submitNotify;
+        $scope.remove = remove;
+        loadNotify();
+
         Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
+        
+
+        function loadNotify(){
+            Restangular.one("/api/notify/getAll").get().then(function (response) { $scope.lstNotify = response.data; });
+        }
 
         function submitNotify() {  
-            Restangular.all('/api/notify/insert').post($scope.checkin).then(function (response) {
+            Restangular.all('/api/notify/insert').post($scope.notify).then(function (response) {
                 if(response.code == 200){
                     toastr.success(response.message);
+                    loadNotify();
+                    $("#modalAddNotify").modal("hide");
+                }else{
+                    toastr.error(response.message);
+                }
+            });
+        }
+
+        function remove(id){
+            Restangular.one('/api/notify/delete', id).get().then(function (response) {
+                if (response.code == 200) {
+                    toastr.success(response.message);
+                    loadNotify();
                 }else{
                     toastr.error(response.message);
                 }
@@ -555,7 +576,7 @@
         }
 
         function remove(teacherId, orgId){
-            $http.get("/api/organization/delete-teacher?teacher_id="+ teacherId + "&org_id=" + orgId).then(function (response) {
+            $http.get("/api/organization/delete-teacher?teacher_id="+ teacherId ).then(function (response) {
                 if(response.data.code == 200){
                     toastr.success(response.data.message);
                     loadLstTeacher();
@@ -570,6 +591,6 @@
 
     function ParentController($scope, Restangular) {
         $scope.orgId = "";
-        Restangular.one("/api/organization/get-parent?id=" + $scope.orgId).get().then(function (response) { $scope.lstParent = response.data; });
+        Restangular.one("/api/organization/get-paren").get().then(function (response) { $scope.lstParent = response.data; });
     }
 })();

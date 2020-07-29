@@ -108,7 +108,7 @@ CREATE TABLE `tblLession`  (
 DROP TABLE IF EXISTS `tblNotify`;
 CREATE TABLE `tblNotify`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
   `school_id` bigint(20), 
@@ -250,9 +250,9 @@ CREATE TABLE `tblUserOrganization`  (
 SET FOREIGN_KEY_CHECKS = 1;
 
 
--- Stored Procedure
+--------------------------------- Stored Procedure -----------------------------
+-- getStudentByClassIds
 DROP procedure IF EXISTS `getStudentByClassIds`;
-
 DELIMITER $$
 USE `test`$$
 CREATE PROCEDURE `getStudentByClassIds` (
@@ -264,11 +264,11 @@ BEGIN
     JOIN tblUser u on u.id = s.parent_id 
     WHERE FIND_IN_SET(s.class_id, classIds);
 END$$
-
 DELIMITER ;
 
-DROP procedure IF EXISTS `getDeviceByClassIds`;
 
+-- getDeviceByClassIds
+DROP procedure IF EXISTS `getDeviceByClassIds`;
 DELIMITER $$
 USE `test`$$
 CREATE PROCEDURE `getDeviceByClassIds` (
@@ -279,5 +279,4 @@ BEGIN
     JOIN tblStudent s on s.parent_id = ud.user_id 
     WHERE FIND_IN_SET(s.class_id, classIds);
 END$$
-
 DELIMITER ;

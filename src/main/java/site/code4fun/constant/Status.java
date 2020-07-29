@@ -1,24 +1,13 @@
 package site.code4fun.constant;
 
-public enum Status {
-	ACTIVE("ACTIVE"),
-	INACTIVE("INACTIVE"),
-	PENDING("PENDING"),
-	COMPLETE("COMPLETE"),
-	ERROR("ERROR"),
-	PUBLIC("PUBLIC"),
-	PRIVATE("PRIVATE"),
-	LOCK("LOCK"),
-	DRAFT("DRAFT");
-	
-	
-	private String val;
-
-	Status(String val) {
-		this.val = val;
-	}
-
-	public String getVal() {
-		return this.val;
-	}
+public class Status {
+	public static final String ACTIVE = "ACTIVE";
+	public static final String INACTIVE = "INACTIVE";
+	public static final String PENDING = "PENDING";
+	public static final String COMPLETE = "COMPLETE";
+	public static final String ERROR = "ERROR";
+	public static final String PUBLIC = "PUBLIC";
+	public static final String PRIVATE = "PRIVATE";
+	public static final String LOCK = "LOCK";
+	public static final String DRAFT = "DRAFT";
 }

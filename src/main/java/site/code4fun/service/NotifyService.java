@@ -19,6 +19,7 @@ import site.code4fun.constant.Status;
 import site.code4fun.entity.Classes;
 import site.code4fun.entity.Notify;
 import site.code4fun.entity.NotifyDevice;
+import site.code4fun.entity.Organization;
 import site.code4fun.entity.UserDevice;
 import site.code4fun.entity.dto.NotifyDTO;
 import site.code4fun.util.FirebaseAdmin;
@@ -49,39 +50,62 @@ public class NotifyService extends BaseService{
         	NotifyDevice notiDevice = NotifyDevice.builder().notifyId(noti.getId()).deviceToken(noti.getDeviceToken()).build();
             try {
 				FirebaseAdmin.pushNotification(noti.getTitle(), noti.getContent(), noti.getDeviceToken());
-				notiDevice.setStatus(Status.COMPLETE.getVal());
+				notiDevice.setStatus(Status.COMPLETE);
 			} catch (Exception e) {
 				notiDevice.setNote(e.getMessage());
-				notiDevice.setStatus(Status.ERROR.getVal());
+				notiDevice.setStatus(Status.ERROR);
 				e.printStackTrace();
 			}
             jNotifyRepository.updateNoti(notiDevice);
         }
     }
 	
-	public NotifyDTO create(NotifyDTO item) throws Exception {
+	public Notify create(Notify item) throws Exception {
 		if(StringUtils.isNull(item.getTitle())) throw new Exception("Tiều đề không được bỏ trống!");
 		if(StringUtils.isNull(item.getContent())) throw new Exception("Nội dung thông báo không được bỏ trống!");
-		List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
-		if (item.getClassIds() !=  null && item.getClassIds().size() > 0) {
-			item.getClassIds().removeIf(id -> !classIds.contains(id));
-			classIds.removeIf(id -> !item.getClassIds().contains(id));
-		}
-		
+		Organization org = getCurrentOrganization();
+		if(null == org) throw new Exception("Chưa có trường.");
+		if(item.getStatus() == null) item.setStatus(Status.DRAFT);
 		item.setCreatedBy(getCurrentId());
 		item.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-//		List<Notify> lstNotify = new ArrayList<>();
-//		classIds.forEach(_item -> {
-//			item.setClassId(_item);
-//			lstNotify.add(item);
-//		});
-
-		if(item.getStatus().equalsIgnoreCase(Status.ACTIVE.getVal())){
-			List<UserDevice> lst = userDeviceRepository.getDeviceByClassIds(classIds);
-			lst.forEach(_device ->{
-//				noti
-			});
+		item.setSchoolId(org.getId());
+		item = notifyRepository.save(item);
+		List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
+		if(Status.ACTIVE.equalsIgnoreCase(item.getStatus())){
+			List<UserDevice> lst = userDeviceRepository.getDeviceByClassIds(StringUtils.stringFromList(classIds));
+			System.out.println(StringUtils.stringFromList(classIds));
+			List<NotifyDevice> lstNotify = new ArrayList<>();
+			for(UserDevice _device : lst){
+				NotifyDevice nt = NotifyDevice.builder()
+						.createdBy(getCurrentId())
+						.deviceToken(_device.getDeviceToken())
+						.notifyId(item.getId())
+						.userId(_device.getUserId())
+						.createdDate(new Timestamp(System.currentTimeMillis()))
+						.status(Status.PENDING)
+						.build();
+				lstNotify.add(nt);
+			}
+			notifyDeviceRepository.saveAll(lstNotify);
 		}
-		return null;
+		return item;
+	}
+	
+	public List<NotifyDTO> getAll(){
+		Organization org = getCurrentOrganization();
+		return null != org ? jNotifyRepository.getNotifyByOrg(org.getId()) : new ArrayList<>();
+	}
+	
+	public List<NotifyDTO> getByUser(){
+		return jNotifyRepository.getNotifyByUserId(getCurrentId());
+	}
+	
+	public boolean delete(Long id) {
+		List<NotifyDevice> lst = notifyDeviceRepository.findByNotifyId(id);
+		if(lst.size() == 0) {
+			notifyRepository.deleteById(id);
+			return true;
+		}
+		return false;
 	}
 }

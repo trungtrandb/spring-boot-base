@@ -20,8 +20,8 @@ public class JwtUserDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		site.code4fun.entity.User user = userRepository.findByUserName(userName);
 		if(user == null) throw new UsernameNotFoundException(userName);
-		if(user.getStatus().equalsIgnoreCase(Status.PENDING.getVal())) {
-			user.setStatus(Status.ACTIVE.getVal());
+		if(user.getStatus().equalsIgnoreCase(Status.PENDING)) {
+			user.setStatus(Status.ACTIVE);
 			userRepository.save(user);
 		}
 		

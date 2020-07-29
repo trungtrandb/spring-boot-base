@@ -29,8 +29,8 @@ public class Notify {
 	protected String content;
 	protected String status; // ACTIVE/INACTIVE
 	
-	@Column(name = "class_id")
-	protected Long classId;
+	@Column(name = "school_id")
+	protected Long schoolId;
 	
 	@Column(name = "created_by")
 	protected Long createdBy;

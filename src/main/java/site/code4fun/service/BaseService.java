@@ -2,6 +2,7 @@ package site.code4fun.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,13 +104,14 @@ public class BaseService {
 		return currentUser.getId();
 	}
 	
-	protected final List<Organization> getCurrentOrganization(){
-		return organizationRepository.findByUserId(getCurrentId());
+	protected final Organization getCurrentOrganization(){
+		Optional<Organization> org = organizationRepository.findFirstByUserId(getCurrentId());
+		return org.isPresent() ? org.get() : null;
 	}
 	
 	protected final List<GroupClass> getCurrentGroupClass(){
-		List<Long> idsOrganization = getCurrentOrganization().stream().map(Organization::getId).collect(Collectors.toList());
-		return idsOrganization.size() > 0 ? groupClassRepository.findByOrganizationIds(idsOrganization) : new ArrayList<>();
+		Organization org = getCurrentOrganization();
+		return org != null ? groupClassRepository.findByOrganizationId(org.getId()) : new ArrayList<>();
 	}
 	
 	protected final List<Classes> getCurrentClasses(){

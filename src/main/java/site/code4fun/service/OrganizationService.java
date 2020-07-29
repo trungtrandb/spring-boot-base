@@ -1,7 +1,5 @@
 package site.code4fun.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import site.code4fun.entity.Classes;
-import site.code4fun.entity.GroupClass;
 import site.code4fun.entity.Organization;
 import site.code4fun.entity.User;
 import site.code4fun.entity.dto.UserDTO;
@@ -32,10 +29,8 @@ public class OrganizationService extends BaseService{
 		return organizationRepository.findById(id).get();
 	}
 	
-	public List<Organization> getByUser() throws Exception {
-		List<Organization> lstItem = organizationRepository.findByUserId(getCurrentId());
-		if(lstItem.size() == 0) throw new Exception("Organization not found!");
-		return lstItem;
+	public Organization getByUser() throws Exception {
+		return getCurrentOrganization();
 	}
 	
 	public Organization create(Organization item) throws Exception {
@@ -53,29 +48,19 @@ public class OrganizationService extends BaseService{
 		return true;
 	}
 
-	public List<User> getLstTeacherOfOrg(Long id) {
-		List<Long> ids = getCurrentOrganization().stream().map(Organization::getId).collect(Collectors.toList());
-		if(null != id) {
-			ids = Arrays.asList(id);
-		}
-		return jUserOrganizationRepository.getTeachersByOrgIds(ids);
+	public List<User> getLstTeacherOfOrg() {
+		Long id = getCurrentOrganization().getId();
+		return jUserOrganizationRepository.getTeachersByOrgId(id);
 	}
 
-	public boolean deleteTeacher(Long teacherId, Long orgId) throws Exception {
+	public boolean deleteTeacher(Long teacherId) throws Exception {
+		Long orgId = getCurrentOrganization().getId();
 		userOrganizationRepository.deleteTeacherOrg(teacherId, orgId);
 		return true;
 	}
 
-	public List<UserDTO> getLstParentOfOrg(Long orgId) throws Exception {
-		List<Long> classIds = new ArrayList<>();
-		if(orgId != null) {
-			Optional<Organization> org = organizationRepository.findById(orgId);
-			List<Long> groupClassIds = groupClassRepository.findByOrganizationIds(Arrays.asList(org.get().getId())).stream().map(GroupClass::getId).collect(Collectors.toList());
-			if(groupClassIds.size() == 0 )return new ArrayList<>();
-			classIds = classRepository.findByGroupId(groupClassIds).stream().map(Classes::getId).collect(Collectors.toList());
-		}else {
-			classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
-		}
+	public List<UserDTO> getLstParentOfOrg() throws Exception {
+		List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
 		return jStudentRepository.findParentByClassIds(classIds);
 	}
 

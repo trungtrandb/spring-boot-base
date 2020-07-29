@@ -1,5 +1,6 @@
 package site.code4fun.util;
 
+import java.util.List;
 import java.util.Random;
 
 public class StringUtils {
@@ -20,5 +21,16 @@ public class StringUtils {
 	
 	public static String randomString() {
 		return randomString(6);
+	}
+	
+	public static String stringFromList(List<?> lst) {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < lst.size();  i ++)
+		{	
+			if(i != 0) sb.append(",");
+		    sb.append(lst.get(i).toString());
+		}
+		return sb.toString();
+		
 	}
 }

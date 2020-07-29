@@ -61,7 +61,7 @@ public class StudentService extends BaseService{
 					.password(new BCryptPasswordEncoder().encode(passWord))
 					.role(Role.ROLE_USER.getVal())
 					.email(s.getParentPhoneOrEmail())
-					.status(Status.PENDING.getVal()).build();
+					.status(Status.PENDING).build();
 			u = userRepository.saveAndFlush(u);
 			
 //			Thêm vào queue gửi mật khẩu cho tài khoản mới đăng ký
@@ -113,7 +113,7 @@ public class StudentService extends BaseService{
 					.fullName(s.getParentName())
 					.password(new BCryptPasswordEncoder().encode(passWord))
 					.role(Role.ROLE_USER.getVal())
-					.status(Status.PENDING.getVal()).build();
+					.status(Status.PENDING).build();
 			u = userRepository.saveAndFlush(u);
 			
 //			Thêm vào queue gửi mật khẩu cho tài khoản mới đăng ký

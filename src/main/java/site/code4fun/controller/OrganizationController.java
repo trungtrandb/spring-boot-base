@@ -52,9 +52,9 @@ public class OrganizationController {
 	
 	@PreAuthorize("@organizationService.authorizeOrg(#id, false)")
 	@RequestMapping(path = "/get-teacher", method = RequestMethod.GET)
-	public ResponseEntity<?> getTeacher(@RequestParam(required = false)Long id){
+	public ResponseEntity<?> getTeacher(){
 		try {
-			return ResponseEntity.ok(new Response(200, "Success", organizationService.getLstTeacherOfOrg(id)));
+			return ResponseEntity.ok(new Response(200, "Success", organizationService.getLstTeacherOfOrg()));
 		}catch (Exception e) {
 			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
 		}
@@ -62,9 +62,9 @@ public class OrganizationController {
 	
 	@PreAuthorize("@organizationService.authorizeOrg(#id, false)")
 	@RequestMapping(path = "/get-parent", method = RequestMethod.GET)
-	public ResponseEntity<?> getParent(@RequestParam(required = false)Long id){
+	public ResponseEntity<?> getParent(){
 		try {
-			return ResponseEntity.ok(new Response(200, "Success", organizationService.getLstParentOfOrg(id)));
+			return ResponseEntity.ok(new Response(200, "Success", organizationService.getLstParentOfOrg()));
 		}catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
@@ -84,10 +84,9 @@ public class OrganizationController {
 	
 	@PreAuthorize("@organizationService.authorizeOrg(#orgId, true)")
 	@RequestMapping(path = "/delete-teacher", method = RequestMethod.GET)
-	public ResponseEntity<?> deleteTeacher(@RequestParam(value = "teacher_id") Long teacherId,
-			@RequestParam(value = "org_id") Long orgId){
+	public ResponseEntity<?> deleteTeacher(@RequestParam(value = "teacher_id") Long teacherId){
 		try {
-			organizationService.deleteTeacher(teacherId, orgId);
+			organizationService.deleteTeacher(teacherId);
 			return ResponseEntity.ok(new Response(200, "Success", null));
 		}catch (Exception e) {
 			return ResponseEntity.ok(new Response(null, e.getMessage(), null));

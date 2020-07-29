@@ -18,7 +18,6 @@ import site.code4fun.entity.Lession;
 import site.code4fun.entity.Notify;
 import site.code4fun.entity.NotifyDevice;
 import site.code4fun.entity.UserDevice;
-import site.code4fun.entity.Organization;
 import site.code4fun.entity.Student;
 import site.code4fun.entity.dto.CheckinDTO;
 import site.code4fun.entity.dto.CheckinFilterDTO;
@@ -49,7 +48,7 @@ public class CheckinService extends BaseService{
 				Notify noti = Notify.builder()
 						.title(title)
 						.content(notifyContent.toString())
-						.status(Status.PENDING.getVal())
+						.status(Status.PENDING)
 						.createdBy(getCurrentId())
 						.createdDate(new Timestamp(System.currentTimeMillis()))
 						.build();
@@ -62,7 +61,7 @@ public class CheckinService extends BaseService{
 							.notifyId(noti.getId())
 							.createdDate(new Timestamp(System.currentTimeMillis()))
 							.createdBy(noti.getCreatedBy())
-							.status(Status.PENDING.getVal())
+							.status(Status.PENDING)
 							.build();
 					lstNotifyDevice.add(notiDevice);
 				};
@@ -76,16 +75,7 @@ public class CheckinService extends BaseService{
 	}
 
 	public List<CheckinDTO> getAll(CheckinFilterDTO filter) {
-		Map<Long, String> mapOrganization = new HashMap<>();
-		if(filter.getOrganizationId() != null) {
-			Optional<Organization> orga = organizationRepsitory.findById(filter.getOrganizationId());
-			if(orga.isPresent()) mapOrganization.put(orga.get().getId(), orga.get().getName());
-		}else {
-			mapOrganization = organizationRepsitory.findByUserId(getCurrentId())
-					.stream().collect(Collectors.toMap(Organization::getId, Organization::getName));
-		}
-		if(mapOrganization.size() == 0 ) return new ArrayList<>();
-		Map<Long, String> mapGroup = groupClassRepository.findByOrganizationIds(new ArrayList<>(mapOrganization.keySet()))
+		Map<Long, String> mapGroup = getCurrentGroupClass()
 				.stream().collect(Collectors.toMap(GroupClass::getId, GroupClass::getName));
 		
 		Map<Long, String> mapClass = new HashMap<>();

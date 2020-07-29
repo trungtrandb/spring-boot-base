@@ -1,10 +1,6 @@
 package site.code4fun.service;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -28,16 +24,8 @@ public class GroupClassService extends BaseService{
 		return groupClassRepository.saveAndFlush(gc);
 	}
 	
-	public List<GroupClass> getByOrganizationId(Long organizationId) throws Exception {
-		List<Long> idsOrganization = new ArrayList<Long>();
-		if(null == organizationId) {
-			List<Organization> lstOrganization =  organizationRepository.findByUserId(getCurrentId());
-			idsOrganization = lstOrganization.stream().map(Organization::getId).collect(Collectors.toList());
-		}else {
-			idsOrganization = Arrays.asList(organizationId);
-		}
-		
-		return idsOrganization.size() > 0 ? groupClassRepository.findByOrganizationIds(idsOrganization) : new ArrayList<>();
+	public List<GroupClass> getAll() throws Exception {		
+		return groupClassRepository.findByOrganizationId(getCurrentOrganization().getId());
 	}
 	
 	public GroupClass getById(Long id) throws Exception {

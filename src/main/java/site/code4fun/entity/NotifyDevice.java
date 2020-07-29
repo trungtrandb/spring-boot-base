@@ -32,6 +32,9 @@ public class NotifyDevice {
 	protected String status; // COMPLETE/ERROR/PENDING
 	protected String note;
 	
+	@Column(name = "user_id")
+	protected Long userId;
+	
 	@Column(name = "created_by")
 	protected Long createdBy;
 	

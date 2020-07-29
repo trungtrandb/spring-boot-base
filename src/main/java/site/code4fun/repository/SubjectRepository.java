@@ -9,7 +9,7 @@ import site.code4fun.entity.Subject;
 
 public interface SubjectRepository extends JpaRepository<Subject, Long>{
 	
-	@Query(value = "Select s from Subject s where s.organizationId IN :organizationIds")
-	public List<Subject> findByOrganizationIds(List<Long> organizationIds);
+	@Query(value = "Select s from Subject s where s.organizationId = :organizationId")
+	public List<Subject> findByOrganizationId(Long organizationId);
 
 }
