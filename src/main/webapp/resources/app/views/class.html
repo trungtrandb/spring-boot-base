@@ -89,18 +89,12 @@
               <input type="text" class="form-control" id="note" ng-model="class.note">
             </div>
             <div class="form-group">
-              <label>Trường <span class="text-danger">*</span></label>
-              <select class="form-control" ng-model="organizationId" ng-change="selectOrganization()">
-                <option ng-repeat="x in lstOrganization" value="{{x.id}}">{{x.name}}</option>
-              </select>
-            </div>
-            <div class="form-group" ng-show="organizationId">
-              <label>Nhóm lớp: <span class="text-danger">*</span></label>
+              <label>Khốilớp: <span class="text-danger">*</span></label>
               <select class="form-control" ng-model="class.groupClassId">
                 <option ng-repeat="x in lstGroup" value="{{x.id}}">{{x.name}}</option>
               </select>
             </div>
-            <div class="form-group" ng-show="organizationId">
+            <div class="form-group">
               <label>GV chủ nhiệm: <span class="text-danger">*</span></label>
               <select class="form-control" ng-model="class.ownerId">
                 <option ng-repeat="x in lstTeacher" value="{{x.id}}">{{x.fullName}}</option>

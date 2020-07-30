@@ -1,5 +1,7 @@
 package site.code4fun.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +35,26 @@ public class NotifyController {
 	public ResponseEntity<?> getAllNotify(){
 		try {
 			return ResponseEntity.ok(new Response(200, "Success", notifyService.getAll()));
+		}catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
+	
+	@RequestMapping(path = "/is-read", method = RequestMethod.POST) // Đánh dấu notify đã đọc
+	public ResponseEntity<?> updateIsRead(@RequestBody(required = false) List<Long> ids){
+		try {
+			return ResponseEntity.ok(new Response(200, "Success", notifyService.isRead(ids)));
+		}catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
+	
+	@RequestMapping(path = "/get/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> getById(@PathVariable Long id){
+		try {
+			return ResponseEntity.ok(new Response(200, "Success", notifyService.getById(id)));
 		}catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));

@@ -12,14 +12,13 @@ import site.code4fun.entity.dto.GroupClassDTO;
 public class GroupClassService extends BaseService{
 	
 	public GroupClass create(GroupClassDTO item) throws Exception {
-		if(null == item.getOrganizationId()) throw new Exception("Select 1 Organization!");
-		Optional<Organization> organization = organizationRepository.findById(item.getOrganizationId());
-		if(!organization.isPresent()) throw new Exception("Organization not found!!!");
+		Organization org = getCurrentOrganization();
+		if(null == org) throw new Exception("Chưa tạo trường!");
 		GroupClass gc = GroupClass.builder()
 				.id(item.getId())
 				.name(item.getName())
 				.schoolYear(item.getSchoolYear())
-				.organization(organization.get())
+				.organization(org)
 				.build();
 		return groupClassRepository.saveAndFlush(gc);
 	}

@@ -56,9 +56,9 @@ public class AuthenController {
 	}
 	
 	@RequestMapping(value = "/sign-up", method = RequestMethod.POST)
-	public ResponseEntity<?> signUp(@RequestBody User user){
+	public ResponseEntity<?> signUp(@RequestBody User user, @RequestParam(required = false) String type){
 		try {
-			return ResponseEntity.ok(new Response(200, "Success", userService.create(user)));
+			return ResponseEntity.ok(new Response(200, "Đăng ký thành công", userService.create(user, type)));
 		}catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));

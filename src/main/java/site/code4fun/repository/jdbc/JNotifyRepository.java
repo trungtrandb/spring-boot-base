@@ -21,12 +21,12 @@ public class JNotifyRepository {
 		StringBuilder sql = new StringBuilder("SELECT n.*, nd.device_token, null as full_name ");
 		sql.append("FROM tblNotify n ");
 		sql.append("JOIN tblNotifyDevice nd ON n.id = nd.notify_id ");
-		sql.append("WHERE nd.status IN ('PENDING')");
+		sql.append("WHERE nd.status IN ('PENDING') AND nd.is_read != 1");
 		return jdbcTemplate.query(sql.toString(), new NotifyDTOMapper());
 	}
 
 	public int updateNoti(NotifyDevice notiDevice) {
-		String sql = "UPDATE tblNotifyDevice SET status =:status, note =:note WHERE notify_id = :notifyId AND device_token = :deviceToken, updated_date = NOW()";
+		String sql = "UPDATE tblNotifyDevice SET status =:status, note =:note,  updated_date = NOW() WHERE notify_id = :notifyId AND device_token = :deviceToken";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("status", notiDevice.getStatus());
 		parameters.addValue("note", notiDevice.getNote());
@@ -53,5 +53,4 @@ public class JNotifyRepository {
 		parameters.addValue("userId", Id);
 		return jdbcTemplate.query(sb.toString(), parameters, new NotifyDTOMapper());
 	}
-
 }

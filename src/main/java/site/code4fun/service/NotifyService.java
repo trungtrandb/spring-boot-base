@@ -3,6 +3,7 @@ package site.code4fun.service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.jms.JMSException;
@@ -73,7 +74,6 @@ public class NotifyService extends BaseService{
 		List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
 		if(Status.ACTIVE.equalsIgnoreCase(item.getStatus())){
 			List<UserDevice> lst = userDeviceRepository.getDeviceByClassIds(StringUtils.stringFromList(classIds));
-			System.out.println(StringUtils.stringFromList(classIds));
 			List<NotifyDevice> lstNotify = new ArrayList<>();
 			for(UserDevice _device : lst){
 				NotifyDevice nt = NotifyDevice.builder()
@@ -83,6 +83,7 @@ public class NotifyService extends BaseService{
 						.userId(_device.getUserId())
 						.createdDate(new Timestamp(System.currentTimeMillis()))
 						.status(Status.PENDING)
+						.isRead(false)
 						.build();
 				lstNotify.add(nt);
 			}
@@ -96,6 +97,10 @@ public class NotifyService extends BaseService{
 		return null != org ? jNotifyRepository.getNotifyByOrg(org.getId()) : new ArrayList<>();
 	}
 	
+	public Optional<Notify> getById(Long id) {
+		return notifyRepository.findById(id);
+	}
+	
 	public List<NotifyDTO> getByUser(){
 		return jNotifyRepository.getNotifyByUserId(getCurrentId());
 	}
@@ -107,5 +112,9 @@ public class NotifyService extends BaseService{
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean isRead(List<Long> notifyIds) {
+		return true;
 	}
 }

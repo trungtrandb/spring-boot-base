@@ -115,8 +115,7 @@ CREATE TABLE `tblNotify`  (
   `created_by` bigint(20) NULL ,
   `created_date` datetime(0) NULL ,
   `updated_date` datetime(0) NULL ,
-  `updated_by` bigint(20) NULL ,
-  FOREIGN KEY (`class_id`) REFERENCES `tblClass` (`id`)
+  `updated_by` bigint(20) NULL
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 -- ----------------------------
@@ -141,6 +140,7 @@ CREATE TABLE `tblNotifyDevice`  (
   `device_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
   `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ,
+  `is_read` bit NULL DEFAULT b'0',
   `created_by` bigint(20) NULL ,
   `created_date` datetime(0) NULL ,
   `updated_date` datetime(0) NULL ,
@@ -250,7 +250,7 @@ CREATE TABLE `tblUserOrganization`  (
 SET FOREIGN_KEY_CHECKS = 1;
 
 
---------------------------------- Stored Procedure -----------------------------
+-- ---------------------------- Stored Procedure -----------------------------
 -- getStudentByClassIds
 DROP procedure IF EXISTS `getStudentByClassIds`;
 DELIMITER $$

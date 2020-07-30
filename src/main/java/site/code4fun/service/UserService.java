@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import site.code4fun.constant.Queue;
 import site.code4fun.constant.Role;
 import site.code4fun.constant.Status;
+import site.code4fun.entity.Organization;
 import site.code4fun.entity.User;
 import site.code4fun.entity.UserOrganization;
 import site.code4fun.util.StringUtils;
@@ -20,11 +21,13 @@ import site.code4fun.util.StringUtils;
 @Service
 public class UserService extends BaseService{
 	
-	public User create(User u) throws Exception {
-		if(u.getOrganizationId() != null) { // Tạo tài khoản cho giáo viên
-			UserOrganization uo = UserOrganization.builder().organizationId(u.getOrganizationId()).build();
-			if(StringUtils.isNull(u.getEmail())) 
-				throw new Exception("Email không được bỏ trống");
+	public User create(User u, String type) throws Exception {
+		if("TEACHER".equalsIgnoreCase(type)) {
+			Organization org = getCurrentOrganization();
+			if(org == null) throw new Exception("Tạo trường trước khi thêm giáo viên!");
+			
+			u.setOrganizationId(org.getId());
+			if(StringUtils.isNull(u.getEmail())) throw new Exception("Email không được bỏ trống");
 			User existUser = userRepository.findByUserName(u.getEmail());
 			if(existUser != null) {
 				u = existUser;
@@ -52,7 +55,7 @@ public class UserService extends BaseService{
 				String mesToQueue = new Gson().toJson(mailMess);
 				queueService.sendToQueue(Queue.QUEUE_MAIL, mesToQueue);
 			}
-			uo.setUserId(u.getId());
+			UserOrganization uo = UserOrganization.builder().organizationId(org.getId()).userId(u.getId()).build();
 			userOrganizationRepository.save(uo);
 		}else {
 			if(null == u.getPassword() || null == u.getRePass() || !u.getPassword().equals(u.getRePass())) 

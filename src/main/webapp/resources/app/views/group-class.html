@@ -82,14 +82,8 @@
               <input type="text" class="form-control" id="name" ng-model="group.name">
             </div>
             <div class="form-group">
-              <label for="name">Năm học</label>
-              <input type="text" class="form-control datetimepicker" id="name" ng-model="group.schoolYear">
-            </div>
-            <div class="form-group">
-              <label>Trường</label>
-              <select class="form-control" ng-model="group.organizationId">
-                <option ng-selected="x.id == group.organizationId" ng-repeat="x in lstOrganization" value="{{x.id}}">{{x.name}}</option>
-              </select>
+              <label for="schoolYear">Năm học</label>
+              <input type="text" class="form-control datetimepicker" id="schoolYear" ng-model="group.schoolYear">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>

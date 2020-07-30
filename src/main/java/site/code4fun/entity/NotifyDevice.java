@@ -43,6 +43,9 @@ public class NotifyDevice {
 	
 	@Column(name = "updated_date")
 	protected Timestamp updatedDate;
+	
+	@Column(name = "is_read")
+	protected Boolean isRead;
 }
 
 @Embeddable

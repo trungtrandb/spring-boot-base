@@ -35,7 +35,7 @@ public class ClassController {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public ResponseEntity<?> insert(@RequestBody ClassDTO c) {
 		try {
-			return new ResponseEntity<>(new Response(200, "Successfull!!!", classService.insert(c)), HttpStatus.OK);
+			return new ResponseEntity<>(new Response(200, "Thêm mới thành công", classService.insert(c)), HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
 		}
@@ -45,7 +45,7 @@ public class ClassController {
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		try {
 			classService.delete(id);
-			return new ResponseEntity<>(new Response(200, "Successfull!!!", null), HttpStatus.OK);
+			return new ResponseEntity<>(new Response(200, "Xóa thành công", null), HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
 		}
