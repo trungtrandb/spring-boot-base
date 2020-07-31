@@ -16,6 +16,22 @@
     app.controller("ParentController", ParentController);
     app.controller("ChatController", ChatController);
     app.controller("NotifyController", NotifyController);
+    app.controller("NavbarController", NavbarController);
+
+
+    /* ============================================ */
+    function NavbarController($scope, ChatService, Restangular, $rootScope){
+        $scope.markAllRead = markAllRead;
+        Restangular.one("/api/notify/count-notify").get().then(function (response) { $scope.numNotiUnRead = response.data.notRead; });
+        Restangular.one("/api/notify/get-by-user").get().then(function (response) { $scope.lstNotify = response.data; });
+        Restangular.one("/api/organization/get-by-user").get().then(function (response) { 
+            $rootScope.org = response.data; 
+        });
+
+        function markAllRead() {
+            Restangular.all("/api/notify/is-read").post().then(function (response) { location.reload(); });
+        }
+    }
 
     /* ============================================ */
     function OrganizationController($scope, $http, Restangular) {

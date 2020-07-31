@@ -71,7 +71,7 @@ public class NotifyController {
 		}
 	}
 	
-	@RequestMapping(path = "/getByUser", method = RequestMethod.GET)
+	@RequestMapping(path = "/get-by-user", method = RequestMethod.GET)
 	public ResponseEntity<?> getByUser(){
 		try {
 			return ResponseEntity.ok(new Response(200, "Success", notifyService.getByUser()));
