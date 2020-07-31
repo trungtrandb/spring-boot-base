@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +23,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedStoredProcedureQuery(name = "Notify.countNotifyByStatus", procedureName = "countNotifyByStatus", parameters = {
+		  @StoredProcedureParameter(mode = ParameterMode.IN, name = "userId", type = Long.class),
+		  @StoredProcedureParameter(mode = ParameterMode.IN, name = "status", type = Boolean.class),
+		  @StoredProcedureParameter(mode = ParameterMode.OUT, name = "numNotify", type = Integer.class) })
 public class Notify {
 
 	@Id

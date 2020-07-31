@@ -62,6 +62,7 @@ public class CheckinService extends BaseService{
 							.createdDate(new Timestamp(System.currentTimeMillis()))
 							.createdBy(noti.getCreatedBy())
 							.status(Status.PENDING)
+							.userId(_item.getUserId())
 							.build();
 					lstNotifyDevice.add(notiDevice);
 				};

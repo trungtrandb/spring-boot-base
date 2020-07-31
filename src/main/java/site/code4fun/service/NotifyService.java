@@ -2,7 +2,9 @@ package site.code4fun.service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -105,16 +107,28 @@ public class NotifyService extends BaseService{
 		return jNotifyRepository.getNotifyByUserId(getCurrentId());
 	}
 	
-	public boolean delete(Long id) {
+	public boolean delete(Long id) throws Exception {
 		List<NotifyDevice> lst = notifyDeviceRepository.findByNotifyId(id);
 		if(lst.size() == 0) {
 			notifyRepository.deleteById(id);
 			return true;
 		}
-		return false;
+		throw new Exception("Không thể xóa thông báo đã được gửi.");
 	}
 	
 	public boolean isRead(List<Long> notifyIds) {
+		String lstId = StringUtils.stringFromList(notifyIds);
+		notifyRepository.updateRead(lstId, getCurrentId());
 		return true;
+	}
+
+	public Map<String, Integer> countNotify() {
+		int isRead = notifyRepository.countNotifyByStatus(getCurrentId(), true);
+		int notRead = notifyRepository.countNotifyByStatus(getCurrentId(), false);
+		Map<String, Integer> mapRes = new HashMap<String, Integer>();
+		mapRes.put("isRead", isRead);
+		mapRes.put("notRead", notRead);
+		mapRes.put("total", isRead + notRead);
+		return mapRes;
 	}
 }

@@ -30,9 +30,11 @@ public class SubjectService extends BaseService{
 	}
 	
 	public Subject insert(Subject s) throws Exception {
-		if(null == s.getOrganizationId()) throw new Exception("Chưa chọn trường!");
 		if(StringUtils.isNull(s.getName())) throw new Exception("Tên môn học không được bỏ trống!");
-		String status = s.getStatus().equals(Status.ACTIVE) || s.getStatus().equals(Status.INACTIVE) ? s.getStatus() : Status.ACTIVE;
+		Organization org = getCurrentOrganization();
+		if(null == org) throw new Exception("Chưa tạo trường!");
+		String status = Status.ACTIVE.equalsIgnoreCase(s.getStatus()) ? s.getStatus() : Status.DRAFT;
+		s.setOrganizationId(org.getId());
 		s.setStatus(status);
 		s.setCreatedBy(getCurrentId());
 		s.setCreatedDate(new Timestamp(System.currentTimeMillis()));

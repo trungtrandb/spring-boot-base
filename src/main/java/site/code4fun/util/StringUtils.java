@@ -24,7 +24,7 @@ public class StringUtils {
 	}
 	
 	public static String stringFromList(List<?> lst) {
-		StringBuffer sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer("");
 		for (int i = 0; i < lst.size();  i ++)
 		{	
 			if(i != 0) sb.append(",");
