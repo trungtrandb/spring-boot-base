@@ -1,0 +1,91 @@
+<!-- Content Header (Page header) -->
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Sổ điểm</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Sổ điểm</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <div class="form-row mb-2">
+                <div class="col">
+                  <label for="class">Lớp: </label>
+                  <select class="form-control" ng-model="filter.classId" ng-change="filterCheckin()">
+                    <option value="">-- All --</option>
+                    <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="class">Buổi học: </label>
+                  <select class="form-control" ng-model="filter.lessionId" ng-change="filterCheckin()">
+                    <option value="">-- All --</option>
+                    <option ng-repeat="x in lstLession" value="{{x.id}}">{{x.title}}</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="class">Ngày điểm danh: </label>
+                  <input class="form-control datetimepicker" ng-model="filter.createdDate" ng-change="filterCheckin()"/>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <div class="row">
+                
+              </div>
+              <table id="tblCheckin" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>ID lớp</th>
+                    <th>Tên lớp</th>
+                    <th>Tên môn học</th>
+                    <th>Ngày</th>
+                    <th>Tổng số học sinh</th>
+                    <th>Tổng số tham gia</th>
+                    <th>Tổng số vắng</th>
+                    <th>% Tham gia</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="x in lstCheckinDTO" ng-click="view(x)" style="cursor: pointer;">
+                    <td>{{ x.id }}</td>
+                    <td>{{ x.classId }}</td>
+                    <td>{{ x.className }}</td>
+                    <td>{{ x.lessionName }}</td>
+                    <td>{{ x.createdDate | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ x.totalCheckin }}</td>
+                    <td>{{ x.totalPresent }}</td>
+                    <td>{{ x.totalAbsent }}</td>
+                    <td>{{ x.totalPresent * 100 / x.totalCheckin }}</td>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>

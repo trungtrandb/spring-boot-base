@@ -17,6 +17,7 @@
     app.controller("ChatController", ChatController);
     app.controller("NotifyController", NotifyController);
     app.controller("NavbarController", NavbarController);
+    app.controller("PointController", PointController);
 
 
     /* ============================================ */
@@ -409,17 +410,53 @@
     }
 
     /* ============================================ */
-    function NotifyController($scope,$location, Restangular) {
+    function NotifyController($scope, $location, Restangular) {
+        var vm = this;
         $scope.submitNotify = submitNotify;
         $scope.remove = remove;
         $scope.edit = edit;
+        $scope.notify = {};
         loadNotify();
 
         Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
-        
 
-        function loadNotify(){
-            Restangular.one("/api/notify/getAll").get().then(function (response) { $scope.lstNotify = response.data; });
+
+        async function loadNotify(){
+            await Restangular.one("/api/notify/getAll").get().then(function (response) { 
+                // $scope.lstNotify = response.data;
+                initGrid(response.data);
+                
+             });
+        }
+
+        function initGrid(data) {
+            $("#jsGrid").jsGrid({
+                width: "100%",
+                height: "400px",
+         
+                inserting: true,
+                editing: true,
+                sorting: true,
+                paging: true,
+                rowClick: function(args) {
+                    showDetail(args);
+                },
+                data: data,
+         
+                fields: [
+                    { name: "id", title: "ID", type: "text", width: 150, validate: "required" },
+                    { name: "title", title: "Tiêu đề thông báo", type: "text"},
+                    { name: "content", title: "Nội dung thông báo", type: "text"},
+                    { name: "status", title: "Trạng thái", type: "text"},
+                    { type: "control" }
+                ]
+            });
+        }
+
+        function showDetail(arg) {
+            $scope.notify = arg.item;
+            $scope.$digest();
+            $("#modalAddNotify").modal("show");
         }
 
         function submitNotify() {  
@@ -547,6 +584,7 @@ function ChatController($scope, userName, Restangular, $rootScope, $filter, Chat
     });
 }
 
+/* ============================================ */
 function SubjectController($scope, Restangular) {
     $scope.submitSubject = submitSubject;
     $scope.remove = remove;
@@ -584,6 +622,7 @@ function SubjectController($scope, Restangular) {
     }
 }
 
+/* ============================================ */
 function TeacherController($scope, $http, Restangular) {
     $scope.submitUser = submitUser;
     $scope.remove = remove;
@@ -622,8 +661,14 @@ function TeacherController($scope, $http, Restangular) {
     }
 }
 
+/* ============================================ */
 function ParentController($scope, Restangular) {
     $scope.orgId = "";
     Restangular.one("/api/organization/get-parent").get().then(function (response) { $scope.lstParent = response.data; });
+}
+
+/* ============================================ */
+function PointController($scope,$location, Restangular) {
+      
 }
 })();

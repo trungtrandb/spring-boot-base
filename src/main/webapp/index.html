@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="/resources/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- <link rel="stylesheet" href="/resources/plugins/summernote/summernote-bs4.css"> -->
   <link rel="stylesheet" href="/resources/plugins/sweetalert2/sweetalert2.min.css">
+  <link rel="stylesheet" href="/resources/plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="/resources/plugins/jsgrid/jsgrid-theme.min.css">
 
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -26,13 +28,78 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
   <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.min.js"></script>
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/restangular/1.5.2/restangular.min.js"></script>
-
+  
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <style>
     html {
       font-family: sans-serif;
+    }
+    
+    .fade {
+      transition:opacity 0.15s linear !important;
+    }
+    .collapsing {
+      transition:height 0.35s ease !important;
+    }
+    .custom-switch .custom-control-label::after {
+      transition:background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-transform 0.15s ease-in-out !important;
+      transition:transform 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out !important;
+      transition:transform 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-transform 0.15s ease-in-out !important;
+    }
+    .custom-range::-webkit-slider-thumb {
+      transition:background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out !important;
+    }
+    .custom-range::-moz-range-thumb {
+      transition:background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out !important;
+    }
+    .custom-range::-ms-thumb {
+      transition:background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out !important;
+    }
+    .custom-control-label::before,.custom-file-label,.custom-select {
+      transition:background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out !important;
+    }
+    .badge {
+      transition:color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out !important;
+    }
+    .progress-bar {
+      transition:width 0.6s ease !important;
+    }
+    .progress-bar-animated {
+      -webkit-animation:progress-bar-stripes 1s linear infinite !important;
+      animation:progress-bar-stripes 1s linear infinite !important;
+    }
+    .modal.fade .modal-dialog {
+      transition:-webkit-transform 0.3s ease-out !important;
+      transition:transform 0.3s ease-out !important;
+      transition:transform 0.3s ease-out,-webkit-transform 0.3s ease-out !important;
+    }
+    .carousel-item {
+      transition:-webkit-transform 0.6s ease-in-out !important;
+      transition:transform 0.6s ease-in-out !important;
+      transition:transform 0.6s ease-in-out,-webkit-transform 0.6s ease-in-out !important;
+    }
+    .carousel-fade .carousel-item {
+        transition-property: opacity !important;
+    }
+
+    .carousel-fade .active.carousel-item-left,
+    .carousel-fade .active.carousel-item-right {
+        transition: 0s 0.6s opacity !important;
+    }
+
+    .carousel-control-prev,.carousel-control-next {
+      transition:opacity 0.15s ease !important;
+    }
+    .carousel-indicators li {
+      transition:opacity 0.6s ease !important;
+    }
+    .form-control {
+      transition:border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out !important;
+    }
+    .btn {
+      transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out !important;
     }
   </style>
 </head>
@@ -55,7 +122,7 @@
   <script src="/resources/plugins/datetime-picker.min.js"></script>
   <script src="/resources/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
   <script src="/resources/plugins/sweetalert2/sweetalert2.min.js"></script>
-  
+  <script src="/resources/plugins/jsgrid/jsgrid.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 

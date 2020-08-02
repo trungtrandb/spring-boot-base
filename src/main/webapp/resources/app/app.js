@@ -77,6 +77,10 @@
       templateUrl : "/resources/app/views/parent.html",
       controller : "ParentController"
     })
+    .when("/point", {
+      templateUrl : "/resources/app/views/point.html",
+      controller : "PointController"
+    })
     .when("/chat/:userName", {
       templateUrl : "/resources/app/views/chat.html",
       controller : "ChatController",
