@@ -9,6 +9,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
+import site.code4fun.constant.Status;
 import site.code4fun.entity.Message;
 import site.code4fun.entity.OutputMessage;
 import site.code4fun.entity.User;
@@ -44,10 +45,10 @@ public class ChatController {
 
 	@MessageMapping("/direct/chat")
 	public void sendDirect(@Payload Message msg, Authentication auth) {
-		System.out.print(msg);
 		UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
 		User user = userService.getByUserName(principal.getUsername());
 		
+		msg.setStatus(Status.PENDING);
 		msg.setFrom(user.getUsername());
 		msg.setFromId(user.getId());
 		msg.setCreatedDate(new Timestamp(System.currentTimeMillis()));

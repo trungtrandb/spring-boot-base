@@ -1,17 +1,13 @@
 package site.code4fun.service;
 
-import java.sql.Timestamp;
 import org.springframework.stereotype.Service;
 
-import site.code4fun.constant.Status;
 import site.code4fun.entity.Message;
 
 @Service
 public class MessageService extends BaseService{
 	
 	public Message sendDirect(Message mess) {
-		mess.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-		mess.setStatus(Status.PENDING);
 		return messageRepository.save(mess);
 //		queueService.sendToQueue(Queue.QUEUE_MESSAGE,new Gson().toJson(mess));
 	}
