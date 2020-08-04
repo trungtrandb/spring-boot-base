@@ -25,10 +25,10 @@ spring:
     url: jdbc:mysql://35.240.181.244:3306/test?useSSL=false
     username: root
     password: Trung37544
-#  activemq:
-#    user: admin
-#    password: admin
-#    broker-url: tcp://localhost:61616
+  activemq:
+    user: admin
+    password: admin
+    broker-url: tcp://localhost:61616
   security:
     oauth2:
       client:
