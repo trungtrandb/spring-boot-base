@@ -511,13 +511,34 @@
     }
 
     /* ============================================ */
-    function ChatController($scope, userName, Restangular, $rootScope, $filter, ChatService) {
+    function ChatController($scope, Restangular, $rootScope, $filter, ChatService) {
         $scope.sendMessage = sendMessage;
         $scope.pressSend = pressSend;
+
+        Restangular.one("/api/user/get-list-conversion").get().then(function (response) { 
+            $scope.lstConversion = response.data;
+            $(".card-body.msg_card_body").overlayScrollbars({});
+            $(".card-body.contact-body").overlayScrollbars({});
+        });
+        $("#lst-conversion-box>li:first-child").addClass("active");
 
         function pressSend(event) {
             if(event.keyCode == 13) sendMessage();
         }
+
+        $('#action_menu_btn').click(function(){
+            $('.action_menu').toggle();
+        });
+
+
+
+        // $(document).mouseup(function(e){
+        //     var container = $('.action_menu');
+        //     if (!container.is(e.target) && container.has(e.target).length === 0) 
+        //     {
+        //         $('.action_menu').css("display", "none");
+        //     }
+        // }); 
 
         function sendMessage() {
             var time = $filter('date')(Date.now(),'yyyy-MM-dd HH:MM:ss');
@@ -700,13 +721,13 @@
                 }
             },
             fields: [
-                { name: "id", title: "ID",},
-                { name: "title", title: "Tiêu đề thông báo", type: "text"},
-                { name: "content", title: "Nội dung thông báo"},
-                { name: "createdDate", title: "Thời gian tạo"},
-                { name: "createdName", title: "Người tạo"},
-                { name: "status", title: "Trạng thái"},
-                { type: "control", deleteButton: false}
+            { name: "id", title: "ID",},
+            { name: "title", title: "Tiêu đề thông báo", type: "text"},
+            { name: "content", title: "Nội dung thông báo"},
+            { name: "createdDate", title: "Thời gian tạo"},
+            { name: "createdName", title: "Người tạo"},
+            { name: "status", title: "Trạng thái"},
+            { type: "control", deleteButton: false}
             ]
         });
     }

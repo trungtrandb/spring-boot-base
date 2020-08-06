@@ -2,6 +2,7 @@ package site.code4fun.service;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ import site.code4fun.entity.Organization;
 import site.code4fun.entity.User;
 import site.code4fun.entity.UserOrganization;
 import site.code4fun.util.StringUtils;
+import site.code4fun.entity.OutputMessage;
 
 @Service
 public class UserService extends BaseService{
@@ -83,7 +85,7 @@ public class UserService extends BaseService{
 
 	public User updateUser(User u) throws Exception {
 		if(null != u.getPassword() && !u.getPassword().equals(u.getRePass())) 
-			throw new Exception("Password not match!");
+			throw new Exception("Mật khẩu nhập lại không đúng!");
 		
 		Optional<User> optUser = userRepository.findById(getCurrentId());
 		
@@ -113,5 +115,15 @@ public class UserService extends BaseService{
 		userRepository.save(u);
 		mailUtil.sendmail(u.getEmail(), "Thay đổi mật khẩu", "Mật khẩu đã được thay đổi: " + rawPass);
 		return true;
+	}
+
+	public List<OutputMessage> getListConversion() {
+		String userName = getCurrentUser().getUsername();
+		return messageRepository.getListConversion(userName);
+	}
+
+	public List<OutputMessage> getMessageWithUser(String userName) {
+		
+		return null;
 	}
 }
