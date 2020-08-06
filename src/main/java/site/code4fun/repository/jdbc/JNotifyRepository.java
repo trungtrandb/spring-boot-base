@@ -42,14 +42,21 @@ public class JNotifyRepository {
 		return jdbcTemplate.query(sql.toString(), parameters, new NotifyDTOMapper());
 	}
 	
-	public List<NotifyDTO> getNotifyByUserId(Long Id){
+	public List<NotifyDTO> getNotifyByUserId(Long Id,Long page){
 		StringBuilder sb = new StringBuilder("SELECT n.*, nd.user_id, u.full_name, null as device_token, n.title, n.content from tblNotify n ");
 		sb.append("JOIN tblNotifyDevice nd ON n.id = nd.notify_id ");
 		sb.append("JOIN tblUser u ON u.id = n.created_by ");
 		sb.append("WHERE user_id = :userId ");
 		sb.append("GROUP BY notify_id, user_id ");
-		sb.append("ORDER BY n.created_date DESC");
+		sb.append("ORDER BY n.created_date DESC ");
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		if(page>0) {
+			sb.append("LIMIT :start, :end");
+			Long start = page==1 ? 1L : 20L*(page-1);
+			Long end = page==1 ? 20L : 20L*page;
+			parameters.addValue("start", start);
+			parameters.addValue("end", end);
+		}
 		parameters.addValue("userId", Id);
 		return jdbcTemplate.query(sb.toString(), parameters, new NotifyDTOMapper());
 	}
