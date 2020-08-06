@@ -81,14 +81,9 @@
       templateUrl : "/resources/app/views/point.html",
       controller : "PointController"
     })
-    .when("/chat/:userName", {
+    .when("/chat", {
       templateUrl : "/resources/app/views/chat.html",
-      controller : "ChatController",
-      resolve: {
-          userName: function ($route) {
-              return $route.current.params.userName;
-          }
-      }
+      controller : "ChatController"
     })
     .when("/user-info", {
       templateUrl : "/resources/app/views/user-info.html",

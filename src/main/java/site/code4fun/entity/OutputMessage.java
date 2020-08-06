@@ -1,18 +1,23 @@
 package site.code4fun.entity;
 
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-@Builder
-@Data
-public class OutputMessage {
-
+@SuperBuilder
+@Getter
+@Setter
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+public class OutputMessage extends Message{
+	
+	@Column(name = "full_name")
 	private String fullName;
 	private String avatar;
-    private Long from;
-    private String text;
-    private Timestamp time;
-    private Long classId;
 }

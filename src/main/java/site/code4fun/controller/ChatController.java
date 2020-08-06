@@ -9,10 +9,12 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
+import site.code4fun.constant.Status;
 import site.code4fun.entity.Message;
 import site.code4fun.entity.OutputMessage;
 import site.code4fun.entity.User;
 import site.code4fun.entity.UserPrincipal;
+import site.code4fun.service.MessageService;
 import site.code4fun.service.UserService;
 
 @Controller
@@ -23,17 +25,17 @@ public class ChatController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private MessageService messageService;
 
 	@MessageMapping("/topic/chat")
 //    @SendTo("/topic/message")
 	public void sendAll(@Payload Message msg, Authentication auth) throws Exception {
-		UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
-		User user = userService.getByUserName(principal.getUsername());
+		//UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+		//User user = userService.getByUserName(principal.getUsername());
 
-		OutputMessage out = OutputMessage.builder().from(user.getId()).avatar(user.getAvatar())
-				.fullName(user.getFullName()).text(msg.getText()).time(new Timestamp(System.currentTimeMillis()))
-				.build();
-		simpMessagingTemplate.convertAndSend("/topic/message", out);
+		simpMessagingTemplate.convertAndSend("/topic/message", msg);
 	}
 	
 	@MessageMapping("/esp/send")
@@ -44,12 +46,25 @@ public class ChatController {
 	@MessageMapping("/direct/chat")
 	public void sendDirect(@Payload Message msg, Authentication auth) {
 		UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
-
 		User user = userService.getByUserName(principal.getUsername());
-
-		OutputMessage out = OutputMessage.builder().from(user.getId()).avatar(user.getAvatar())
-				.fullName(user.getFullName()).text(msg.getText()).time(new Timestamp(System.currentTimeMillis()))
+		
+		msg.setStatus(Status.PENDING);
+		msg.setFrom(user.getUsername());
+		msg.setFromId(user.getId());
+		msg.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+		msg = messageService.sendDirect(msg);
+		
+		OutputMessage out = OutputMessage.builder()
+				.from(msg.getFrom())
+				.to(msg.getTo())
+				.fromId(msg.getFromId())
+				.createdDate(msg.getCreatedDate())
+				.text(msg.getText())
+				.id(msg.getId())
 				.build();
+		
+		out.setFullName(user.getFullName());
+		out.setAvatar(user.getAvatar());
 		simpMessagingTemplate.convertAndSendToUser(msg.getTo(), "/queue/reply", out);
 	}
 }

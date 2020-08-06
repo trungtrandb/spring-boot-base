@@ -10,16 +10,14 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
-import site.code4fun.constant.Queue;
-
 @Service
 public class QueueService {
 	
 	@Autowired
 	JmsTemplate jmsTemplate;
 	
-	public void sendToQueue(Queue queueName, String message) {
-        jmsTemplate.send(queueName.getVal(), new MessageCreator() {
+	public void sendToQueue(String queueName, String message) {
+        jmsTemplate.send(queueName, new MessageCreator() {
             public javax.jms.Message createMessage(Session session) throws JMSException {
             	TextMessage txtMessage = session.createTextMessage(message);
             	txtMessage.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, 60 * 1000);

@@ -45,7 +45,7 @@ public class NotifyService extends BaseService{
 	    });
 	}
 	
-	@JmsListener(destination = "notify.queue")
+	@JmsListener(destination = Queue.QUEUE_NOTIFY)
     private void pushNotifyFromQueue(final javax.jms.Message jsonMessage) throws JMSException {
         if(jsonMessage instanceof TextMessage) {
         	TextMessage textMessage = (TextMessage)jsonMessage;

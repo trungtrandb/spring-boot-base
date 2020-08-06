@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 import site.code4fun.entity.Classes;
 import site.code4fun.entity.GroupClass;
 import site.code4fun.entity.Organization;
+import site.code4fun.entity.User;
 import site.code4fun.entity.UserPrincipal;
 import site.code4fun.repository.CheckinRepository;
 import site.code4fun.repository.ClassRepository;
 import site.code4fun.repository.GroupClassRepository;
 import site.code4fun.repository.LessionRepository;
+import site.code4fun.repository.MessageRepository;
 import site.code4fun.repository.NotifyDeviceRepository;
 import site.code4fun.repository.NotifyRepository;
 import site.code4fun.repository.OrganizationRepository;
@@ -97,7 +99,9 @@ public class BaseService {
 	
 	@Autowired
 	protected JNotifyRepository jNotifyRepository;
-
+	
+	@Autowired
+	protected MessageRepository messageRepository;
 	
 	protected final Long getCurrentId() {
 		UserPrincipal currentUser = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -117,5 +121,9 @@ public class BaseService {
 	protected final List<Classes> getCurrentClasses(){
 		List<Long> idsGroupClass = getCurrentGroupClass().stream().map(GroupClass::getId).collect(Collectors.toList());
 		return idsGroupClass.size() > 0 ? classRepository.findByGroupId(idsGroupClass) : new ArrayList<>();
+	}
+	
+	protected final User getCurrentUser() {
+		return userRepository.findById(getCurrentId()).get();
 	}
 } 
