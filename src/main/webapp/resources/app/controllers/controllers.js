@@ -599,6 +599,8 @@
                 }else{
                     toastr.error(response.message);
                 }
+            }, function () {
+                toastr.error(response.message);
             });
         }
     }

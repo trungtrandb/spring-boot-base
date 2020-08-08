@@ -22,7 +22,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://35.240.181.244:3306/test?useSSL=false
+    url: jdbc:mysql://35.240.181.244:3306/test?noAccessToProcedureBodies=true
     username: demo
     password: ruFrV4S`]`_)?xJ%q{^F
 #  activemq:

@@ -12,7 +12,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class OutputMessage extends Message{
