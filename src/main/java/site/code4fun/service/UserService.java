@@ -119,11 +119,12 @@ public class UserService extends BaseService{
 
 	public List<OutputMessage> getListConversion() {
 		String userName = getCurrentUser().getUsername();
-		return messageRepository.getListConversion(userName);
+		return jMessageRepository.getListConversion(userName);
 	}
 
-	public List<OutputMessage> getMessageWithUser(String userName) {
-		
-		return null;
+	public List<OutputMessage> getMessage(String userName , Long page, Integer size) {
+		Integer limit = null != size ? size : 10;
+		Long offset = null != page ? (page - 1) * limit : 0;
+		return jMessageRepository.getMessage(getCurrentUser().getUsername(), userName, limit, offset);
 	}
 }

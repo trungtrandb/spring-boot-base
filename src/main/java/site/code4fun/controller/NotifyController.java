@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import site.code4fun.entity.Notify;
@@ -71,10 +72,10 @@ public class NotifyController {
 		}
 	}
 	
-	@RequestMapping(path = "/get-by-user/{page}", method = RequestMethod.GET)
-	public ResponseEntity<?> getByUser(@PathVariable Long page){
+	@RequestMapping(path = "/get-by-user", method = RequestMethod.GET)
+	public ResponseEntity<?> getByUser(@RequestParam(required = false) Long page,@RequestParam(required = false) Integer size){
 		try {
-			return ResponseEntity.ok(new Response(200, "Success", notifyService.getByUser(page)));
+			return ResponseEntity.ok(new Response(200, "Success", notifyService.getByUser(page, size)));
 		}catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));

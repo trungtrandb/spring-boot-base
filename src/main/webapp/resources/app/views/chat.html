@@ -77,16 +77,8 @@
             </div>
             <div class="card-body msg_card_body">
               <div class="tab-content">
-                <div class="tab-pane active" id="vert-tabs-home">
-                  <div class="d-flex justify-content-start mb-4">
-                    <div class="img_cont_msg">
-                      <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
-                    </div>
-                    <div class="msg_cotainer">
-                      Hi, how are you samim?
-                      <span class="msg_time">8:40 AM, Today</span>
-                    </div>
-                  </div>
+                <div class="tab-pane active" id="box-chat">
+                  
                   <div class="d-flex justify-content-end mb-4">
                     <div class="msg_cotainer_send">
                       Hi Khalid i am good tnx how about you?
@@ -147,11 +139,22 @@
                </div>
              </div>
            </div>
-           <!-- /.card -->
-         </div>
+           <div class="card-footer">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+              </div>
+              <input type="text" ng-model="messageContent" class="form-control type_msg" placeholder="Type your message..." ng-keypress="pressSend($event)"></input>
+              <div class="input-group-append" ng-click="sendMessage()">
+                <span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+              </div>
+            </div>
+          </div>
+          <!-- /.card -->
+        </div>
 
-       </div>
-     </div>
-   </div>
- </section>
+      </div>
+    </div>
+  </div>
+</section>
 </div>

@@ -298,7 +298,7 @@
         $scope.lession = {};
         $scope.submitAddLession = submitAddLession;
         $scope.remove = remove;
-		$scope.edit = edit;
+        $scope.edit = edit;
         flatpickr(".datetimepicker",{
             enableTime: true,
             dateFormat: "Y-m-d H:i",
@@ -346,7 +346,7 @@
                 toastr.error(response.data.message);
             });
         }
- 		function edit(id) {
+        function edit(id) {
             Restangular.one('/api/lession/get', id).get().then(function (response) {
                 if (response.code == 200) {
                     $("#modalAddLession").modal("show");
@@ -524,13 +524,23 @@
     function ChatController($scope, Restangular, $rootScope, $filter, ChatService) {
         $scope.sendMessage = sendMessage;
         $scope.pressSend = pressSend;
-
+        var userName;
         Restangular.one("/api/user/get-list-conversion").get().then(function (response) { 
             $scope.lstConversion = response.data;
+            userName = response.data[0].from;
             $(".card-body.msg_card_body").overlayScrollbars({});
             $(".card-body.contact-body").overlayScrollbars({});
+            setTimeout(function() {
+                $(".contacts li:first-child a").addClass("active");
+                loadMessage(1);
+            });
         });
-        $("#lst-conversion-box>li:first-child").addClass("active");
+        
+        function loadMessage(page) {
+            Restangular.one("/api/user/get-message-with-user/" + userName + "?page=" + page).get().then(function (response) { 
+                
+            });
+        }
 
         function pressSend(event) {
             if(event.keyCode == 13) sendMessage();
@@ -551,26 +561,26 @@
         // }); 
 
         function sendMessage() {
-            var time = $filter('date')(Date.now(),'yyyy-MM-dd HH:MM:ss');
-            var html = '<div class="direct-chat-msg">';
-            html += '<div class="direct-chat-infos clearfix">';
-            html += '<span class="direct-chat-name float-left">' + $rootScope.currentUser.fullName +'</span>';
-            html += '<span class="direct-chat-timestamp float-right">'+ time +'</span></div>';
-            html += '<img class="direct-chat-img" src="'+ $rootScope.currentUser.avatar +'">';
-            html += '<div class="direct-chat-text">'+ $scope.messageContent +'</div>';
+            userName = $(".contacts a.active").data("target").replace("#", "");
+            var time = $filter('date')(Date.now(),'HH:MM dd-mm');
+            var html = '<div class="d-flex justify-content-start mb-4">';
+            html += '<div class="img_cont_msg">';
+            html += '<img src="'+ $rootScope.currentUser.avatar +'" class="rounded-circle user_img_msg"></div>';
+            html += '<div class="msg_cotainer">';
+            html += $scope.messageContent;
+            html += '<span class="msg_time">'+ time +'</span></div></div>';                      
             $("#box-chat").append(html);
             ChatService.sendDirect(JSON.stringify({'text': $scope.messageContent, 'to': userName}));
             $scope.messageContent = "";
         }
 
         ChatService.receive().then(null, null, function(message) {
-            var time = $filter('date')(new Date(message.time),'yyyy-MM-dd HH:MM:ss');
-            var html = '<div class="direct-chat-msg right">';
-            html += '<div class="direct-chat-infos clearfix">';
-            html += '<span class="direct-chat-name float-right">' + message.fullName +'</span>';
-            html += '<span class="direct-chat-timestamp float-left">'+ time +'</span></div>';
-            html += '<img class="direct-chat-img" src="'+ message.avatar +'">';
-            html += '<div class="direct-chat-text">'+message.text+'</div>';
+            var time = $filter('date')(new Date(message.createdDate),'HH:MM dd-mm');
+            var html = '<div class="d-flex justify-content-end mb-4">';
+            html += '<div class="msg_cotainer_send">';
+            html += message.text;
+            html += '<span class="msg_time_send">'+ time +'</span></div>';
+            html += '<div class="img_cont_msg"><img src="'+ message.avatar +'" class="rounded-circle user_img_msg"></div> </div>';
             $("#box-chat").append(html);
         });
     }
@@ -579,7 +589,7 @@
     function SubjectController($scope, Restangular) {
         $scope.submitSubject = submitSubject;
         $scope.remove = remove;
-		$scope.edit = edit;
+        $scope.edit = edit;
         Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.lstOrganization = response.data;});
         loadLstSubject();
 
@@ -590,9 +600,9 @@
             Restangular.all('/api/subject/insert').post($scope.subject).then(function (response) {
                 if(response.code == 200){
                     loadLstSubject();                
-                   /* toastr.success(response.message);*/
- 					$("#modalAddSubject").modal("hide");
-                   /* $scope.subject = {};*/
+                    /* toastr.success(response.message);*/
+                    $("#modalAddSubject").modal("hide");
+                    /* $scope.subject = {};*/
                 }else{
                     toastr.error(response.message);
                 }
@@ -600,92 +610,92 @@
                 toastr.error(response.data.message);
             });
         }
-		function edit(id) {
-		            Restangular.one('/api/subject/get', id).get().then(function (response) {
-		                if (response.code == 200) {
-		                    $("#modalAddSubject").modal("show");
-		                    $scope.subject = response.data;
-		                }else{
-		                    toastr.error(response.message);
-		                }
-		            });
-		        }
+        function edit(id) {
+          Restangular.one('/api/subject/get', id).get().then(function (response) {
+              if (response.code == 200) {
+                  $("#modalAddSubject").modal("show");
+                  $scope.subject = response.data;
+              }else{
+                  toastr.error(response.message);
+              }
+          });
+      }
 
 
-        function remove(id){
-            Restangular.one('/api/subject/delete', id).get().then(function (response) {
-                if (response.code == 200) {
-                    toastr.success(response.message);
-                    loadLstSubject();
-                }else{
-                    toastr.error(response.message);
-                }
-            }, function () {
+      function remove(id){
+        Restangular.one('/api/subject/delete', id).get().then(function (response) {
+            if (response.code == 200) {
+                toastr.success(response.message);
+                loadLstSubject();
+            }else{
                 toastr.error(response.message);
-            });
-        }
-	
-				
-	
-	
+            }
+        }, function () {
+            toastr.error(response.message);
+        });
     }
 
-    /* ============================================ */
-    function TeacherController($scope, $http, Restangular) {
-        $scope.submitUser = submitUser;
-        $scope.remove = remove;
 
-        loadLstTeacher();
-        function loadLstTeacher() {
-            Restangular.one("/api/organization/get-teacher").get().then(function (response) {$scope.lstTeacher = response.data;});
-        }
 
-        function submitUser() {
-            Restangular.all('/sign-up?type=teacher').post($scope.user).then(function (response) {
-                if(response.code == 200){
-                    loadLstTeacher();
-                    $("#modalCreateUser").modal("hide");
-                    toastr.success(response.message);
-                    $scope.user = {};
-                }else{
-                    toastr.error(response.message);
-                }
-            }, function(response) {
+
+}
+
+/* ============================================ */
+function TeacherController($scope, $http, Restangular) {
+    $scope.submitUser = submitUser;
+    $scope.remove = remove;
+
+    loadLstTeacher();
+    function loadLstTeacher() {
+        Restangular.one("/api/organization/get-teacher").get().then(function (response) {$scope.lstTeacher = response.data;});
+    }
+
+    function submitUser() {
+        Restangular.all('/sign-up?type=teacher').post($scope.user).then(function (response) {
+            if(response.code == 200){
+                loadLstTeacher();
+                $("#modalCreateUser").modal("hide");
+                toastr.success(response.message);
+                $scope.user = {};
+            }else{
+                toastr.error(response.message);
+            }
+        }, function(response) {
+            toastr.error(response.data.message);
+        });
+    }
+
+    function remove(teacherId, orgId){
+        $http.get("/api/organization/delete-teacher?teacher_id="+ teacherId ).then(function (response) {
+            if(response.data.code == 200){
+                toastr.success(response.data.message);
+                loadLstTeacher();
+            }else{
                 toastr.error(response.data.message);
-            });
-        }
-
-        function remove(teacherId, orgId){
-            $http.get("/api/organization/delete-teacher?teacher_id="+ teacherId ).then(function (response) {
-                if(response.data.code == 200){
-                    toastr.success(response.data.message);
-                    loadLstTeacher();
-                }else{
-                    toastr.error(response.data.message);
-                }
-            }, function (response) {
-                toastr.error(response.data.message);
-            });
-        }
+            }
+        }, function (response) {
+            toastr.error(response.data.message);
+        });
     }
+}
 
-    /* ============================================ */
-    function ParentController($scope, Restangular) {
-        $scope.orgId = "";
-        Restangular.one("/api/organization/get-parent").get().then(function (response) { $scope.lstParent = response.data; });
+/* ============================================ */
+function ParentController($scope, Restangular) {
+    $scope.orgId = "";
+    Restangular.one("/api/organization/get-parent").get().then(function (response) { $scope.lstParent = response.data; });
+}
+
+/* ============================================ */
+function PointController($scope,$location, Restangular) {
+    Restangular.one("/api/group-class/get-all").get().then(function (response) { $scope.lstGroup = response.data; });
+    Restangular.one('/api/subject/getAll').get().then(function (response) { $scope.lstSubject = response.data; });
+    Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
+
+    $scope.selectGroup = function() {
+        Restangular.one("/api/class/get-by-group?id=" + $scope.groupId).get().then(function (response) { $scope.lstClass = response.data; });
     }
-
-    /* ============================================ */
-    function PointController($scope,$location, Restangular) {
-        Restangular.one("/api/group-class/get-all").get().then(function (response) { $scope.lstGroup = response.data; });
-        Restangular.one('/api/subject/getAll').get().then(function (response) { $scope.lstSubject = response.data; });
-        Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
-
-        $scope.selectGroup = function() {
-            Restangular.one("/api/class/get-by-group?id=" + $scope.groupId).get().then(function (response) { $scope.lstClass = response.data; });
-        }
-        $("#jsGrid").jsGrid({
-            width: "100%",
+    $("#jsGrid").jsGrid({
+        width: "100%",
            // height: "400px",
            paging: true,
            autoload: true,
@@ -757,5 +767,5 @@
             { type: "control", deleteButton: false}
             ]
         });
-    }
+}
 })();

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import site.code4fun.entity.Classes;
 import site.code4fun.entity.Lession;
-import site.code4fun.entity.Subject;
 import site.code4fun.util.StringUtils;
 
 @Service
@@ -27,7 +26,7 @@ public class LessionService extends BaseService{
 	}
 	
 	public Lession insert(Lession c) throws Exception {
-		if(StringUtils.isNull(c.getTitle())) throw new Exception("Lession name is null!!");
+		if(StringUtils.isNull(c.getTitle())) throw new Exception("Tên bài học không được bỏ trống!");
 		List<Long> idsClass = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
 		
 		if(!idsClass.contains(c.getClassId())) throw new Exception("Class not found!!");

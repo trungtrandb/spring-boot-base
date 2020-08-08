@@ -103,8 +103,10 @@ public class NotifyService extends BaseService{
 		return notifyRepository.findById(id);
 	}
 	
-	public List<NotifyDTO> getByUser(Long page){
-		return jNotifyRepository.getNotifyByUserId(getCurrentId(),page);
+	public List<NotifyDTO> getByUser(Long page, Integer size){
+		Integer limit = null != size ? size : 10;
+		Long start = null != page ? (page - 1) * limit : 0;
+		return jNotifyRepository.getNotifyByUserId(getCurrentId(), limit, start);
 	}
 	
 	public boolean delete(Long id) throws Exception {
