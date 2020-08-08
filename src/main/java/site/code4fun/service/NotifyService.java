@@ -103,8 +103,8 @@ public class NotifyService extends BaseService{
 		return notifyRepository.findById(id);
 	}
 	
-	public List<NotifyDTO> getByUser(){
-		return jNotifyRepository.getNotifyByUserId(getCurrentId());
+	public List<NotifyDTO> getByUser(Long page){
+		return jNotifyRepository.getNotifyByUserId(getCurrentId(),page);
 	}
 	
 	public boolean delete(Long id) throws Exception {

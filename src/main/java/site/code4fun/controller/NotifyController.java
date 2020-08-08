@@ -71,10 +71,10 @@ public class NotifyController {
 		}
 	}
 	
-	@RequestMapping(path = "/get-by-user", method = RequestMethod.GET)
-	public ResponseEntity<?> getByUser(){
+	@RequestMapping(path = "/get-by-user/{page}", method = RequestMethod.GET)
+	public ResponseEntity<?> getByUser(@PathVariable Long page){
 		try {
-			return ResponseEntity.ok(new Response(200, "Success", notifyService.getByUser()));
+			return ResponseEntity.ok(new Response(200, "Success", notifyService.getByUser(page)));
 		}catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
