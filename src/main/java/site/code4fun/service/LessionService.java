@@ -2,12 +2,14 @@ package site.code4fun.service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import site.code4fun.entity.Classes;
 import site.code4fun.entity.Lession;
+import site.code4fun.entity.Subject;
 import site.code4fun.util.StringUtils;
 
 @Service
@@ -36,5 +38,8 @@ public class LessionService extends BaseService{
 	public boolean delete(Long id) {
 		lessionRepository.deleteById(id);
 		return true;
+	}
+	public Optional<Lession> getById(Long id){
+		return lessionRepository.findById(id);
 	}
 }
