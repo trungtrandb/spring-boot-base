@@ -84,27 +84,22 @@
         <div class="modal-body">
           <form role="form" ng-submit="submitAddLession()">
             <div class="form-group">
-              <label for="name">Tên buổi học: <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="name" ng-model="lession.title">
+              <label for="classId">Tên buổi học: <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="name" ng-model="lession.classId">
             </div>
             <div class="form-group">
               <label>Lớp: </label>
-              <select class="form-control" ng-model="lession.classId">
-                <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
+              <select class="form-control" ng-model="lession.className">
+                <option ng-repeat="x in lstClass" value="{{x.className}}">{{x.className}}</option>
               </select>
             </div>
             <div class="form-group">
               <label>Thuộc môn học: <span class="text-danger">*</span></label>
-              <select class="form-control" ng-model="lession.subjectId">
-                <option ng-repeat="x in lstSubject" value="{{x.id}}">{{x.name}}</option>
+              <select class="form-control" ng-model="lession.subjectName">
+                <option ng-repeat="x in lstSubject" value="{{x.subjectName}}">{{x.subjectName}}</option>
               </select>
             </div>
-            <div class="form-group">
-              <label>GV giảng dạy: <span class="text-danger">*</span></label>
-              <select class="form-control" ng-model="lession.userId">
-                <option ng-repeat="x in lstTeacher" value="{{x.id}}">{{x.fullName}}</option>
-              </select>
-            </div>
+
             <div class="form-group">
               <label for="startTime">Thời gian bắt đầu</label>
               <input type="text" ng-model="lession.startTime" class="form-control datetimepicker">
@@ -115,7 +110,7 @@
             </div>
             <div class="form-group">
               <label for="note">Ghi chú</label>
-              <input type="text" class="form-control" id="note" ng-model="lession.note">
+              <input type="text" class="form-control" id="title" ng-model="lession.title">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>

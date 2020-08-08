@@ -45,4 +45,13 @@ public class SubjectController {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
 	}
+	@RequestMapping(value="/get/{id}")
+	public ResponseEntity<?> getById(@PathVariable Long id){
+		try {
+			return ResponseEntity.ok(new Response(200, "Success",subjectService.getById(id)));
+		}catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
 }

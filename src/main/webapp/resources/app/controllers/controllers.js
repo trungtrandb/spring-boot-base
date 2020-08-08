@@ -298,7 +298,7 @@
         $scope.lession = {};
         $scope.submitAddLession = submitAddLession;
         $scope.remove = remove;
-
+		$scope.edit = edit;
         flatpickr(".datetimepicker",{
             enableTime: true,
             dateFormat: "Y-m-d H:i",
@@ -344,6 +344,16 @@
                 
             },function (response) {
                 toastr.error(response.data.message);
+            });
+        }
+ 		function edit(id) {
+            Restangular.one('/api/lession/get', id).get().then(function (response) {
+                if (response.code == 200) {
+                    $("#modalAddLession").modal("show");
+                    $scope.lession = response.data;
+                }else{
+                    toastr.error(response.message);
+                }
             });
         }
     }
@@ -569,7 +579,7 @@
     function SubjectController($scope, Restangular) {
         $scope.submitSubject = submitSubject;
         $scope.remove = remove;
-
+		$scope.edit = edit;
         Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.lstOrganization = response.data;});
         loadLstSubject();
 
@@ -579,10 +589,10 @@
         function submitSubject() {
             Restangular.all('/api/subject/insert').post($scope.subject).then(function (response) {
                 if(response.code == 200){
-                    loadLstSubject();
-                    $("#modalAddSubject").modal("hide");
-                    toastr.success(response.message);
-                    $scope.subject = {};
+                    loadLstSubject();                
+                   /* toastr.success(response.message);*/
+ 					$("#modalAddSubject").modal("hide");
+                   /* $scope.subject = {};*/
                 }else{
                     toastr.error(response.message);
                 }
@@ -590,6 +600,17 @@
                 toastr.error(response.data.message);
             });
         }
+		function edit(id) {
+		            Restangular.one('/api/subject/get', id).get().then(function (response) {
+		                if (response.code == 200) {
+		                    $("#modalAddSubject").modal("show");
+		                    $scope.subject = response.data;
+		                }else{
+		                    toastr.error(response.message);
+		                }
+		            });
+		        }
+
 
         function remove(id){
             Restangular.one('/api/subject/delete', id).get().then(function (response) {
@@ -601,6 +622,10 @@
                 }
             });
         }
+	
+				
+	
+	
     }
 
     /* ============================================ */

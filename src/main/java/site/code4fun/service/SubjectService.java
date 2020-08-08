@@ -43,10 +43,13 @@ public class SubjectService extends BaseService{
 	
 	public boolean delete(Long id) throws Exception {
 		Optional<Subject> item = subjectRepository.findById(id);
-		if(!item.isPresent()) {
+		if(item.isPresent()) {
 			subjectRepository.deleteById(id);
 			return true;
 		}
 		return false;
+	}
+	public Optional<Subject> getById(Long id){
+		return subjectRepository.findById(id);
 	}
 }
