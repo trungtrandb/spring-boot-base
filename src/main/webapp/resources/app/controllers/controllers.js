@@ -525,20 +525,47 @@
         $scope.sendMessage = sendMessage;
         $scope.pressSend = pressSend;
         var userName;
+        var gpage = 1;
         Restangular.one("/api/user/get-list-conversion").get().then(function (response) { 
             $scope.lstConversion = response.data;
             userName = response.data[0].from;
-            $(".card-body.msg_card_body").overlayScrollbars({});
+            var instance = $(".card-body.msg_card_body").overlayScrollbars({});
             $(".card-body.contact-body").overlayScrollbars({});
             setTimeout(function() {
                 $(".contacts li:first-child a").addClass("active");
-                loadMessage(1);
+                loadMessage();
             });
         });
         
-        function loadMessage(page) {
-            Restangular.one("/api/user/get-message-with-user/" + userName + "?page=" + page).get().then(function (response) { 
-                
+        function loadMessage() {
+            Restangular.one("/api/user/get-message-with-user/" + userName + "?page=" + gpage).get().then(function (response) { 
+                if(response.code == 200){
+                    $.each(response.data, function (idx, item) {
+                        let html = "";
+                        let time = $filter('date')(new Date(item.createdDate),'HH:MM dd-mm-yyyy');
+                        let currentAvatar = $rootScope.currentUser.avatar;
+                        let currentUserName = $rootScope.currentUser.userName;
+
+                        if(item.from == currentUserName){
+                            html = '<div class="d-flex justify-content-start mb-4">';
+                            html += '<div class="img_cont_msg">';
+                            html += '<img src="'+ currentAvatar +'" class="rounded-circle user_img_msg"></div>';
+                            html += '<div class="msg_cotainer">';
+                            html += item.text;
+                            html += '<span class="msg_time">'+ time +'</span></div></div>';
+                        }else{
+                            html = '<div class="d-flex justify-content-end mb-4">';
+                            html += '<div class="msg_cotainer_send">';
+                            html += item.text;
+                            html += '<span class="msg_time_send">'+ time +'</span></div>';
+                            html += '<div class="img_cont_msg"><img src="'+ item.avatar +'" class="rounded-circle user_img_msg"></div> </div>';
+                        }
+                        gpage++;
+                        $("#box-chat").prepend(html);
+                    })
+                }
+            }, function (response) {
+                toastr.error("Lỗi tải tin nhắn");
             });
         }
 
@@ -562,7 +589,7 @@
 
         function sendMessage() {
             userName = $(".contacts a.active").data("target").replace("#", "");
-            var time = $filter('date')(Date.now(),'HH:MM dd-mm');
+            var time = $filter('date')(Date.now(),'HH:MM dd-mm-yyyy');
             var html = '<div class="d-flex justify-content-start mb-4">';
             html += '<div class="img_cont_msg">';
             html += '<img src="'+ $rootScope.currentUser.avatar +'" class="rounded-circle user_img_msg"></div>';
@@ -575,7 +602,7 @@
         }
 
         ChatService.receive().then(null, null, function(message) {
-            var time = $filter('date')(new Date(message.createdDate),'HH:MM dd-mm');
+            var time = $filter('date')(new Date(message.createdDate),'HH:MM dd-mm-yyyy');
             var html = '<div class="d-flex justify-content-end mb-4">';
             html += '<div class="msg_cotainer_send">';
             html += message.text;
@@ -583,6 +610,13 @@
             html += '<div class="img_cont_msg"><img src="'+ message.avatar +'" class="rounded-circle user_img_msg"></div> </div>';
             $("#box-chat").append(html);
         });
+
+        $scope.changUserChat = function (name) {
+            userName = name;
+            $("#box-chat").html("");
+            gpage = 1;
+            loadMessage();
+        }
     }
 
     /* ============================================ */

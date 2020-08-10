@@ -1,4 +1,4 @@
-<div class="content-wrapper" style="min-height: 1116.5px; max-height: 100%">
+<div class="content-wrapper" style="min-height: 1116.5px; max-height: 100vh">
   <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -29,7 +29,7 @@
             </div>
             <div class="card-body contact-body">
               <ul class="nav nav-tabs contacts" style="border-bottom: none;">
-                <li class="nav-item" ng-repeat="x in lstConversion">
+                <li class="nav-item" ng-repeat="x in lstConversion" ng-click="changUserChat( x.from )">
                   <a class="nav-link" href="javascript:;" data-target="#{{ x.from }}" data-toggle="tab">
                     <div class="d-flex bd-highlight">
                       <div class="img_cont">
@@ -60,10 +60,10 @@
                   <span>Chat with Khalid</span>
                   <p>1767 Messages</p>
                 </div>
-                <div class="video_cam">
+<!--                 <div class="video_cam">
                   <span><i class="fas fa-video"></i></span>
                   <span><i class="fas fa-phone"></i></span>
-                </div>
+                </div> -->
               </div>
               <span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
               <div class="action_menu">
@@ -76,68 +76,10 @@
               </div>
             </div>
             <div class="card-body msg_card_body">
-              <div class="tab-content">
-                <div class="tab-pane active" id="box-chat">
-                  
-                  <div class="d-flex justify-content-end mb-4">
-                    <div class="msg_cotainer_send">
-                      Hi Khalid i am good tnx how about you?
-                      <span class="msg_time_send">8:55 AM, Today</span>
-                    </div>
-                    <div class="img_cont_msg">
-                      <img src="" class="rounded-circle user_img_msg">
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-start mb-4">
-                    <div class="img_cont_msg">
-                      <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
-                    </div>
-                    <div class="msg_cotainer">
-                      I am good too, thank you for your chat template
-                      <span class="msg_time">9:00 AM, Today</span>
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-end mb-4">
-                    <div class="msg_cotainer_send">
-                      You are welcome
-                      <span class="msg_time_send">9:05 AM, Today</span>
-                    </div>
-                    <div class="img_cont_msg">
-                      <img src="" class="rounded-circle user_img_msg">
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-start mb-4">
-                    <div class="img_cont_msg">
-                      <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
-                    </div>
-                    <div class="msg_cotainer">
-                      I am looking for your next templates
-                      <span class="msg_time">9:07 AM, Today</span>
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-end mb-4">
-                    <div class="msg_cotainer_send">
-                      Ok, thank you have a good day
-                      <span class="msg_time_send">9:10 AM, Today</span>
-                    </div>
-                    <div class="img_cont_msg">
-                      <img src="" class="rounded-circle user_img_msg">
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-start mb-4">
-                    <div class="img_cont_msg">
-                      <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
-                    </div>
-                    <div class="msg_cotainer">
-                      Bye, see you
-                      <span class="msg_time">9:12 AM, Today</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="tab-pane fade" id="vert-tabs-profile">
-                 Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at, posuere nec nunc. Nunc euismod pellentesque diam. 
-               </div>
-             </div>
+              <div class="tab-pane active" id="box-chat">
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                
+              </div>
            </div>
            <div class="card-footer">
             <div class="input-group">

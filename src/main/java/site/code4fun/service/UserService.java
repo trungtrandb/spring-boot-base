@@ -1,6 +1,8 @@
 package site.code4fun.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,7 @@ import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 
 import site.code4fun.constant.Queue;
@@ -117,9 +120,31 @@ public class UserService extends BaseService{
 		return true;
 	}
 
-	public List<OutputMessage> getListConversion() {
+	public Collection<OutputMessage> getListConversion() {
 		String userName = getCurrentUser().getUsername();
-		return jMessageRepository.getListConversion(userName);
+		List<OutputMessage> lst = jMessageRepository.getListConversion(userName);
+		List<OutputMessage> lstRest = new ArrayList<>();
+		Map<String, OutputMessage> mapRes = new HashMap<>();
+		lst.forEach(_item -> {
+			if(!userName.equals(_item.getFrom()) || !userName.equals(_item.getTo())) lstRest.add(_item);
+		});
+		lstRest.forEach(_item ->{
+			if(userName.equals(_item.getFrom())) {
+				_item.setFrom(_item.getTo());
+				if(mapRes.containsKey(_item.getTo()) && _item.getCreatedDate().after(mapRes.get(_item.getTo()).getCreatedDate()) ) {
+					mapRes.put(_item.getTo(), _item);
+				}else {
+					mapRes.put(_item.getTo(), _item);
+				}
+			}else {
+				if(mapRes.containsKey(_item.getFrom()) && _item.getCreatedDate().after(mapRes.get(_item.getFrom()).getCreatedDate()) ){
+					mapRes.put(_item.getFrom(), _item);
+				}else {
+					mapRes.put(_item.getFrom(), _item);
+				}
+			}
+		});
+		return mapRes.values();
 	}
 
 	public List<OutputMessage> getMessage(String userName , Long page, Integer size) {

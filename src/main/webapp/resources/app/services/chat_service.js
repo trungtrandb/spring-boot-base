@@ -33,10 +33,6 @@ angular.module("app").service("ChatService", function($q, $timeout, $rootScope) 
   };
 
   var startListener = function() {
-    socket.stomp.subscribe(service.MESSAGE_TOPIC, function(data) {
-      listener.notify(getMessage(data.body));
-    });
-
     socket.stomp.subscribe(service.MESSAGE_DIRECT, function(data) {
       listener.notify(JSON.parse(data.body));
     });
