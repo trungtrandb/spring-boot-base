@@ -26,7 +26,7 @@ public class JStudentRepository {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("classIds", classIds);
 		StringBuilder sql = new StringBuilder(
-				"SELECT s.*, c.name as class_name, u.full_name FROM tblStudent s ");
+				"SELECT s.*, c.name as class_name, u.full_name, u.user_name FROM tblStudent s ");
 		sql.append("JOIN tblClass c on s.class_id = c.id ");
 		sql.append("JOIN tblUser u on u.id = s.parent_id ");
 		sql.append("WHERE s.class_id IN (:classIds) ");
@@ -37,6 +37,7 @@ public class JStudentRepository {
 			public void processRow(ResultSet rs) throws SQLException {
 				StudentDTO st = StudentDTO.builder()
 						.id(rs.getLong("id"))
+						.studentCode(rs.getString("student_code"))
 						.address(rs.getString("address"))
 						.className(rs.getString("class_name"))
 						.dateOfBirth(rs.getTimestamp("date_of_birth"))
@@ -44,6 +45,7 @@ public class JStudentRepository {
 						.phone(rs.getString("phone"))
 						.note(rs.getString("note"))
 						.parentName(rs.getString("full_name"))
+						.parentPhoneOrEmail(rs.getString("user_name"))
 						.classId(rs.getLong("class_id"))
 						.build();
 				lstRes.add(st);

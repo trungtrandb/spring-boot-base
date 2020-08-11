@@ -37,6 +37,7 @@ public class ClassController {
 		try {
 			return new ResponseEntity<>(new Response(200, "Thêm mới thành công", classService.insert(c)), HttpStatus.OK);
 		}catch(Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
 		}
 	}

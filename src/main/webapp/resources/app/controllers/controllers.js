@@ -140,6 +140,7 @@
     function ClassController($scope, $http, Restangular) {
         $scope.submitAddCLazz = submitAddClazz;
         $scope.remove = remove;
+        $scope.class = {};
         loadLstClass();
         
         Restangular.one("/api/group-class/get-all").get().then(function (response) { $scope.lstGroup = response.data; });
@@ -156,10 +157,14 @@
                 data: $scope.class
             })
             .then(function(response) {
-                toastr.success(response.data.message);
-                loadLstClass();
-                $("#modalAddClass").modal("hide");
-                $scope.class = {};
+                if(response.data.code == 200){
+                    toastr.success(response.data.message);
+                    loadLstClass();
+                    $("#modalAddClass").modal("hide");
+                    $scope.class = {};
+                }else{
+                    toastr.error(response.data.message);
+                }
             },function (response) {
                 toastr.error(response.data.message);
             });
@@ -337,6 +342,7 @@
                 if(response.data.code == 200){
                     toastr.success(response.data.message);
                     loadLstLession();
+                    $scope.lession = {};
                     $("#modalAddLession").modal("hide");
                 }else{
                     toastr.error(response.data.message);
@@ -624,6 +630,7 @@
         $scope.submitSubject = submitSubject;
         $scope.remove = remove;
         $scope.edit = edit;
+        $scope.subject = {};
         Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.lstOrganization = response.data;});
         loadLstSubject();
 
@@ -634,9 +641,9 @@
             Restangular.all('/api/subject/insert').post($scope.subject).then(function (response) {
                 if(response.code == 200){
                     loadLstSubject();                
-                    /* toastr.success(response.message);*/
+                    toastr.success(response.message);
                     $("#modalAddSubject").modal("hide");
-                    /* $scope.subject = {};*/
+                    $scope.subject = {};
                 }else{
                     toastr.error(response.message);
                 }

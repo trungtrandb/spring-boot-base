@@ -5,12 +5,13 @@
  		<div class="container-fluid">
  			<div class="row mb-2">
  				<div class="col-sm-6">
- 					<h1>Add Student</h1>
+ 					<h1>Thêm mới</h1>
  				</div>
  				<div class="col-sm-6">
  					<ol class="breadcrumb float-sm-right">
- 						<li class="breadcrumb-item"><a href="/">Home</a></li>
- 						<li class="breadcrumb-item active">Add student</li>
+ 						<li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+ 						<li class="breadcrumb-item"><a href="#!student">Học sinh</a></li>
+ 						<li class="breadcrumb-item active">Thêm mới</li>
  					</ol>
  				</div>
  			</div>
@@ -35,7 +36,7 @@
  						<div class="row">
  							<div class="col-md-6">
  								<div class="form-group">
-				                    <label for="exampleInputFile">Avatar</label>
+				                    <label for="exampleInputFile">Ảnh đại diện</label>
 				                    <div class="input-group">
 				                      <div class="custom-file">
 				                        <input type="file" class="custom-file-input" id="exampleInputFile" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>
@@ -44,11 +45,11 @@
 				                    </div>
 				                  </div>
  								<div class="form-group">
- 									<label for="name">Name <span class="text-danger">*</span></label>
+ 									<label for="name">Tên <span class="text-danger">*</span></label>
  									<input type="text" class="form-control" id="name" ng-model="student.name">
  								</div>
  								<div class="form-group">
- 									<label for="phone">Phone</label>
+ 									<label for="phone">Số điện thoại</label>
  									<input type="text" class="form-control" id="phone" ng-model="student.phone">
  								</div>
  								<div class="form-group">
@@ -56,7 +57,7 @@
  									<input type="email" class="form-control" id="email" ng-model="student.email">
  								</div>
  								<div class="form-group">
- 									<label>Class</label>
+ 									<label>Lớp <span class="text-danger">*</span></label>
  									<select class="form-control" ng-model="student.classId">
  										<option ng-selected="x.id == student.classId" ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
  									</select>
@@ -64,26 +65,30 @@
  							</div>
  							<div class="col-md-6">
  								<div class="form-group">
- 									<label for="parentName">Parent Name</label>
+ 									<label for="studentCode">Mã học sinh <span class="text-danger">*</span></label>
+ 									<input type="text" class="form-control" id="studentCode" ng-model="student.studentCode">
+ 								</div>
+ 								<div class="form-group">
+ 									<label for="parentName">Tên phụ huynh</label>
  									<input type="text" class="form-control" id="parentName" ng-model="student.parentName">
  								</div>
  								<div class="form-group">
- 									<label for="phoneEmail">Phone Or Email(Parent) <span class="text-danger">*</span></label>
+ 									<label for="phoneEmail">Email phụ huynh <span class="text-danger">*</span></label>
  									<input type="text" class="form-control" id="phoneEmail" ng-model="student.parentPhoneOrEmail">
  								</div>
  								<div class="form-group">
- 									<label for="address">Address</label>
+ 									<label for="address">Địa chỉ</label>
  									<input type="text" class="form-control" id="address" ng-model="student.address">
  								</div>
  								<div class="form-group">
- 									<label>Date:</label>
+ 									<label>Ngày sinh</label>
  									<input type="date" class="form-control" ng-model="student.dateOfBirth">
  								</div>
  							</div>
  							<!-- /.col -->
  							<div class="col-md-12">
  								<div class="form-group">
- 									<label for="note">Note</label>
+ 									<label for="note">Ghi chú</label>
  									<textarea class="form-control" id="note" ng-model="student.note"></textarea> 
  								</div>
  							</div>

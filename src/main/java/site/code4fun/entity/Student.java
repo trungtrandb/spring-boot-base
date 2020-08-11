@@ -27,6 +27,9 @@ public class Student {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
+	
+	@Column(name = "student_code")
+	protected String studentCode;
 	protected String name;
 	protected String address;
 	protected String phone;

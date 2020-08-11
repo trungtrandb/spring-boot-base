@@ -10,6 +10,7 @@ import site.code4fun.entity.Classes;
 import site.code4fun.entity.GroupClass;
 import site.code4fun.entity.User;
 import site.code4fun.entity.dto.ClassDTO;
+import site.code4fun.util.StringUtils;
 
 @Service
 public class ClassService extends BaseService{
@@ -27,9 +28,12 @@ public class ClassService extends BaseService{
 	}
 	
 	public Classes insert(ClassDTO c) throws Exception {
+		if(StringUtils.isNull(c.getName())) throw new Exception("Tên lớp là bắt buộc nhập");
+		if(null == c.getGroupClassId()) throw new Exception("Khối lớp là bắt buộc chọn");
+		if(null == c.getOwnerId()) throw new Exception("Giáo viên chủ nhiệm là bắt buộc chọn");
 		Optional<GroupClass> group = groupClassRepository.findById(c.getGroupClassId());
 		Optional<User> user = userRepository.findById(c.getOwnerId());
-		if(!group.isPresent()) throw new Exception("Group not found!!");
+		
 		Classes clazz = Classes.builder()
 				.name(c.getName())
 				.note(c.getNote())

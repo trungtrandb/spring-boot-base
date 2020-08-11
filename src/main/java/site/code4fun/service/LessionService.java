@@ -26,10 +26,13 @@ public class LessionService extends BaseService{
 	}
 	
 	public Lession insert(Lession c) throws Exception {
-		if(StringUtils.isNull(c.getTitle())) throw new Exception("Tên bài học không được bỏ trống!");
 		List<Long> idsClass = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
 		
-		if(!idsClass.contains(c.getClassId())) throw new Exception("Class not found!!");
+		if(StringUtils.isNull(c.getTitle())) throw new Exception("Tên bài học không được bỏ trống!");
+		if(!idsClass.contains(c.getClassId())) throw new Exception("Lớp học không được bỏ trống!");
+		if(null == c.getSubjectId()) throw new Exception("Môn học không được bỏ trống!");
+		if(null == c.getUserId()) throw new Exception("Giáo viên giảng dạy không được bỏ trống!");
+		
 		
 		return lessionRepository.saveAndFlush(c);
 	}

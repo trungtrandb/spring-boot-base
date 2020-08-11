@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import site.code4fun.constant.ResponseMessage;
 import site.code4fun.entity.Response;
 import site.code4fun.entity.User;
 import site.code4fun.service.StudentService;
@@ -36,7 +37,7 @@ public class UserController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST )
 	public ResponseEntity<?> updateUser(@RequestBody User user){
 		try {
-			return ResponseEntity.ok(new Response(200, "Successful", userService.updateUser(user)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.UPDATE_SUCCESS, userService.updateUser(user)));
 		}catch(Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}

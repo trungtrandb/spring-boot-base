@@ -9,7 +9,7 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-            <li class="breadcrumb-item active">DataTables</li>
+            <li class="breadcrumb-item active">Học sinh</li>
           </ol>
         </div>
       </div>
@@ -31,6 +31,7 @@
                 <thead>
                   <tr>
                     <th>ID</th>
+                    <th>Mã học sinh</th>
                     <th>Họ tên</th>
                     <th>Số điện thoại</th>
                     <th>Tên phụ huynh</th>
@@ -42,9 +43,10 @@
                 <tbody>
                   <tr ng-repeat="x in lstStudent">
                     <td>{{ x.id }}</td>
+                    <td>{{ x.studentCode }}</td>
                     <td>{{ x.name }}</td>
                     <td>{{ x.phone }}</td>
-                    <td>{{ x.parentName }}</td>
+                    <td>{{ x.parentName }} <a href="#!chat?user={{ x.parentPhoneOrEmail }}"><i class="far fa-comment"></i></a> </td> <!-- text-decoration: none;  -->
                     <td>{{ x.className }}</td>
                     <td>{{ x.note }}</td>
                     <td>

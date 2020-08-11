@@ -1,6 +1,7 @@
 package site.code4fun.service;
 
 import java.sql.Timestamp;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,9 +47,21 @@ public class StudentService extends BaseService{
 	}
 
 	public Student create(StudentDTO s) throws Exception {
-		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Email phụ huynh không được bỏ trống!");
 		if (StringUtils.isNull(s.getName())) throw new Exception("Tên học sinh không được bỏ trống!");
-		if(s.getClassId() == null) throw new Exception("Chưa chọn lớp cho học sinh!");
+		if (StringUtils.isNull(s.getStudentCode())) throw new Exception("Mã học sinh không được bỏ trống!");	
+		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Email phụ huynh không được bỏ trống!");
+		if (s.getClassId() == null) throw new Exception("Chưa chọn lớp cho học sinh!");
+		
+		
+        String normalizeCode = Normalizer.normalize(s.getStudentCode(), Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "").replace(" ", "");
+        List<Long> idsClass = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
+        
+        List<Student> lst = studentRepository.findByStudentCode(normalizeCode);
+        for(Student _st : lst) {
+        	if(idsClass.contains(_st.getClassId())) throw new Exception("Mã học sinh phải là duy nhất!");
+        }
+
+        s.setStudentCode(normalizeCode);
 		
 		String passWord = StringUtils.randomString();
 		User u = userRepository.findByUserName(s.getParentPhoneOrEmail());
@@ -81,6 +94,7 @@ public class StudentService extends BaseService{
 
 		Student student = Student.builder()
 				.address(s.getAddress())
+				.studentCode(s.getStudentCode())
 				.name(s.getName())
 				.dateOfBirth(s.getDateOfBirth())
 				.email(s.getEmail())
@@ -99,8 +113,21 @@ public class StudentService extends BaseService{
 		if (!item.isPresent())
 			throw new Exception("Student not found!");
 		
-		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Email phụ huynh không được bỏ trống!");
 		if (StringUtils.isNull(s.getName())) throw new Exception("Tên học sinh không được bỏ trống!");
+		if (StringUtils.isNull(s.getStudentCode())) throw new Exception("Mã học sinh không được bỏ trống!");	
+		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Email phụ huynh không được bỏ trống!");
+		if (s.getClassId() == null) throw new Exception("Chưa chọn lớp cho học sinh!");
+		
+		
+        String normalizeCode = Normalizer.normalize(s.getStudentCode(), Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "").replace(" ", "");
+        List<Long> idsClass = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
+        
+        List<Student> lst = studentRepository.findByStudentCode(normalizeCode);
+        for(Student _st : lst) {
+        	if(idsClass.contains(_st.getClassId())) throw new Exception("Mã học sinh phải là duy nhất!");
+        }
+
+        s.setStudentCode(normalizeCode);
 		
 		
 		User u = userRepository.findByUserName(s.getParentPhoneOrEmail());
