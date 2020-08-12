@@ -55,7 +55,7 @@ public class ClassService extends BaseService{
 		if (!item.isPresent()) throw new Exception("Class not found!");
 		classRepository.deleteById(id);
 	}
-	
+
 	public List<PointDTO> getPoint(Long classId, Long subjectId, Byte sem, Byte numOfTest){
 		List<StudentDTO> lstStudent = jStudentRepository.findStudentByClassId(Arrays.asList(classId));
 		List<Long> studentIds = lstStudent.stream().map(StudentDTO::getId).collect(Collectors.toList());
@@ -129,5 +129,10 @@ public class ClassService extends BaseService{
 			lstPoint.add(newPoint);
 		}
 		return point;
+	}
+
+	public Optional<Classes> getById(Long id) {
+		// TODO Auto-generated method stub
+		return classRepository.findById(id);
 	}
 }

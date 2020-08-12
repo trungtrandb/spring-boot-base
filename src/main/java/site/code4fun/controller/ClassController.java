@@ -43,6 +43,16 @@ public class ClassController {
 			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
 		}
 	}
+	@RequestMapping(path = "/get/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> getById(@PathVariable Long id){
+		try {
+			return ResponseEntity.ok(new Response(200, "Success", classService.getById(id)));
+		}catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
+	
 	
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> delete(@PathVariable Long id) {

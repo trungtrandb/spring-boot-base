@@ -25,9 +25,7 @@ public class OrganizationService extends BaseService{
 		return false;
 	}
 
-	public Organization getById(Long id) throws Exception {
-		return organizationRepository.findById(id).get();
-	}
+	
 	
 	public Organization getByUser() throws Exception {
 		return getCurrentOrganization();
@@ -63,5 +61,4 @@ public class OrganizationService extends BaseService{
 		List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
 		return jStudentRepository.findParentByClassIds(classIds);
 	}
-
 }

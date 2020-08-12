@@ -141,7 +141,8 @@
         $scope.submitAddCLazz = submitAddClazz;
         $scope.remove = remove;
         $scope.class = {};
-        loadLstClass();
+        $scope.edit = edit;
+		loadLstClass();
         
         Restangular.one("/api/group-class/get-all").get().then(function (response) { $scope.lstGroup = response.data; });
         Restangular.one("/api/organization/get-teacher").get().then(function (response) { $scope.lstTeacher = response.data; });
@@ -169,7 +170,17 @@
                 toastr.error(response.data.message);
             });
         }
+	  function edit(id) {
+            Restangular.one('/api/class/get', id).get().then(function (response) {
+                if (response.code == 200) {
+                    $("#modalAddClass").modal("show");
+                    $scope.class = response.data;
 
+                }else{
+                    toastr.error(response.message);
+                }
+            });
+        }
         function remove(id){
             $http.get("/api/class/delete/" + id).then(function (response) {
                 if(response.data.code == 200){
@@ -687,7 +698,7 @@
 function TeacherController($scope, $http, Restangular) {
     $scope.submitUser = submitUser;
     $scope.remove = remove;
-
+	
     loadLstTeacher();
     function loadLstTeacher() {
         Restangular.one("/api/organization/get-teacher").get().then(function (response) {$scope.lstTeacher = response.data;});
@@ -720,6 +731,7 @@ function TeacherController($scope, $http, Restangular) {
             toastr.error(response.data.message);
         });
     }
+ 
 }
 
 /* ============================================ */
