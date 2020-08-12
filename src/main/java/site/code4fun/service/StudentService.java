@@ -124,11 +124,8 @@ public class StudentService extends BaseService{
         
         List<Student> lst = studentRepository.findByStudentCode(normalizeCode);
         for(Student _st : lst) {
-        	if(idsClass.contains(_st.getClassId())) throw new Exception("Mã học sinh phải là duy nhất!");
-        }
-
-        s.setStudentCode(normalizeCode);
-		
+        	if(idsClass.contains(_st.getClassId()) && _st.getId() != s.getId()) throw new Exception("Mã học sinh phải là duy nhất!");
+        }		
 		
 		User u = userRepository.findByUserName(s.getParentPhoneOrEmail());
 		if (null == u) {
@@ -167,6 +164,7 @@ public class StudentService extends BaseService{
 				.email(s.getEmail())
 				.phone(s.getPhone())
 				.classId(s.getClassId())
+				.studentCode(normalizeCode)
 				.parentId(s.getParentId())
 				.note(s.getNote()).build();
 		return studentRepository.saveAndFlush(student);

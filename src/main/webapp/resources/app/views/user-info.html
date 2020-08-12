@@ -4,12 +4,12 @@
   		<div class="container-fluid">
   			<div class="row mb-2">
   				<div class="col-sm-6">
-  					<h1>Profile</h1>
+  					<h1>Thông tin cá nhân</h1>
   				</div>
   				<div class="col-sm-6">
   					<ol class="breadcrumb float-sm-right">
-  						<li class="breadcrumb-item"><a href="#">Home</a></li>
-  						<li class="breadcrumb-item active">User Profile</li>
+  						<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+  						<li class="breadcrumb-item active">Thông tin cá nhân</li>
   					</ol>
   				</div>
   			</div>
@@ -32,19 +32,19 @@
 
   							<h3 class="profile-username text-center">{{ user.fullName }}</h3>
 
-  							<p class="text-muted text-center">Software Engineer</p>
+  							<!-- <p class="text-muted text-center">Software Engineer</p> -->
   							<ul class="list-group list-group-unbordered mb-3">
   								<li class="list-group-item">
-  									<b>Username</b> <a class="float-right">{{ user.username}}</a>
+  									<b>Tên đăng nhập</b> <a class="float-right">{{ user.username}}</a>
   								</li>
   								<li class="list-group-item">
-  									<b>Status</b> <a class="float-right">{{ user.status}}</a>
+  									<b>Trạng thái</b> <a class="float-right">{{ user.status}}</a>
   								</li>
   								<li class="list-group-item">
-  									<b>Created</b> <a class="float-right">{{ user.createdDate | date:'dd/MM/yyyy'}}</a>
+  									<b>Ngày tạo</b> <a class="float-right">{{ user.createdDate | date:'dd/MM/yyyy'}}</a>
   								</li>
   								<li class="list-group-item">
-  									<b>Last update</b> <a class="float-right">{{ user.updatedDate | date:'dd/MM/yyyy'}}</a>
+  									<b>Cập nhật lần cuối</b> <a class="float-right">{{ user.updatedDate | date:'dd/MM/yyyy'}}</a>
   								</li>
   							</ul>
   						</div>
@@ -66,13 +66,13 @@
   								<div class="tab-pane active" id="settings">
   									<form class="form-horizontal" ng-submit="submitForm()">
   										<div class="form-group row">
-  											<label for="" class="col-sm-2 col-form-label">Avatar</label>
+  											<label for="" class="col-sm-2 col-form-label">Ảnh đại diện</label>
   											<div class="col-sm-10">
   												<input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>
   											</div>
   										</div>
   										<div class="form-group row">
-  											<label for="inputName" class="col-sm-2 col-form-label">Name</label>
+  											<label for="inputName" class="col-sm-2 col-form-label">Họ và tên</label>
   											<div class="col-sm-10">
   												<input type="text" class="form-control" id="inputName" ng-model="user.fullName" placeholder="Name">
   											</div>
@@ -84,31 +84,31 @@
   											</div>
   										</div>
   										<div class="form-group row">
-  											<label for="identity" class="col-sm-2 col-form-label">Identity</label>
+  											<label for="identity" class="col-sm-2 col-form-label">Số CMT</label>
   											<div class="col-sm-10">
   												<input type="text" class="form-control" id="identity" ng-model="user.identityCard" placeholder="Identity">
   											</div>
   										</div>
   										<div class="form-group row">
-  											<label for="phone" class="col-sm-2 col-form-label">Phone</label>
+  											<label for="phone" class="col-sm-2 col-form-label">Số điện thoại</label>
   											<div class="col-sm-10">
   												<input type="text" class="form-control" id="phone" ng-model="user.phone" placeholder="Phone">
   											</div>
   										</div>
   										<div class="form-group row">
-  											<label for="address" class="col-sm-2 col-form-label">Address</label>
+  											<label for="address" class="col-sm-2 col-form-label">Địa chỉ</label>
   											<div class="col-sm-10">
   												<input type="text" class="form-control" id="address" ng-model="user.address" placeholder="Address">
   											</div>
   										</div>
   										<div class="form-group row">
-  											<label for="password" class="col-sm-2 col-form-label">Password</label>
+  											<label for="password" class="col-sm-2 col-form-label">Mật khẩu</label>
   											<div class="col-sm-10">
   												<input type="password" class="form-control" autocomplete="true" id="password" ng-model="user.password" placeholder="Password">
   											</div>
   										</div>
   										<div class="form-group row">
-  											<label for="repass" class="col-sm-2 col-form-label">Repass</label>
+  											<label for="repass" class="col-sm-2 col-form-label">Nhập lại mật khẩu</label>
   											<div class="col-sm-10">
   												<input type="password" class="form-control" id="repass" autocomplete="true" ng-model="user.rePass" placeholder="Repass">
   											</div>

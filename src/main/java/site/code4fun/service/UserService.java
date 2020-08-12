@@ -11,7 +11,6 @@ import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 
 import site.code4fun.constant.Queue;

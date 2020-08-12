@@ -33,16 +33,35 @@
                 </div>
                 <div class="col">
                   <label for="class">Lớp: </label>
-                  <select class="form-control" ng-model="filter.classId">
+                  <select class="form-control" ng-model="filter.classId" ng-change="selectClass()">
                     <option value="">-- All --</option>
                     <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
                   </select>
                 </div>
                 <div class="col">
                   <label for="class">Môn học: </label>
-                  <select class="form-control" ng-model="filter.lessionId">
-                    <option ng-repeat="x in lstSubject" value="{{x.id}}">{{x.name}}</option>
+                  <select class="form-control" ng-model="filter.subjectId" ng-change="selectClass()" ng-options="item.id as item.name for item in lstSubject"></select>
+                </div>
+                <div class="col">
+                  <label for="class">Lần thi: </label>
+                  <select class="form-control" ng-model="filter.numOfTest" ng-change="selectClass()">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
                   </select>
+                </div>
+                <div class="col">
+                  <label for="class">Học kỳ: </label>
+                  <div class="form-group">
+                      <div class="icheck-primary d-inline">
+                        <input type="radio" id="radioPrimary1" ng-model="filter.sem" value="1" ng-change='selectClass()'>
+                        <label for="radioPrimary1">Kỳ 1</label>
+                      </div>
+                      <div class="icheck-primary d-inline ml-3">
+                        <input type="radio" id="radioPrimary2" ng-model="filter.sem" value="2" ng-change='selectClass()'>
+                        <label for="radioPrimary2">Kỳ 2</label>
+                      </div>
+                    </div>
                 </div>
               </div>
             </div>

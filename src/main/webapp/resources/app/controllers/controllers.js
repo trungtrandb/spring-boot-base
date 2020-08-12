@@ -411,7 +411,9 @@
                 if(response.code == 200){
                     toastr.success(response.message);
                 }else{
-                    toastr.error(response.message);
+                    toastr.error(response.message); 
+                    $scope.checkin.present = null;
+                    
                 }
             });
         }
@@ -728,17 +730,24 @@ function ParentController($scope, Restangular) {
 
 /* ============================================ */
 function PointController($scope,$location, Restangular) {
+    $scope.filter = {
+        numOfTest: '1',
+        sem:'1'
+    };
     Restangular.one("/api/group-class/get-all").get().then(function (response) { $scope.lstGroup = response.data; });
-    Restangular.one('/api/subject/getAll').get().then(function (response) { $scope.lstSubject = response.data; });
+    Restangular.one('/api/subject/getAll').get().then(function (response) { 
+        $scope.lstSubject = response.data;
+        $scope.filter.subjectId = response.data[0].id;
+    });
     Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
 
-    $scope.selectGroup = function() {
-        Restangular.one("/api/class/get-by-group?id=" + $scope.groupId).get().then(function (response) { $scope.lstClass = response.data; });
-    }
-    $("#jsGrid").jsGrid({
+    $scope.selectClass = selectClass;
+
+    function selectClass() {
+        $("#jsGrid").jsGrid({
         width: "100%",
            // height: "400px",
-           paging: true,
+           // paging: true,
            autoload: true,
            pageSize: 10,
            editing: true,
@@ -748,42 +757,42 @@ function PointController($scope,$location, Restangular) {
             //     $("#modalAddNotify").modal("show");
             // },
             confirmDeleting: false,
-            onItemDeleting: function (args) {
-                if (!args.item.deleteConfirmed) { // custom property for confirmation
-                    args.cancel = true; // cancel deleting
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        if (result.value) {
-                            Restangular.one('/api/notify/delete', args.item.id).get().then(function (response) {
-                                if (response.code == 200) {
-                                    toastr.success(response.message);
-                                    $("#jsGrid").jsGrid("loadData");
-                                }else{
-                                    toastr.error(response.message);
-                                }
-                            });                            
-                        }
-                    })
-                }
-            },
+            // onItemDeleting: function (args) {
+            //     if (!args.item.deleteConfirmed) { // custom property for confirmation
+            //         args.cancel = true; // cancel deleting
+            //         Swal.fire({
+            //             title: 'Are you sure?',
+            //             text: "You won't be able to revert this!",
+            //             icon: 'warning',
+            //             showCancelButton: true,
+            //             confirmButtonColor: '#3085d6',
+            //             cancelButtonColor: '#d33',
+            //             confirmButtonText: 'Yes, delete it!'
+            //         }).then((result) => {
+            //             if (result.value) {
+            //                 Restangular.one('/api/notify/delete', args.item.id).get().then(function (response) {
+            //                     if (response.code == 200) {
+            //                         toastr.success(response.message);
+            //                         $("#jsGrid").jsGrid("loadData");
+            //                     }else{
+            //                         toastr.error(response.message);
+            //                     }
+            //                 });                            
+            //             }
+            //         })
+            //     }
+            // },
             controller: {
                 loadData: function() {
                     var d = $.Deferred();
-                    Restangular.one("/api/notify/getAll").get().then(function (response) { 
+                    Restangular.one("/api/class/get-point").get($scope.filter).then(function (response) { 
                         d.resolve(response.data);
                     });
                     return d.promise();
                 },
                 updateItem: function(item) {
                     var d = $.Deferred();
-                    Restangular.one('/api/notify/delete', item.id).get().then(function (response) {
+                    Restangular.all('/api/class/update-point', $scope.filter.classId).post(item).then(function (response) {
                         if (response.code == 200) {
                             toastr.success(response.message);
                             $("#jsGrid").jsGrid("loadData");
@@ -799,14 +808,19 @@ function PointController($scope,$location, Restangular) {
                 }
             },
             fields: [
-            { name: "id", title: "ID",},
-            { name: "title", title: "Tiêu đề thông báo", type: "text"},
-            { name: "content", title: "Nội dung thông báo"},
-            { name: "createdDate", title: "Thời gian tạo"},
-            { name: "createdName", title: "Người tạo"},
-            { name: "status", title: "Trạng thái"},
-            { type: "control", deleteButton: false}
+                { name: "studentCode", title: "Mã học sinh", width: 50},
+                { name: "studentName", title: "Tên học sinh"},
+                { name: "pointMulti1", title: "Điểm hệ số 1", type: "text"},
+                { name: "pointMulti2", title: "Điểm hệ số 2", type: "text"},
+                { name: "pointMulti3", title: "Điểm hệ số 3", type: "text"},
+                { type: "control", deleteButton: false}
             ]
         });
+    }
+
+    $scope.selectGroup = function() {
+        Restangular.one("/api/class/get-by-group?id=" + $scope.groupId).get().then(function (response) { $scope.lstClass = response.data; });
+    }
+    
 }
 })();

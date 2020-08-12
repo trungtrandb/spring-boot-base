@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import site.code4fun.constant.ResponseMessage;
 import site.code4fun.entity.Response;
 import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.service.StudentService;
@@ -27,7 +28,7 @@ public class StudentController {
 			@RequestParam(name = "organiztion", required = false) Long organizationId,
 			@RequestParam(name = "group", required = false) Long groupId){
 		try {
-			return ResponseEntity.ok(new Response(200, "Successfull!", studentService.getAll(classId, groupId, organizationId)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.ADD_SUCCESS, studentService.getAll(classId, groupId, organizationId)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
@@ -37,7 +38,7 @@ public class StudentController {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public ResponseEntity<?> insert(@RequestBody StudentDTO s){
 		try {
-			return ResponseEntity.ok(new Response(200, "Successfull!", studentService.create(s)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.ADD_SUCCESS, studentService.create(s)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
@@ -57,7 +58,7 @@ public class StudentController {
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> update(@Valid @RequestBody StudentDTO s){
 		try {
-			return ResponseEntity.ok(new Response(200, "Successfull!", studentService.update(s)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.UPDATE_SUCCESS, studentService.update(s)));
 		} catch (Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
@@ -67,7 +68,7 @@ public class StudentController {
 	public ResponseEntity<?> update(@RequestParam("student")Long studentId,
 			@RequestParam(value = "class", required = false) Long classId){
 		try {
-			return ResponseEntity.ok(new Response(200, "Successfull!", studentService.delete(studentId, classId)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.DELETE_SUCCESS, studentService.delete(studentId, classId)));
 		} catch (Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
