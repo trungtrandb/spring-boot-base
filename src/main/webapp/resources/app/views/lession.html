@@ -89,15 +89,15 @@
             </div>
             <div class="form-group">
               <label>Lớp: <span class="text-danger">*</span></label>
-              <select class="form-control" ng-model="lession.classId" ng-options="item.id as item.name for item in lstClass" ng-selected="{{item.id == lession.classId}}"></select>
+              <select class="form-control" ng-model="lession.classId" ng-options="item.id as item.name for item in lstClass" ></select>
             </div>
             <div class="form-group">
               <label>Thuộc môn học: <span class="text-danger">*</span></label>
-              <select class="form-control" ng-model="lession.subjectId" ng-options="item.id as item.name for item in lstSubject" ng-selected="{{item.id == lession.subjectId}}"></select>
+              <select class="form-control" ng-model="lession.subjectId" ng-options="item.id as item.name for item in lstSubject"></select>
             </div>
             <div class="form-group">
               <label>GV giảng dạy: <span class="text-danger">*</span></label>
-              <select class="form-control" ng-model="lession.userId" ng-options="item.id as item.fullName for item in lstTeacher" ng-selected="{{item.id == lession.userId}}"></select>
+              <select class="form-control" ng-model="lession.userId" ng-options="item.id as item.fullName for item in lstTeacher"></select>
             </div>
             <div class="form-group">
               <label for="startTime">Thời gian bắt đầu</label>
@@ -109,7 +109,7 @@
             </div>
             <div class="form-group">
               <label for="note">Ghi chú</label>
-              <input type="text" class="form-control" id="note" ng-model="lession.note">
+              <input type="text" class="form-control" id="description" ng-model="lession.description">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>

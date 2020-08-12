@@ -48,4 +48,9 @@ public class ClassService extends BaseService{
 		if (!item.isPresent()) throw new Exception("Class not found!");
 		classRepository.deleteById(id);
 	}
+
+	public Optional<Classes> getById(Long id) {
+		// TODO Auto-generated method stub
+		return classRepository.findById(id);
+	}
 }

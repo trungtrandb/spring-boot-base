@@ -46,6 +46,7 @@
                     <td>{{ x.owner.fullName }}</td>
                     <td>{{ x.note }}</td>
                     <td>
+                     <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>
                       <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>
                     </td>
                   </tr>
