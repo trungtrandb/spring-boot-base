@@ -31,23 +31,22 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Note</th>
-                    <th>Group</th>
-                    <th>Organization</th>
-                    <th>Owner</th>
-                    <th>Action</th>
+                    <th>Tên lớp</th>
+                    <th>Khối lớp</th>
+                    <th>Chủ nhiệm</th>
+                    <th>Ghi chú</th>
+                    <th>Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr ng-repeat="x in lstClass">
                     <td>{{ x.id }}</td>
                     <td>{{ x.name }}</td>
-                    <td>{{ x.note }}</td>
                     <td>{{ x.groupClass.name }}</td>
-                    <td>{{ x.groupClass.organization.name }}</td>
                     <td>{{ x.owner.fullName }}</td>
+                    <td>{{ x.note }}</td>
                     <td>
+                     <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>
                       <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>
                     </td>
                   </tr>
@@ -81,15 +80,15 @@
         <div class="modal-body">
           <form role="form" ng-submit="submitAddCLazz()">
             <div class="form-group">
-              <label for="name">Tên lớp</label>
+              <label for="name">Tên lớp: <span class="text-danger">*</span></label>
               <input type="text" class="form-control" id="name" ng-model="class.name">
             </div>
             <div class="form-group">
-              <label for="note">Note</label>
+              <label for="note">Ghi chú</label>
               <input type="text" class="form-control" id="note" ng-model="class.note">
             </div>
             <div class="form-group">
-              <label>Khốilớp: <span class="text-danger">*</span></label>
+              <label>Khối lớp: <span class="text-danger">*</span></label>
               <select class="form-control" ng-model="class.groupClassId">
                 <option ng-repeat="x in lstGroup" value="{{x.id}}">{{x.name}}</option>
               </select>

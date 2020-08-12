@@ -31,8 +31,8 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Tên trường</th>
                     <th>Tên môn học</th>
+                    <th>Ghi chú</th>
                     <th>Trạng thái</th>
                     <th>Thao tác</th>
                   </tr>
@@ -80,11 +80,11 @@
             
             <div class="form-group">
               <label for="note">Tên môn học</label>
-              <input type="text" class="form-control" id="note" ng-model="subject.note">
+              <input type="text" class="form-control" id="note" ng-model="subject.name">
             </div>
             <div class="form-group">
-              <label for="status">Trạng thái</label>
-              <input type="text" class="form-control" id="status" ng-model="subject.status">
+              <label for="status">Ghi chú</label>
+              <input type="text" class="form-control" id="status" ng-model="subject.note">
             </div>
             
             <div class="form-group">

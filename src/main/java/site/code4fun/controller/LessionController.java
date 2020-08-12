@@ -34,6 +34,7 @@ public class LessionController {
 		try {
 			return ResponseEntity.ok(new Response(200, "success", lessionService.getByClassId(id)));
 		}catch(Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
 	}
@@ -41,8 +42,9 @@ public class LessionController {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public ResponseEntity<?> insert(@RequestBody Lession s) {
 		try {
-			return ResponseEntity.ok(new Response(200, "Successful", lessionService.insert(s)));
+			return ResponseEntity.ok(new Response(200, "Thêm mới thành công", lessionService.insert(s)));
 		}catch(Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
 	}

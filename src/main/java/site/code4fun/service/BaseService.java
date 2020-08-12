@@ -22,6 +22,7 @@ import site.code4fun.repository.MessageRepository;
 import site.code4fun.repository.NotifyDeviceRepository;
 import site.code4fun.repository.NotifyRepository;
 import site.code4fun.repository.OrganizationRepository;
+import site.code4fun.repository.PointRepository;
 import site.code4fun.repository.StudentRepository;
 import site.code4fun.repository.SubjectRepository;
 import site.code4fun.repository.UserDeviceRepository;
@@ -31,6 +32,7 @@ import site.code4fun.repository.jdbc.JCheckinRepository;
 import site.code4fun.repository.jdbc.JLessionRepository;
 import site.code4fun.repository.jdbc.JMessageRepository;
 import site.code4fun.repository.jdbc.JNotifyRepository;
+import site.code4fun.repository.jdbc.JPointRepository;
 import site.code4fun.repository.jdbc.JStudentRepository;
 import site.code4fun.repository.jdbc.JUserOrganizationRepository;
 import site.code4fun.util.MailUtil;
@@ -90,6 +92,12 @@ public class BaseService {
 	protected OrganizationRepository organizationRepsitory;
 	
 	@Autowired
+	protected MessageRepository messageRepository;
+	
+	@Autowired 
+	protected PointRepository pointRepository;
+	
+	@Autowired
 	protected JCheckinRepository jCheckinRepository;
 
 	@Autowired
@@ -102,10 +110,10 @@ public class BaseService {
 	protected JNotifyRepository jNotifyRepository;
 	
 	@Autowired
-	protected MessageRepository messageRepository;
+	protected JMessageRepository jMessageRepository;
 	
 	@Autowired
-	protected JMessageRepository jMessageRepository;
+	protected JPointRepository jPointRepository;
 	
 	protected final Long getCurrentId() {
 		UserPrincipal currentUser = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();

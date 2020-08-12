@@ -32,7 +32,7 @@ public class CheckinController {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public ResponseEntity<?> insert(@RequestBody Checkin s) {
 		try {
-			return ResponseEntity.ok(new Response(200, "Successful", checkinService.insert(s)));
+			return ResponseEntity.ok(new Response(200, "Điểm danh thành công", checkinService.insert(s)));
 		}catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));

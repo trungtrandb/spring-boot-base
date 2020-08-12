@@ -4,12 +4,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Điểm danh</h1>
+          <h1>Lịch sử điểm danh</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-            <li class="breadcrumb-item active">DataTables</li>
+            <li class="breadcrumb-item active">Lịch sử điểm danh</li>
           </ol>
         </div>
       </div>
@@ -31,14 +31,14 @@
                 <div class="col">
                   <label for="class">Lớp: </label>
                   <select class="form-control" ng-model="filter.classId" ng-change="filterCheckin()">
-                    <option value="">-- All --</option>
+                    <option value="">-- Tất cả --</option>
                     <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
                   </select>
                 </div>
                 <div class="col">
                   <label for="class">Buổi học: </label>
                   <select class="form-control" ng-model="filter.lessionId" ng-change="filterCheckin()">
-                    <option value="">-- All --</option>
+                    <option value="">-- Tất cả --</option>
                     <option ng-repeat="x in lstLession" value="{{x.id}}">{{x.title}}</option>
                   </select>
                 </div>

@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import site.code4fun.constant.ResponseMessage;
 import site.code4fun.entity.Response;
 import site.code4fun.entity.dto.ClassDTO;
+import site.code4fun.entity.dto.PointDTO;
 import site.code4fun.service.ClassService;
 
 @Controller
@@ -25,7 +27,7 @@ public class ClassController {
 	@RequestMapping(value = "/get-by-group", method = RequestMethod.GET)
 	public ResponseEntity<?> getAll(@RequestParam(required = false) Long id){
 		try {
-			return new ResponseEntity<>(new Response(200, "Successfull!!!", classService.getByGroupId(id)), HttpStatus.OK);
+			return new ResponseEntity<>(new Response(200, ResponseMessage.QUERY_SUCCESS, classService.getByGroupId(id)), HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
 		}
@@ -35,19 +37,53 @@ public class ClassController {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public ResponseEntity<?> insert(@RequestBody ClassDTO c) {
 		try {
-			return new ResponseEntity<>(new Response(200, "Thêm mới thành công", classService.insert(c)), HttpStatus.OK);
+			return new ResponseEntity<>(new Response(200, ResponseMessage.ADD_SUCCESS, classService.insert(c)), HttpStatus.OK);
 		}catch(Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
 		}
 	}
+	@RequestMapping(path = "/get/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> getById(@PathVariable Long id){
+		try {
+			return ResponseEntity.ok(new Response(200, "Success", classService.getById(id)));
+		}catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
+	
 	
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		try {
 			classService.delete(id);
-			return new ResponseEntity<>(new Response(200, "Xóa thành công", null), HttpStatus.OK);
+			return new ResponseEntity<>(new Response(200, ResponseMessage.DELETE_SUCCESS, null), HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
 		}
 	}	
+	
+	@RequestMapping(value = "get-point", method = RequestMethod.GET)
+	public ResponseEntity<?> getListPoint(@RequestParam(required = false) Long classId, 
+			@RequestParam(required = false) Long subjectId, 
+			@RequestParam(required = false) Byte sem, 
+			@RequestParam(required = false) Byte numOfTest){
+		try {
+			return new ResponseEntity<>(new Response(200, ResponseMessage.QUERY_SUCCESS, classService.getPoint(classId, subjectId, sem, numOfTest)), HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping(value = "update-point", method = RequestMethod.POST)
+	public ResponseEntity<?> updatePoint(@RequestBody PointDTO point){
+		try {
+			return new ResponseEntity<>(new Response(200, ResponseMessage.UPDATE_SUCCESS, classService.updatePoint(point)), HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
+		}
+	}
 }

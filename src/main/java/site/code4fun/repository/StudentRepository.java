@@ -14,4 +14,8 @@ public interface StudentRepository extends JpaRepository<Student, Long>{
 	public List<StudentDTO> getStudentByClassIds(List<Long> classIds);
 	
 	public List<Student> findByParentId(Long parentId);
+	
+	public List<Student> findByStudentCode(String studentCode);
+	
+	
 }

@@ -31,16 +31,6 @@ public class OrganizationController {
 		}
 	}
 	
-	@PreAuthorize("@organizationService.authorizeOrg(#id, true)")
-	@RequestMapping(path = "/get/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getById(@PathVariable Long id){
-		try {
-			return ResponseEntity.ok(new Response(200, "Success", organizationService.getById(id)));
-		}catch (Exception e) {
-			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
-		}
-	}
-	
 	@RequestMapping(path = "/insert", method = RequestMethod.POST)
 	public ResponseEntity<?> insert(@RequestBody Organization item){
 		try {
@@ -92,5 +82,6 @@ public class OrganizationController {
 			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
 		}
 	}
+	
 
 }
