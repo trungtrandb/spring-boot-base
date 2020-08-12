@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import site.code4fun.entity.UserDevice;
+import site.code4fun.entity.dto.ChooseStudentDTO;
 import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.entity.dto.UserDTO;
 import site.code4fun.mapper.StudentDTOMapper;
@@ -101,5 +102,35 @@ public class JStudentRepository {
 				.deviceToken(rs.getString("device_token"))
 				.userId(rs.getLong("user_id"))
 				.build());
+	}
+	
+	
+	public List<ChooseStudentDTO> getListChooseSt(Long parentId) {
+		StringBuilder sql = new StringBuilder(
+				"SELECT s.id as id,s.name as name,s.avatar as avatar,s.date_of_birth as date_of_birth, c.name as class_name, g.name as group_class_name, o.name as school_name FROM tblStudent s ");
+		sql.append("JOIN tblClass c on s.class_id = c.id ");
+		sql.append("JOIN tblGroupClass g on c.group_class_id = g.id ");
+		sql.append("JOIN tblOrganization o on g.organization_id = o.id ");
+		sql.append("JOIN tblUser u on u.id = s.parent_id ");
+		sql.append("WHERE u.id = :userId ");
+		List<ChooseStudentDTO> lstRes = new ArrayList<>();
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("userId", parentId);
+		jdbcTemplate.query(sql.toString(), parameters, new RowCallbackHandler() {
+			@Override
+			public void processRow(ResultSet rs) throws SQLException {
+				ChooseStudentDTO st = ChooseStudentDTO.builder()
+						.id(rs.getLong("id"))
+						.name(rs.getString("name"))
+						.avatar(rs.getString("avatar"))
+						.dateOfBirth(rs.getTimestamp("date_of_birth"))
+						.className(rs.getString("class_name"))
+						.groupClassName(rs.getString("group_class_name"))
+						.schoolName(rs.getString("school_name"))
+						.build();
+				lstRes.add(st);
+			}
+		});
+		return lstRes;
 	}
 }

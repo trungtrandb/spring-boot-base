@@ -51,6 +51,15 @@ public class UserController {
 		}
 	}
 	
+	@RequestMapping(value = "/get-list-choose-student", method = RequestMethod.GET )
+	public ResponseEntity<?> getListChooseStudent(){
+		try {
+			return ResponseEntity.ok(new Response(200, "Successful", studentService.getListChooseSt()));
+		}catch(Exception e) {
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
+	
 	@RequestMapping(value = "/get-list-conversion", method = RequestMethod.GET) // Danh sách hội thoại và last Message
 	public ResponseEntity<?> getListConversion(){
 		try {

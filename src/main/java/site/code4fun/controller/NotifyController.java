@@ -53,7 +53,7 @@ public class NotifyController {
 	}
 	
 	@RequestMapping(path = "/count-notify", method = RequestMethod.GET) // Tổng số notify, notify isRead
-	public ResponseEntity<?> countNotify(@RequestBody(required = false) List<Long> ids){
+	public ResponseEntity<?> countNotify(){
 		try {
 			return ResponseEntity.ok(new Response(200, "Success", notifyService.countNotify()));
 		}catch (Exception e) {

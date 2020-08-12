@@ -20,6 +20,7 @@ import site.code4fun.constant.Status;
 import site.code4fun.entity.Classes;
 import site.code4fun.entity.Student;
 import site.code4fun.entity.User;
+import site.code4fun.entity.dto.ChooseStudentDTO;
 import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.util.StringUtils;
 
@@ -43,6 +44,10 @@ public class StudentService extends BaseService{
 		if(dto == null || !classIds.contains(dto.getClassId())) throw new Exception("Không tồn tại!");
 		return dto;
 		
+	}
+	
+	public Optional<Student> getStudentById(Long id) throws Exception {
+		return studentRepository.findById(id);
 	}
 
 	public Student create(StudentDTO s) throws Exception {
@@ -166,4 +171,30 @@ public class StudentService extends BaseService{
 	public List<Student> getByCurrentParent() {
 		return studentRepository.findByParentId(getCurrentId());
 	}
+	
+	public List<ChooseStudentDTO> getListChooseSt() {
+		return jStudentRepository.getListChooseSt(getCurrentId());
+	}
+
+	public Student updateStudent(Student s) throws Exception {
+		Optional<Student> item = studentRepository.findById(s.getId());
+		if (!item.isPresent())
+			throw new Exception("Student not found!");
+
+		Student student = Student.builder()
+				.id(s.getId())
+				.address(s.getAddress())
+				.name(s.getName())
+				.avatar(s.getAvatar())
+				.dateOfBirth(s.getDateOfBirth())
+				.email(s.getEmail())
+				.phone(s.getPhone())
+				.classId(s.getClassId())
+				.parentId(s.getParentId())
+				.note(s.getNote()).build();
+		
+		return studentRepository.saveAndFlush(student);
+	}
+	
+	
 }

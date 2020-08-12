@@ -1,17 +1,32 @@
 package site.code4fun.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import site.code4fun.entity.Response;
+import site.code4fun.entity.Student;
+import site.code4fun.entity.User;
 import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.service.StudentService;
 
@@ -54,11 +69,30 @@ public class StudentController {
 		}
 	} 
 	
+	@RequestMapping(value = "/get-student-by-id")
+	public ResponseEntity<?> getStudentById(@RequestParam(required = false) Long id){
+		try {
+			return ResponseEntity.ok(new Response(200, "Successfull!", studentService.getStudentById(id)));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	} 
+	
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> update(@Valid @RequestBody StudentDTO s){
 		try {
 			return ResponseEntity.ok(new Response(200, "Successfull!", studentService.update(s)));
 		} catch (Exception e) {
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
+	
+	@RequestMapping(value = "/update-student", method = RequestMethod.POST )
+	public ResponseEntity<?> updateStudent(@RequestBody Student student){
+		try {
+			return ResponseEntity.ok(new Response(200, "Successful", studentService.updateStudent(student)));
+		}catch(Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
 	}
@@ -69,6 +103,22 @@ public class StudentController {
 		try {
 			return ResponseEntity.ok(new Response(200, "Successfull!", studentService.delete(studentId, classId)));
 		} catch (Exception e) {
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
+	
+	
+	@RequestMapping(value = "/upload-image", method = RequestMethod.POST)
+	public ResponseEntity<?> saveFile(@RequestPart("file") MultipartFile file, HttpServletRequest request) {
+		ServletContext servletContext = request.getSession().getServletContext();
+		String rootPath = servletContext.getRealPath("");
+		String imagePath = "/resources/image/" + file.getOriginalFilename();
+		Path path = Paths.get(rootPath + imagePath);
+		try {
+			Files.write(path, file.getBytes(), StandardOpenOption.CREATE);
+			return ResponseEntity.ok(new Response(200, "Success", imagePath));
+		} catch (IOException e) {
+			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
 	}
