@@ -209,6 +209,7 @@ public class StudentService extends BaseService{
 		Student student = Student.builder()
 				.id(s.getId())
 				.address(s.getAddress())
+				.studentCode(s.getStudentCode())
 				.name(s.getName())
 				.avatar(s.getAvatar())
 				.dateOfBirth(s.getDateOfBirth())

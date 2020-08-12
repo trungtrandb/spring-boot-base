@@ -125,8 +125,8 @@ public class NotifyService extends BaseService{
 	}
 
 	public Map<String, Integer> countNotify() {
-		int isRead = notifyRepository.countNotifyByStatus(getCurrentId(), true);
-		int notRead = notifyRepository.countNotifyByStatus(getCurrentId(), false);
+		int isRead = notifyDeviceRepository.getNotifyByStatus(getCurrentId(), true).size();
+		int notRead = notifyDeviceRepository.getNotifyByStatus(getCurrentId(), false).size();
 		Map<String, Integer> mapRes = new HashMap<String, Integer>();
 		mapRes.put("isRead", isRead);
 		mapRes.put("notRead", notRead);

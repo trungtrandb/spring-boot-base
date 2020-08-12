@@ -40,6 +40,6 @@ public class StringUtils {
 	}
 	
 	public static String cleanToFloat(String str) {
-		return str.replaceAll(",", "\\.").replaceAll("[^0-9\s]", "");
+		return str.replaceAll(",", "\\.").replaceAll("[^0-9]", "");
 	}
 }
