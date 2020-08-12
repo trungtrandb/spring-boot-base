@@ -7,11 +7,11 @@ import java.util.Random;
 public class StringUtils {
 	final static String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
-	public final static boolean isNull(String inputString) {
+	public static boolean isNull(String inputString) {
 		return ((inputString == null) || (inputString.equals("")) || (inputString.trim().length() == 0));
 	}
 	
-	public final static String randomString(int length) {
+	public static String randomString(int length) {
 		Random r = new Random();
 		String str = "";
 		for (int i = 0; i < length; i++) {
@@ -20,11 +20,11 @@ public class StringUtils {
 		return str;
 	}
 	
-	public final static String randomString() {
+	public static String randomString() {
 		return randomString(6);
 	}
 	
-	public final static String stringFromList(List<?> lst) {
+	public static String stringFromList(List<?> lst) {
 		StringBuffer sb = new StringBuffer("");
 		for (int i = 0; i < lst.size();  i ++)
 		{	
@@ -34,12 +34,12 @@ public class StringUtils {
 		return sb.toString();
 	}
 	
-	public final static float round1(String s) {
+	public static float round1(String s) {
 		Float d = Float.parseFloat(s);
 		return BigDecimal.valueOf(d).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 	}
 	
 	public static String cleanToFloat(String str) {
-		return str.replaceAll(",", "\\.").replaceAll("[^0-9\s]", "");
+		return str.replaceAll(",", "\\.").replaceAll("[^0-9\\s\\.]", "");
 	}
 }

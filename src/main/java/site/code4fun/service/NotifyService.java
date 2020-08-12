@@ -64,6 +64,8 @@ public class NotifyService extends BaseService{
     }
 	
 	public Notify create(Notify item) throws Exception {
+		List<NotifyDevice> lstSend = notifyDeviceRepository.findByNotifyId(item.getId());
+		if(lstSend.size() > 0) throw new Exception("Không thể sửa thông báo đã được gửi!");
 		if(StringUtils.isNull(item.getTitle())) throw new Exception("Tiều đề không được bỏ trống!");
 		if(StringUtils.isNull(item.getContent())) throw new Exception("Nội dung thông báo không được bỏ trống!");
 		Organization org = getCurrentOrganization();
@@ -125,8 +127,8 @@ public class NotifyService extends BaseService{
 	}
 
 	public Map<String, Integer> countNotify() {
-		int isRead = notifyRepository.countNotifyByStatus(getCurrentId(), true);
-		int notRead = notifyRepository.countNotifyByStatus(getCurrentId(), false);
+		int isRead = notifyDeviceRepository.getNotifyByStatus(getCurrentId(), true).size();
+		int notRead = notifyDeviceRepository.getNotifyByStatus(getCurrentId(), false).size();
 		Map<String, Integer> mapRes = new HashMap<String, Integer>();
 		mapRes.put("isRead", isRead);
 		mapRes.put("notRead", notRead);

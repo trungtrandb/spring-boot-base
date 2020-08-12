@@ -47,15 +47,14 @@ public class UserService extends BaseService{
 				u = userRepository.saveAndFlush(u);	
 				
 //				Thêm vào queue gửi mật khẩu cho tài khoản mới đăng ký
-				StringBuilder mailContent = new StringBuilder("Tài khoản của bạn đã được đăng ký.");
-				mailContent.append("Sử dụng tên tài khoản là địa chỉ email và mật khẩu: ");
-				mailContent.append(passWord);
-				mailContent.append(" để đăng nhập!");
-				
+
 				Map<String, String> mailMess = new HashMap<>();
 				mailMess.put("receiver", u.getEmail());
 				mailMess.put("subject", "Tạo tài khoản thành công");
-				mailMess.put("content", mailContent.toString());
+				String mailContent = "Tài khoản của bạn đã được đăng ký. Sử dụng tên tài khoản là địa chỉ email và mật khẩu: " +
+						passWord +
+						" để đăng nhập!";
+				mailMess.put("content", mailContent);
 				String mesToQueue = new Gson().toJson(mailMess);
 				queueService.sendToQueue(Queue.QUEUE_MAIL, mesToQueue);
 			}
@@ -119,7 +118,7 @@ public class UserService extends BaseService{
 		return true;
 	}
 
-	public Collection<OutputMessage> getListConversion() {
+	public Collection<OutputMessage> getListConversion(String targetUserName) {
 		String userName = getCurrentUser().getUsername();
 		List<OutputMessage> lst = jMessageRepository.getListConversion(userName);
 		List<OutputMessage> lstRest = new ArrayList<>();
@@ -127,27 +126,39 @@ public class UserService extends BaseService{
 		lst.forEach(_item -> {
 			if(!userName.equals(_item.getFrom()) || !userName.equals(_item.getTo())) lstRest.add(_item);
 		});
+
+		if (!StringUtils.isNull(targetUserName)){
+			User targetUser = userRepository.findByUserName(targetUserName);
+			for (OutputMessage _item : lstRest ) {
+				if (_item.getFrom().equals(targetUserName)){
+					mapRes.put(_item.getFrom(), _item);
+				}else if (_item.getTo().equals(targetUserName)){
+					mapRes.put(_item.getTo(), _item);
+				}
+			}
+			if (mapRes.isEmpty() && null != targetUser){
+				OutputMessage outputMessage = OutputMessage.builder()
+						.from(targetUser.getUsername())
+						.avatar(targetUser.getAvatar())
+						.fullName(targetUser.getFullName())
+						.build();
+				mapRes.put(targetUserName, outputMessage);
+			}
+		}
+
 		lstRest.forEach(_item ->{
 			if(userName.equals(_item.getFrom())) {
 				_item.setFrom(_item.getTo());
-				if(mapRes.containsKey(_item.getTo()) && _item.getCreatedDate().after(mapRes.get(_item.getTo()).getCreatedDate()) ) {
-					mapRes.put(_item.getTo(), _item);
-				}else {
-					mapRes.put(_item.getTo(), _item);
-				}
+				mapRes.put(_item.getTo(), _item);
 			}else {
-				if(mapRes.containsKey(_item.getFrom()) && _item.getCreatedDate().after(mapRes.get(_item.getFrom()).getCreatedDate()) ){
-					mapRes.put(_item.getFrom(), _item);
-				}else {
-					mapRes.put(_item.getFrom(), _item);
-				}
+				mapRes.put(_item.getFrom(), _item);
 			}
 		});
 		return mapRes.values();
 	}
 
 	public List<OutputMessage> getMessage(String userName , Long page, Integer size) {
-		Integer limit = null != size ? size : 10;
+		int limit = null != size ? size : 10;
 		Long offset = null != page ? (page - 1) * limit : 0;
 		return jMessageRepository.getMessage(getCurrentUser().getUsername(), userName, limit, offset);
 	}

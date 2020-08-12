@@ -60,20 +60,20 @@ public class StudentController {
 		}
 	}
 	
-	@RequestMapping(value = "/get/{id}")
+	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getById(@PathVariable Long id){
 		try {
-			return ResponseEntity.ok(new Response(200, "Successfull!", studentService.getById(id)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, studentService.getById(id)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
 	} 
 	
-	@RequestMapping(value = "/get-student-by-id")
+	@RequestMapping(value = "/get-student-by-id", method = RequestMethod.GET)
 	public ResponseEntity<?> getStudentById(@RequestParam(required = false) Long id){
 		try {
-			return ResponseEntity.ok(new Response(200, "Successfull!", studentService.getStudentById(id)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, studentService.getStudentById(id)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
@@ -85,6 +85,7 @@ public class StudentController {
 		try {
 			return ResponseEntity.ok(new Response(200, ResponseMessage.UPDATE_SUCCESS, studentService.update(s)));
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
 	}
@@ -94,16 +95,17 @@ public class StudentController {
 		try {
 			return ResponseEntity.ok(new Response(200, "Successful", studentService.updateStudent(student)));
 		}catch(Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ResponseEntity<?> update(@RequestParam("student")Long studentId,
-			@RequestParam(value = "class", required = false) Long classId){
+	@RequestMapping(value = "/delete/{studentId}", method = RequestMethod.GET)
+	public ResponseEntity<?> update(@PathVariable Long studentId){
 		try {
-			return ResponseEntity.ok(new Response(200, ResponseMessage.DELETE_SUCCESS, studentService.delete(studentId, classId)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.DELETE_SUCCESS, studentService.delete(studentId)));
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
 	}

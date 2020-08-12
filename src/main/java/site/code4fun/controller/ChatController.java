@@ -31,7 +31,7 @@ public class ChatController {
 
 	@MessageMapping("/topic/chat")
 //    @SendTo("/topic/message")
-	public void sendAll(@Payload Message msg, Authentication auth) throws Exception {
+	public void sendAll(@Payload Message msg){
 		//UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
 		//User user = userService.getByUserName(principal.getUsername());
 
@@ -39,7 +39,7 @@ public class ChatController {
 	}
 	
 	@MessageMapping("/esp/send")
-	public void sendFromEsp(@Payload Message msg) throws Exception {
+	public void sendFromEsp(@Payload Message msg){
 		System.out.println(msg);
 	}
 

@@ -47,7 +47,7 @@ public class AuthenController {
 	private UserDeviceService userDeviceService;
 	
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody SignInRequest authenticationRequest) throws Exception {
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody SignInRequest authenticationRequest){
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();

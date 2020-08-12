@@ -3,7 +3,7 @@ server:
 
 springdoc:
   swagger-ui:
-    path: /doc/swagger-ui
+    path: /doc/api
   api-docs: 
     path: /doc/api-docs
 
@@ -22,7 +22,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://35.240.181.244:3306/test?noAccessToProcedureBodies=true
+    url: jdbc:mysql://35.240.181.244:3306/test?noAccessToProcedureBodies=true&useSSL=false
     username: demo
     password: ruFrV4S`]`_)?xJ%q{^F
 #  activemq:

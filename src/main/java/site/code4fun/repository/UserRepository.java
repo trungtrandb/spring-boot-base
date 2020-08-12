@@ -12,7 +12,7 @@ import site.code4fun.entity.User;
 public interface UserRepository extends JpaRepository<User, Long>{
 
 	@Query("SELECT u FROM User u where u.username = :userName")
-    public User findByUserName(String userName);
+	User findByUserName(String userName);
 	
-	public Optional<User> findByEmail(String email);
+	Optional<User> findByEmail(String email);
 }

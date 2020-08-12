@@ -65,21 +65,21 @@ public class ClassService extends BaseService{
 			PointDTO dto;
 			if(mapPoint.containsKey(_st.getId())) {
 				dto = mapPoint.get(_st.getId());
-				dto.setStudentId(_st.getId());
-				dto.setStudentName(_st.getName());
-				dto.setStudentCode(_st.getStudentCode());
 			}else {
 				dto = new PointDTO();
-				dto.setStudentId(_st.getId());
-				dto.setStudentName(_st.getName());
-				dto.setStudentCode(_st.getStudentCode());
+				dto.setSubjectId(subjectId);
+				dto.setSem(sem);
+				dto.setNumOfTest(numOfTest);
 			}
+			dto.setStudentId(_st.getId());
+			dto.setStudentName(_st.getName());
+			dto.setStudentCode(_st.getStudentCode());
 			return dto;
 		}).collect(Collectors.toList());
 		return lstPointRes;
 	}
 
-	public PointDTO updatePoint(PointDTO point) {
+	public List<Point> updatePoint(PointDTO point) {
 		String multi1 = StringUtils.cleanToFloat(point.getPointMulti1());
 		String multi2 = StringUtils.cleanToFloat(point.getPointMulti2());
 		String multi3 = StringUtils.cleanToFloat(point.getPointMulti3());
@@ -88,9 +88,11 @@ public class ClassService extends BaseService{
 		String[] lstPointMulti2 = multi2.split(" ");
 		String[] lstPointMulti3 = multi3.split(" ");
 		Long currentId = getCurrentId();
-		
+
+		pointRepository.deleteOldPoint(point.getStudentId(), point.getSubjectId(), point.getSem(), point.getNumOfTest());
 		List<Point> lstPoint = new ArrayList<>();
 		for(String _item : lstPointMulti1) {
+			if(StringUtils.isNull(_item)) continue;
 			Point newPoint = new Point();
 			newPoint.setStudentId(point.getStudentId());
 			newPoint.setSubjectId(point.getSubjectId());
@@ -104,6 +106,7 @@ public class ClassService extends BaseService{
 		}
 		
 		for(String _item : lstPointMulti2) {
+			if(StringUtils.isNull(_item)) continue;
 			Point newPoint = new Point();
 			newPoint.setStudentId(point.getStudentId());
 			newPoint.setSubjectId(point.getSubjectId());
@@ -117,6 +120,7 @@ public class ClassService extends BaseService{
 		}
 		
 		for(String _item : lstPointMulti3) {
+			if(StringUtils.isNull(_item)) continue;
 			Point newPoint = new Point();
 			newPoint.setStudentId(point.getStudentId());
 			newPoint.setSubjectId(point.getSubjectId());
@@ -128,7 +132,9 @@ public class ClassService extends BaseService{
 			newPoint.setSem(point.getSem());
 			lstPoint.add(newPoint);
 		}
-		return point;
+
+		pointRepository.saveAll(lstPoint);
+		return lstPoint;
 	}
 
 	public Optional<Classes> getById(Long id) {

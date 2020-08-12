@@ -175,20 +175,15 @@ public class StudentService extends BaseService{
 		return studentRepository.saveAndFlush(student);
 	}
 
-	public boolean delete(Long studentId, Long classId) throws Exception {
+	public boolean delete(Long studentId) throws Exception {
 		Optional<Student> item = studentRepository.findById(studentId);
-		if(null != classId) {
-			if(item.isPresent() && item.get().getClassId() == classId ) {
-				item.get().setClassId(null);
-				studentRepository.save(item.get());
-				return true;
-			}
-		}else {			
-			List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
-			if(item.isPresent() & classIds.contains(item.get().getClassId())) {
-				studentRepository.deleteById(studentId);	
-				return true;
-			}
+		List<Long> lstClass = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
+		if(item.isPresent() && lstClass.contains(item.get().getClassId())) {
+			item.get().setClassId(null);
+			checkinRepository.deleteByStudentId(studentId);
+			pointRepository.deleteByStudentId(studentId);
+			studentRepository.deleteById(studentId);
+			return true;
 		}
 		throw new Exception("Không có quyền xóa!");
 	}
@@ -209,6 +204,7 @@ public class StudentService extends BaseService{
 		Student student = Student.builder()
 				.id(s.getId())
 				.address(s.getAddress())
+				.studentCode(s.getStudentCode())
 				.name(s.getName())
 				.avatar(s.getAvatar())
 				.dateOfBirth(s.getDateOfBirth())
@@ -217,9 +213,6 @@ public class StudentService extends BaseService{
 				.classId(s.getClassId())
 				.parentId(s.getParentId())
 				.note(s.getNote()).build();
-		
 		return studentRepository.saveAndFlush(student);
 	}
-	
-	
 }

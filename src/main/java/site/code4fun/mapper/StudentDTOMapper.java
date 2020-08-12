@@ -23,8 +23,8 @@ public class StudentDTOMapper implements RowMapper<StudentDTO>{
 				.id(rs.getLong("id"))
 				.studentCode(rs.getString("student_code"))
 				.name(rs.getString("name"))
+				.note(rs.getString("note"))
 				.avatar(rs.getString("avatar"))
 				.build();
 	}
-
 }

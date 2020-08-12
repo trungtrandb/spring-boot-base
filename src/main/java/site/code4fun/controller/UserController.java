@@ -62,9 +62,9 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/get-list-conversion", method = RequestMethod.GET) // Danh sách hội thoại và last Message
-	public ResponseEntity<?> getListConversion(){
+	public ResponseEntity<?> getListConversion(@RequestParam(required = false) String user){
 		try {
-			return ResponseEntity.ok(new Response(200, "Successful", userService.getListConversion()));
+			return ResponseEntity.ok(new Response(200, "Successful", userService.getListConversion(user)));
 		}catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
@@ -76,7 +76,6 @@ public class UserController {
 			@RequestParam(required = false)Long page,
 			@RequestParam(required = false)Integer size ){
 		try {
-			
 			return ResponseEntity.ok(new Response(200, "Successful", userService.getMessage(userName, page, size)));
 		}catch(Exception e) {
 			e.printStackTrace();

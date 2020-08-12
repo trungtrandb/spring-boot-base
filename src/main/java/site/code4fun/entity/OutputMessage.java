@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class OutputMessage extends Message{
 	
-	@Column(name = "full_name")
 	private String fullName;
 	private String avatar;
+	private int totalMessage;
 }

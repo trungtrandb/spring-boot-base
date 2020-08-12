@@ -16,8 +16,4 @@ public interface NotifyRepository extends JpaRepository<Notify, Long>{
 	
 	@Query(value = "CALL updateStatusRead(:notifyIds, :userId);", nativeQuery = true)
 	void updateRead(String notifyIds, Long userId);
-	
-	@Transactional
-	@Procedure("countNotifyByStatus")
-	Integer countNotifyByStatus(Long userId, boolean status);
 }

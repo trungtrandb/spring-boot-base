@@ -142,7 +142,7 @@
         $scope.remove = remove;
         $scope.class = {};
         $scope.edit = edit;
-		loadLstClass();
+        loadLstClass();
         
         Restangular.one("/api/group-class/get-all").get().then(function (response) { $scope.lstGroup = response.data; });
         Restangular.one("/api/organization/get-teacher").get().then(function (response) { $scope.lstTeacher = response.data; });
@@ -170,7 +170,7 @@
                 toastr.error(response.data.message);
             });
         }
-	  function edit(id) {
+        function edit(id) {
             Restangular.one('/api/class/get', id).get().then(function (response) {
                 if (response.code == 200) {
                     $("#modalAddClass").modal("show");
@@ -197,7 +197,7 @@
 
 
     /* ============================================ */
-    function StudentController($scope, $http, $location) {
+    function StudentController($scope, $http, $location, Restangular) {
         $scope.submitStudent = submitAddStudent;
         $scope.remove = remove;
         bsCustomFileInput.init();
@@ -205,27 +205,36 @@
         $scope.student = {};
 
         loadLstStudent();
-        $http.get("/api/class/get-by-group").then(function (response) {$scope.lstClass = response.data.data;});
+        Restangular.one("/api/class/get-by-group").get().then(function (response) {$scope.lstClass = response.data;});
 
         function loadLstStudent() {
-            $http.get("/api/student/getAll").then(function (response) {$scope.lstStudent = response.data.data;});
+            Restangular.one("/api/student/getAll").get().then(function (response) {$scope.lstStudent = response.data;});
         }
 
 
         function remove(student){
-
-            var id = student.id;
-            var classId = student.classes[0];
-            $http.get("/api/student/delete?student=" + id+"&&class="+classId).then(function (response) {
-                if(response.data.code == 200){
-                    toastr.success(response.data.message);
-                    loadLstStudent();
-                }else{
-                    toastr.error(response.data.message);
+            Swal.fire({
+                title: 'Bạn có muốn xóa không?',
+                text: "Sẽ xóa toàn bộ thông tin của học sinh trong trường!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    Restangular.one('/api/student/delete', student.id).get().then(function (response) {
+                        if(response.code == 200){
+                            toastr.success(response.message);
+                            loadLstStudent();
+                        }else{
+                            toastr.error(response.message);
+                        }
+                    }, function (response) {
+                        toastr.error(response.data.message);
+                    });
                 }
-            }, function (response) {
-                toastr.error(response.data.message);
-            });
+            })
         }
 
 
@@ -540,19 +549,18 @@
     }
 
     /* ============================================ */
-    function ChatController($scope, Restangular, $rootScope, $filter, ChatService) {
+    function ChatController($scope, Restangular, $rootScope, $filter, ChatService, $location) {
         $scope.sendMessage = sendMessage;
         $scope.pressSend = pressSend;
         var userName;
         var gpage = 1;
-        Restangular.one("/api/user/get-list-conversion").get().then(function (response) { 
+        Restangular.one("/api/user/get-list-conversion").get($location.search()).then(function (response) { 
             $scope.lstConversion = response.data;
-            userName = response.data[0].from;
             var instance = $(".card-body.msg_card_body").overlayScrollbars({});
             $(".card-body.contact-body").overlayScrollbars({});
             setTimeout(function() {
                 $(".contacts li:first-child a").addClass("active");
-                loadMessage();
+                $(".contacts li:first-child").trigger( "click" );
             });
         });
         
@@ -607,6 +615,7 @@
         // }); 
 
         function sendMessage() {
+            if ($scope.messageContent.length == 0) return;
             userName = $(".contacts a.active").data("target").replace("#", "");
             var time = $filter('date')(Date.now(),'HH:MM dd-mm-yyyy');
             var html = '<div class="d-flex justify-content-start mb-4">';
@@ -631,6 +640,9 @@
         });
 
         $scope.changUserChat = function (name) {
+            $(".msg_head .img_cont img").attr("src", $(this)[0].x.avatar);
+            $(".msg_head .user_info span").text($(this)[0].x.fullName);
+            $(".msg_head .user_info p").text($(this)[0].x.totalMessage + " tin nhắn");
             userName = name;
             $("#box-chat").html("");
             gpage = 1;
@@ -688,17 +700,13 @@
             toastr.error(response.message);
         });
     }
-
-
-
-
 }
 
 /* ============================================ */
 function TeacherController($scope, $http, Restangular) {
     $scope.submitUser = submitUser;
     $scope.remove = remove;
-	
+
     loadLstTeacher();
     function loadLstTeacher() {
         Restangular.one("/api/organization/get-teacher").get().then(function (response) {$scope.lstTeacher = response.data;});
@@ -731,7 +739,7 @@ function TeacherController($scope, $http, Restangular) {
             toastr.error(response.data.message);
         });
     }
- 
+
 }
 
 /* ============================================ */
@@ -757,7 +765,7 @@ function PointController($scope,$location, Restangular) {
 
     function selectClass() {
         $("#jsGrid").jsGrid({
-        width: "100%",
+            width: "100%",
            // height: "400px",
            // paging: true,
            autoload: true,
@@ -820,12 +828,12 @@ function PointController($scope,$location, Restangular) {
                 }
             },
             fields: [
-                { name: "studentCode", title: "Mã học sinh", width: 50},
-                { name: "studentName", title: "Tên học sinh"},
-                { name: "pointMulti1", title: "Điểm hệ số 1", type: "text"},
-                { name: "pointMulti2", title: "Điểm hệ số 2", type: "text"},
-                { name: "pointMulti3", title: "Điểm hệ số 3", type: "text"},
-                { type: "control", deleteButton: false}
+            { name: "studentCode", title: "Mã học sinh", width: 50},
+            { name: "studentName", title: "Tên học sinh"},
+            { name: "pointMulti1", title: "Điểm hệ số 1", type: "text"},
+            { name: "pointMulti2", title: "Điểm hệ số 2", type: "text"},
+            { name: "pointMulti3", title: "Điểm hệ số 3", type: "text"},
+            { type: "control", deleteButton: false}
             ]
         });
     }
