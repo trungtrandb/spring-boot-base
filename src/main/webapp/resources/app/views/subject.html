@@ -44,8 +44,8 @@
                     <td>{{ x.note }}</td>
                     <td>{{ x.status }}</td>
                     <td>
-                      <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>
-                      <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>
+                      <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i> Sửa</button>
+                      <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i> Xóa</button>
                     </td>
                   </tr>
                 </tbody>
@@ -90,7 +90,7 @@
             <div class="form-group">
               <div class="custom-control custom-switch">
                 <input type="checkbox" class="custom-control-input" ng-model="subject.status" ng-true-value="'ACTIVE'" ng-false-value="'DRAFT'" id="customSwitch1">
-                <label class="custom-control-label" for="customSwitch1">Active</label>
+                <label class="custom-control-label" for="customSwitch1">Trạng thái</label>
               </div>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>

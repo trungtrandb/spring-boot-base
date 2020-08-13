@@ -175,7 +175,8 @@
                 if (response.code == 200) {
                     $("#modalAddClass").modal("show");
                     $scope.class = response.data;
-
+                    $scope.class.groupClassId = response.data.groupClass.id;
+                    $scope.class.ownerId = response.data.owner.id;
                 }else{
                     toastr.error(response.message);
                 }
@@ -728,16 +729,26 @@ function TeacherController($scope, $http, Restangular) {
     }
 
     function remove(teacherId, orgId){
-        $http.get("/api/organization/delete-teacher?teacher_id="+ teacherId ).then(function (response) {
-            if(response.data.code == 200){
-                toastr.success(response.data.message);
-                loadLstTeacher();
-            }else{
-                toastr.error(response.data.message);
+        Swal.fire({
+            title: 'Xác nhận xóa!',
+            text: "Bạn có chắc chắn muốn xóa giáo viên khỏi trường không???",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                Restangular.one('/api/organization/delete-teacher', teacherId).get().then(function (response) {
+                    if (response.code == 200) {
+                        toastr.success(response.message);
+                        loadLstTeacher();
+                    }else{
+                        toastr.error(response.message);
+                    }
+                });
             }
-        }, function (response) {
-            toastr.error(response.data.message);
-        });
+        })
     }
 
 }
@@ -840,6 +851,16 @@ function PointController($scope,$location, Restangular) {
 
     $scope.selectGroup = function() {
         Restangular.one("/api/class/get-by-group?id=" + $scope.groupId).get().then(function (response) { $scope.lstClass = response.data; });
+    }
+
+    $scope.exportExcel = function () {
+        Restangular.one("/api/class/export-point").get($scope.filter)
+        .then(function (response) { 
+            window.location.href = response.data;
+        }, function function_name(response) {
+            toastr.error(response.message);
+        });
+        
     }
     
 }

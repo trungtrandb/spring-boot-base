@@ -1,14 +1,13 @@
 package site.code4fun.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import site.code4fun.entity.Classes;
-import site.code4fun.entity.Organization;
-import site.code4fun.entity.User;
+import site.code4fun.entity.*;
 import site.code4fun.entity.dto.UserDTO;
 
 @Service
@@ -20,19 +19,18 @@ public class OrganizationService extends BaseService{
 		}else {
 			if(orgId == null) return false;
 			Optional<Organization> org = organizationRepository.findById(orgId);
-			if(!org.isPresent() || org.get().getUser().getId() != getCurrentId()) return true;
-		}	
-		return false;
+			return !org.isPresent() || !org.get().getUser().getId().equals(getCurrentId());
+		}
 	}
 
 	
 	
-	public Organization getByUser() throws Exception {
+	public Organization getByUser(){
 		return getCurrentOrganization();
 	}
 	
 	public Organization create(Organization item) throws Exception {
-		if(null != item.getUser() && item.getUser().getId() != getCurrentId())
+		if(null != item.getUser() && !item.getUser().getId().equals(getCurrentId()))
 			throw new Exception("Item not found!");
 		
 		Optional<User> user = userRepository.findById(getCurrentId());
@@ -41,7 +39,7 @@ public class OrganizationService extends BaseService{
 		return organizationRepository.saveAndFlush(item);
 	}
 	
-	public boolean deleteById(Long id) throws Exception {
+	public boolean deleteById(Long id){
 		organizationRepository.deleteById(id);
 		return true;
 	}
@@ -53,11 +51,22 @@ public class OrganizationService extends BaseService{
 
 	public boolean deleteTeacher(Long teacherId) throws Exception {
 		Long orgId = getCurrentOrganization().getId();
+		List<Classes> lstTeacherClass = classRepository.findByOwnerId(teacherId);
+		List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
+		List<Lession> lstTeacherLession = lessionRepository.findByClassIds(classIds);
+		for (Lession ls : lstTeacherLession){
+			if (Objects.equals(ls.getUserId(), teacherId)) throw new Exception("Không thể xóa giáo viên đang dạy buổi học " + ls.getTitle());
+		}
+
+		for (Classes _cl : lstTeacherClass){
+			if (classIds.contains(_cl.getId())) throw new Exception("Không thể xóa giáo viên chủ nhiệm lớp " + _cl.getName());
+		}
+
 		userOrganizationRepository.deleteTeacherOrg(teacherId, orgId);
 		return true;
 	}
 
-	public List<UserDTO> getLstParentOfOrg() throws Exception {
+	public List<UserDTO> getLstParentOfOrg(){
 		List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
 		return jStudentRepository.findParentByClassIds(classIds);
 	}

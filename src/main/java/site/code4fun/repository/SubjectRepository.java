@@ -10,6 +10,5 @@ import site.code4fun.entity.Subject;
 public interface SubjectRepository extends JpaRepository<Subject, Long>{
 	
 	@Query(value = "Select s from Subject s where s.organizationId = :organizationId order by s.id DESC")
-	public List<Subject> findByOrganizationId(Long organizationId);
-
+	List<Subject> findByOrganizationId(Long organizationId);
 }

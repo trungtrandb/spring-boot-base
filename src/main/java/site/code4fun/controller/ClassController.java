@@ -46,7 +46,7 @@ public class ClassController {
 	@RequestMapping(path = "/get/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getById(@PathVariable Long id){
 		try {
-			return ResponseEntity.ok(new Response(200, "Success", classService.getById(id)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, classService.getById(id)));
 		}catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
@@ -81,6 +81,19 @@ public class ClassController {
 	public ResponseEntity<?> updatePoint(@RequestBody PointDTO point){
 		try {
 			return new ResponseEntity<>(new Response(200, ResponseMessage.UPDATE_SUCCESS, classService.updatePoint(point)), HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
+		}
+	}
+
+	@RequestMapping(value = "export-point", method = RequestMethod.GET)
+	public ResponseEntity<?> exportExcel(@RequestParam(required = false) Long classId,
+										 @RequestParam(required = false) Long subjectId,
+										 @RequestParam(required = false) Byte sem,
+										 @RequestParam(required = false) Byte numOfTest){
+		try {
+			return new ResponseEntity<>(new Response(200, ResponseMessage.QUERY_SUCCESS, classService.exportPointClass(classId, subjectId, sem, numOfTest)), HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);

@@ -54,9 +54,6 @@
           }
       }
     })
-    .when("/widgets", {
-      templateUrl : "/resources/app/views/widgets.html"
-    })
     .when("/class", {
       templateUrl : "/resources/app/views/class.html",
       controller : "ClassController"

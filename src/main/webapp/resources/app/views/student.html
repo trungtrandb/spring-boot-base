@@ -46,12 +46,12 @@
                     <td>{{ x.studentCode }}</td>
                     <td>{{ x.name }}</td>
                     <td>{{ x.phone }}</td>
-                    <td>{{ x.parentName }} <a href="#!chat?user={{ x.parentPhoneOrEmail }}"><i class="far fa-comment"></i></a> </td> <!-- text-decoration: none;  -->
+                    <td>{{ x.parentName }} <a href="#!chat?user={{ x.parentPhoneOrEmail }}"><i class="far fa-comment"></i> Liên hệ</a></td> <!-- text-decoration: none;  -->
                     <td>{{ x.className }}</td>
                     <td>{{ x.note }}</td>
                     <td>
-                      <a href="#!edit-student/{{ x.id }}" class="btn btn-sm btn-primary" ng-click=""><i class="fas fa-pencil-alt"></i></a>
-                      <button class="btn btn-sm btn-danger" ng-click="remove(x)"><i class="fas fa-trash"></i></button>
+                      <a href="#!edit-student/{{ x.id }}" class="btn btn-sm btn-primary" ng-click=""><i class="fas fa-pencil-alt"></i> Sửa</a>
+                      <button class="btn btn-sm btn-danger" ng-click="remove(x)"><i class="fas fa-trash"></i> Xóa</button>
                     </td>
                 </tbody>
               </table>

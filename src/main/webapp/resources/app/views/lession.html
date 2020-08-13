@@ -9,7 +9,7 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-            <li class="breadcrumb-item active">DataTables</li>
+            <li class="breadcrumb-item active">Thời khóa biểu</li>
           </ol>
         </div>
       </div>
@@ -23,7 +23,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddLession">Thêm buổi học</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddLession">Thêm thời khóa biểu</button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -50,10 +50,9 @@
                     <td>{{ x.endTime }}</td>
                     <td>{{ x.description }}</td>
                     <td>
-                      <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>
-                      <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>
+                      <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i> Sửa</button>
+                      <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i> Xóa</button>
                     </td>
-                </tbody>
                 </tbody>
               </table>
             </div>
