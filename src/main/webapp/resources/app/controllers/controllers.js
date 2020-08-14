@@ -38,41 +38,25 @@
     function OrganizationController($scope, $http, Restangular) {
         $scope.submitOrganization = submitOrganization;
         $scope.remove = remove;
-        $scope.edit = edit;
-        loadLstOrganization();
-
+        Restangular.one("/api/organization/get-by-user").get().then(function (response) { $scope.organization = response.data; });
         function submitOrganization() {
-            $http({
-                url: "/api/organization/insert",
-                method: "POST",
-                data: $scope.organization
-            })
-            .then(function(response) {
-                toastr.success(response.data.message);
-                loadLstOrganization();
-                $("#modalAddOrganization").modal("hide");
-                $scope.organization = {};
-            },function (response) {
-                toastr.error(response.data.message);
+            Restangular.all("/api/organization/insert").post($scope.organization)
+            .then(function (response) {
+                if(response.code == 200){
+                    toastr.success(response.message);
+                    setTimeout(function() {
+                        location.reload();
+                    },1000);
+                }else{
+                    toastr.error(response.message);                   
+                }
             });
-        }
-
-        function edit(organizationId) {
-            Restangular.one('/api/organization/get', organizationId).get().then(function (response) {
-                $scope.organization = response.data;
-                $("#modalAddOrganization").modal("show");
-            });
-        }
-
-        function loadLstOrganization() {
-            $http.get("/api/organization/get-by-user").then(function (response) {$scope.lstOrganization = response.data.data;});
         }
 
         function remove(id){
             Restangular.one('/api/organization/delete', id).get().then(function (response) {
                 if (response.code == 200) {
                     toastr.success(response.message);
-                    loadLstOrganization();
                 }else{
                     toastr.error(response.message);
                 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import site.code4fun.entity.*;
 import site.code4fun.entity.dto.UserDTO;
+import site.code4fun.util.StringUtils;
 
 @Service
 public class OrganizationService extends BaseService{
@@ -30,6 +31,7 @@ public class OrganizationService extends BaseService{
 	}
 	
 	public Organization create(Organization item) throws Exception {
+		if(StringUtils.isNull(item.getName())) throw new Exception("Tên trường không được bỏ trống");
 		if(null != item.getUser() && !item.getUser().getId().equals(getCurrentId()))
 			throw new Exception("Item not found!");
 		

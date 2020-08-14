@@ -2,9 +2,9 @@ package site.code4fun.constant;
 
 public class ResponseMessage {
 
-	public static final String ADD_SUCCESS = "Thêm mới thành công";
+	public static final String ADD_SUCCESS = "Thành công";
 	public static final String ADD_FAILED = "Thêm mới thất bại";
-	public static final String UPDATE_SUCCESS = "Cập nhật thành công";
+	public static final String UPDATE_SUCCESS = "Thành công";
 	public static final String UPDATE_FAILED = "Cập nhật thất bại";
 	public static final String DELETE_SUCCESS = "Xóa thành công";
 	public static final String DELETE_FAILED = "Xóa thất bại";

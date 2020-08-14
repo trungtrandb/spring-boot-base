@@ -1,6 +1,6 @@
 <!-- Content Header (Page header) -->
 <div class="content-wrapper">
-  <section class="content-header">
+  <!-- <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
@@ -13,91 +13,90 @@
           </ol>
         </div>
       </div>
-    </div><!-- /.container-fluid -->
-  </section>
+    </div>
+  </section> -->
 
   <!-- Main content -->
-  <section class="content">
+  <section class="content-header">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-header">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddOrganization">Thêm trường</button>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Tên trường</th>
-                    <th>Địa chỉ</th>
-                    <th>Số điện thoại</th>
-                    <th>Thao tác</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="x in lstOrganization">
-                    <td>{{ x.id }}</td>
-                    <td>{{ x.name }}</td>
-                    <td>{{ x.address }}</td>
-                    <td>{{ x.phone }}</td>
-                    <td>
-                      <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>
-                      <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <!-- /.card-body -->
+      <div class="card card-default">
+        <form ng-submit="submitOrganization()">
+          <div class="card-header bg-primary">
+            <h3 class="card-title">Thông tin trường</h3>
+<!-- 
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+              <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+            </div> -->
           </div>
-          <!-- /.card -->
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    </div>
-    <!-- /.container-fluid -->
-  </section>
-  <!-- /.content -->
-
-  <!-- The Modal -->
-  <div class="modal" id="modalAddOrganization">
-    <div class="modal-dialog">
-      <div class="modal-content">
-
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Thông tin trường</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-
-        <!-- Modal body -->
-        <div class="modal-body">
-          <form role="form" ng-submit="submitOrganization()">
-            <div class="form-group">
-              <label for="name">Tên trường</label>
-              <input type="text" class="form-control" id="name" ng-model="organization.name">
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="name">Tên <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="name" ng-model="organization.name">
+                </div>
+                <div class="form-group">
+                  <label for="address">Địa chỉ</label>
+                  <input type="text" class="form-control" id="address" ng-model="organization.address">
+                </div>
+                <div class="form-group">
+                  <label for="phone">Số điện thoại</label>
+                  <input type="text" class="form-control" id="phone" ng-model="organization.phone">
+                </div>
+                <div class="form-group">
+                  <label for="note">Ghi chú</label>
+                  <textarea class="form-control" id="note" ng-model="organization.note"></textarea> 
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="address">Địa chỉ</label>
-              <input type="text" class="form-control" id="address" ng-model="organization.address">
-            </div>
-            <div class="form-group">
-              <label for="phone">Số điện thoại</label>
-              <input type="text" class="form-control" id="phone" ng-model="organization.phone">
-            </div>
-            <div class="form-group">
-              <label for="note">Ghi chú</label>
-              <input type="text" class="form-control" id="note" ng-model="organization.note">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-          <!-- /.card -->
-        </div>
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary float-right mr-3">Submit</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+  <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<!-- The Modal -->
+<div class="modal" id="modalAddOrganization">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Thông tin trường</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form role="form" ng-submit="submitOrganization()">
+          <div class="form-group">
+            <label for="name">Tên trường</label>
+            <input type="text" class="form-control" id="name" ng-model="organization.name">
+          </div>
+          <div class="form-group">
+            <label for="address">Địa chỉ</label>
+            <input type="text" class="form-control" id="address" ng-model="organization.address">
+          </div>
+          <div class="form-group">
+            <label for="phone">Số điện thoại</label>
+            <input type="text" class="form-control" id="phone" ng-model="organization.phone">
+          </div>
+          <div class="form-group">
+            <label for="note">Ghi chú</label>
+            <input type="text" class="form-control" id="note" ng-model="organization.note">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <!-- /.card -->
+      </div>
+    </div>
+  </div>
+</div>
 </div>

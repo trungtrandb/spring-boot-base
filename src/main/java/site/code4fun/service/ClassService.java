@@ -1,9 +1,9 @@
 package site.code4fun.service;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,7 +23,7 @@ import site.code4fun.util.StringUtils;
 public class ClassService extends BaseService {
 
     public List<Classes> getByGroupId(Long id) {
-        return null != id ? classRepository.findByGroupId(Arrays.asList(id)) : getCurrentClasses();
+        return null != id ? classRepository.findByGroupId(Collections.singletonList(id)) : getCurrentClasses();
     }
 
     public Boolean authorizeClass(Long groupClassId) {
@@ -139,7 +139,7 @@ public class ClassService extends BaseService {
     public String exportPointClass(Long classId, Long subjectId, Byte sem, Byte numOfTest) throws IOException {
         SimpleDateFormat format = new SimpleDateFormat("MM_yyyy_");
         String path = "src/main/webapp/resources/excel/";
-        java.io.File file = new java.io.File(path);
+        File file = new File(path);
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Report");
         int rowNum = 0;

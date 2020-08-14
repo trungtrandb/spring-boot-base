@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import site.code4fun.constant.ResponseMessage;
@@ -36,6 +35,7 @@ public class OrganizationController {
 		try {
 			return ResponseEntity.ok(new Response(200, ResponseMessage.ADD_SUCCESS, organizationService.create(item)));
 		}catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
 		}
 	}
