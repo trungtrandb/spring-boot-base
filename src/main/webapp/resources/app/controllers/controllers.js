@@ -23,6 +23,7 @@
     /* ============================================ */
     function NavbarController($scope, ChatService, Restangular, $rootScope){
         $scope.markAllRead = markAllRead;
+        $scope.viewNotify = viewNotify;
         Restangular.one("/api/notify/count-notify").get().then(function (response) { $scope.numNotiUnRead = response.data.notRead; });
         Restangular.one("/api/notify/get-by-user").get().then(function (response) { $scope.lstNotify = response.data; });
         Restangular.one("/api/organization/get-by-user").get().then(function (response) { 
@@ -31,6 +32,21 @@
 
         function markAllRead() {
             Restangular.all("/api/notify/is-read").post().then(function (response) { location.reload(); });
+        }
+
+        function viewNotify(noti) {
+            var lstNotifId = [];
+            lstNotifId.push(noti.id);
+            Restangular.all("/api/notify/is-read").post(lstNotifId)
+            .then( function (response) { 
+                if(response.code == 200) {
+                   Restangular.one("/api/notify/count-notify").get().then(function (response) { $scope.numNotiUnRead = response.data.notRead; });
+                   Restangular.one("/api/notify/get-by-user").get().then(function (response) { $scope.lstNotify = response.data; });
+               }
+           });
+            $("#viewNotify .modal-title").text(noti.title);
+            $("#viewNotify .modal-body").text(noti.content);
+            $("#viewNotify").modal("show");
         }
     }
 
@@ -554,7 +570,7 @@
                 if(response.code == 200){
                     $.each(response.data, function (idx, item) {
                         let html = "";
-                        let time = $filter('date')(new Date(item.createdDate),'HH:MM dd-mm-yyyy');
+                        let time = $filter('date')(new Date(item.createdDate),'HH:mm dd-MM-yyyy');
                         let currentAvatar = $rootScope.currentUser.avatar;
                         let currentUserName = $rootScope.currentUser.userName;
 
@@ -602,7 +618,7 @@
         function sendMessage() {
             if ($scope.messageContent.length == 0) return;
             userName = $(".contacts a.active").data("target").replace("#", "");
-            var time = $filter('date')(Date.now(),'HH:MM dd-mm-yyyy');
+            var time = $filter('date')(Date.now(),'HH:mm dd-MM-yyyy');
             var html = '<div class="d-flex justify-content-start mb-4">';
             html += '<div class="img_cont_msg">';
             html += '<img src="'+ $rootScope.currentUser.avatar +'" class="rounded-circle user_img_msg"></div>';
@@ -615,7 +631,7 @@
         }
 
         ChatService.receive().then(null, null, function(message) {
-            var time = $filter('date')(new Date(message.createdDate),'HH:MM dd-mm-yyyy');
+            var time = $filter('date')(new Date(message.createdDate),'HH:mm dd-MM-yyyy');
             var html = '<div class="d-flex justify-content-end mb-4">';
             html += '<div class="msg_cotainer_send">';
             html += message.text;

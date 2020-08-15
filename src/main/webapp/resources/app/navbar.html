@@ -79,7 +79,7 @@
         <div class="dropdown-divider"></div>
 
         <div ng-repeat="x in lstNotify">
-          <a href="#" class="dropdown-item">
+          <a href="javascript:;" class="dropdown-item" ng-click="viewNotify(x)" ng-class="{ 'text-muted' : x.read}">
             <i class="fas fa-envelope mr-2"></i> {{ x.title.substring(0, 20) }}
             <span class="float-right text-muted text-sm">{{ x.createdDate | date:'dd/MM/yy HH:mm' }}</span>
           </a>
@@ -198,3 +198,22 @@
   </nav>
 </div>
 </aside>
+
+<!-- The Modal -->
+  <div class="modal fade" id="viewNotify">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title"></h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          
+        </div>
+      </div>
+    </div>
+  </div>

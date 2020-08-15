@@ -31,23 +31,22 @@ public class CheckinService extends BaseService{
 		if(!idsClass.contains(check.getClassId())) throw new Exception("Không tìm thấy lớp học!");
 		
 		Optional<Student> student = studentRepository.findById(check.getStudentId());
-		if(!student.isPresent() || student.get().getClassId() != check.getClassId()) throw new Exception("Không tìm thấy học sinh!");
+		if(!student.isPresent() || !student.get().getClassId().equals(check.getClassId())) throw new Exception("Không tìm thấy học sinh!");
 		
 		Optional<Lession> lession = lessionRepository.findById(check.getLessionId());
-		if(!lession.isPresent() || lession.get().getClassId() != check.getClassId()) throw new Exception("Không tìm thấy buổi học!");
+		if(!lession.isPresent() || !lession.get().getClassId().equals(check.getClassId())) throw new Exception("Không tìm thấy buổi học!");
 		
 		// Update nếu điểm danh lại
 		Optional<Checkin> checked = checkinRepository.checkExist(check.getStudentId(), check.getClassId(), check.getLessionId());
-		if(checked.isPresent()) check.setId(checked.get().getId());
+		checked.ifPresent(checkin -> check.setId(checkin.getId()));
 		
 		if (!check.isPresent()) { // Vắng mặt
 			List<UserDevice> lstDevice = jStudentRepository.findParentDeviceByStudentId(check.getStudentId());
 			if(lstDevice.size() > 0) {
 				String title = "Thông báo điểm danh";
-				StringBuilder notifyContent = new StringBuilder(student.get().getName() + "đã điểm danh vắng trong buổi học " + lession.get().getTitle() + "!");
 				Notify noti = Notify.builder()
 						.title(title)
-						.content(notifyContent.toString())
+						.content(student.get().getName() + " đã điểm danh vắng trong buổi học " + lession.get().getTitle() + "!")
 						.status(Status.PENDING)
 						.createdBy(getCurrentId())
 						.createdDate(new Timestamp(System.currentTimeMillis()))
@@ -65,7 +64,7 @@ public class CheckinService extends BaseService{
 							.userId(_item.getUserId())
 							.build();
 					lstNotifyDevice.add(notiDevice);
-				};
+				}
 				notifyDeviceRepository.saveAll(lstNotifyDevice);	
 			}
 		}
