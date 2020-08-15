@@ -19,6 +19,7 @@ public class NotifyDTOMapper implements RowMapper<NotifyDTO>{
 				.createdName(rs.getString("full_name"))
 				.status(rs.getString("status"))
 				.createdDate(rs.getTimestamp("created_date"))
+				.isRead(rs.getBoolean("is_read"))
 				.build();
 	}
 

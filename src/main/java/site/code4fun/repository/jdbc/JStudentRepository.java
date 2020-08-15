@@ -55,6 +55,35 @@ public class JStudentRepository {
         List<StudentDTO> lst = jdbcTemplate.query(sql.toString(), parameters, new StudentDTOMapper());
         return lst.size() > 0 ? lst.get(0) : null;
     }
+    
+    public ChooseStudentDTO getInfoStudent(Long studentId) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("studentId", studentId);
+        StringBuilder sql = new StringBuilder("SELECT s.*, u.email as user_email, u.full_name, u.id as user_id, c.name as class_name, g.name as group_class_name, o.name as school_name FROM tblStudent s ");
+        sql.append("JOIN tblClass c on s.class_id = c.id ");
+        sql.append("JOIN tblGroupClass g on c.group_class_id = g.id ");
+        sql.append("JOIN tblOrganization o on g.organization_id = o.id ");
+        sql.append("JOIN tblUser u ON u.id = s.parent_id ");
+        sql.append("WHERE s.id = :studentId");
+        List<ChooseStudentDTO> lst = jdbcTemplate.query(sql.toString(), parameters, (rs, rowNum) ->
+										        ChooseStudentDTO.builder()
+										        .address(rs.getString("address"))
+												.classId(rs.getLong("class_id"))
+												.parentId(rs.getLong("user_id"))
+												.phone(rs.getString("phone"))
+												.email(rs.getString("email"))
+												.dateOfBirth(rs.getTimestamp("date_of_birth"))
+												.id(rs.getLong("id"))
+												.studentCode(rs.getString("student_code"))
+												.name(rs.getString("name"))
+												.note(rs.getString("note"))
+												.avatar(rs.getString("avatar"))
+										        .className(rs.getString("class_name"))
+										        .groupClassName(rs.getString("group_class_name"))
+										        .schoolName(rs.getString("school_name"))
+										        .build());
+        return lst.size() > 0 ? lst.get(0) : null;
+    }
 
     public List<UserDTO> findParentByClassIds(List<Long> classIds) {
         if (classIds.size() == 0) return new ArrayList<>();

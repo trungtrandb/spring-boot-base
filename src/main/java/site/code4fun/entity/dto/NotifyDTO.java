@@ -15,6 +15,6 @@ import site.code4fun.entity.Notify;
 public class NotifyDTO extends Notify{
 	protected String deviceToken;
 	protected String createdName;
-	protected boolean isRead;
+	protected Boolean isRead;
 }
 

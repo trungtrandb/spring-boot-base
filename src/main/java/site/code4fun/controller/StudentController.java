@@ -73,7 +73,18 @@ public class StudentController {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
-	}
+	} 
+	
+	@RequestMapping(value = "/get-info-student", method = RequestMethod.GET)
+	public ResponseEntity<?> getInfoStudent(@RequestParam(required = false) Long id){
+		try {
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, studentService.getInfoStudent(id)));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	} 
+	
 
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> update(@Valid @RequestBody StudentDTO s){

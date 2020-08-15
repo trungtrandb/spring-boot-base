@@ -2,7 +2,13 @@ package site.code4fun.service;
 
 import java.sql.Timestamp;
 import java.text.Normalizer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -45,6 +51,10 @@ public class StudentService extends BaseService{
 	public Optional<Student> getStudentById(Long id){
 		return studentRepository.findById(id);
 	}
+	
+	public ChooseStudentDTO getInfoStudent(Long id) throws Exception {
+		return jStudentRepository.getInfoStudent(id);
+	}
 
 	public Student create(StudentDTO s) throws Exception {
 		if (StringUtils.isNull(s.getName())) throw new Exception("Tên học sinh không được bỏ trống!");
@@ -76,7 +86,7 @@ public class StudentService extends BaseService{
 					.email(s.getParentPhoneOrEmail())
 					.status(Status.PENDING).build();
 			u = userRepository.saveAndFlush(u);
-
+			
 			Map<String, String> mailMess = new HashMap<>();
 			mailMess.put("receiver", s.getParentPhoneOrEmail());
 			mailMess.put("subject", "Tạo tài khoản thành công");
@@ -135,8 +145,8 @@ public class StudentService extends BaseService{
 					.password(new BCryptPasswordEncoder().encode(passWord))
 					.role(Role.ROLE_USER.getVal())
 					.status(Status.PENDING).build();
-			u = userRepository.saveAndFlush(u);
-
+			u = userRepository.saveAndFlush(u); 
+			
 			Map<String, String> mailMess = new HashMap<>();
 			mailMess.put("receiver", s.getParentPhoneOrEmail());
 			mailMess.put("subject", "Tạo tài khoản thành công");
