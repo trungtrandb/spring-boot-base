@@ -137,7 +137,6 @@ public class ClassService extends BaseService {
     }
 
     public String exportPointClass(Long classId, Long subjectId, Byte sem, Byte numOfTest) throws IOException {
-        SimpleDateFormat format = new SimpleDateFormat("MM_yyyy_");
         String path = "src/main/webapp/resources/excel/";
         File file = new File(path);
         Workbook workbook = new XSSFWorkbook();

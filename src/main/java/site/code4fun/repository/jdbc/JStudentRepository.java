@@ -1,13 +1,10 @@
 package site.code4fun.repository.jdbc;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -138,7 +135,6 @@ public class JStudentRepository {
         sql.append("JOIN tblOrganization o on g.organization_id = o.id ");
         sql.append("JOIN tblUser u on u.id = s.parent_id ");
         sql.append("WHERE u.id = :userId ");
-        List<ChooseStudentDTO> lstRes = new ArrayList<>();
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("userId", parentId);
         return jdbcTemplate.query(sql.toString(), parameters, (rs, rowNum) ->

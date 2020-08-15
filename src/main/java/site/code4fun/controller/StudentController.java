@@ -1,6 +1,5 @@
 package site.code4fun.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,10 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 import site.code4fun.constant.ResponseMessage;
 import site.code4fun.entity.Response;
 import site.code4fun.entity.Student;
-import site.code4fun.entity.User;
 import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.service.StudentService;
 
@@ -40,10 +36,9 @@ public class StudentController {
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public ResponseEntity<?> getAll(@RequestParam(name = "class", required = false) Long classId,
-			@RequestParam(name = "organiztion", required = false) Long organizationId,
 			@RequestParam(name = "group", required = false) Long groupId){
 		try {
-			return ResponseEntity.ok(new Response(200, ResponseMessage.ADD_SUCCESS, studentService.getAll(classId, groupId, organizationId)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.ADD_SUCCESS, studentService.getAll(classId, groupId)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
@@ -90,6 +85,8 @@ public class StudentController {
 		}
 	} 
 	
+	}
+
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> update(@Valid @RequestBody StudentDTO s){
 		try {
