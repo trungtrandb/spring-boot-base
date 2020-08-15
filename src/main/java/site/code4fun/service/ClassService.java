@@ -17,6 +17,7 @@ import site.code4fun.entity.*;
 import site.code4fun.entity.dto.ClassDTO;
 import site.code4fun.entity.dto.PointDTO;
 import site.code4fun.entity.dto.StudentDTO;
+import site.code4fun.entity.dto.UserDTO;
 import site.code4fun.util.StringUtils;
 
 @Service
@@ -53,7 +54,7 @@ public class ClassService extends BaseService {
     }
 
     public List<PointDTO> getPoint(Long classId, Long subjectId, Byte sem, Byte numOfTest) {
-        List<StudentDTO> lstStudent = jStudentRepository.findStudentByClassId(Arrays.asList(classId));
+        List<StudentDTO> lstStudent = jStudentRepository.findStudentByClassId(Collections.singletonList(classId));
         List<Long> studentIds = lstStudent.stream().map(StudentDTO::getId).collect(Collectors.toList());
         Map<Long, PointDTO> mapPoint = jPointRepository.getPoint(StringUtils.stringFromList(studentIds), subjectId, sem, numOfTest);
 
@@ -307,5 +308,10 @@ public class ClassService extends BaseService {
         workbook.close();
         outFile.close();
         return "/resources/excel/" + file.getName();
+    }
+
+    public List<UserDTO> getListTeacher(Long classId){
+
+        return null;
     }
 }

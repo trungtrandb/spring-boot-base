@@ -18,11 +18,10 @@ public class JNotifyRepository {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public List<NotifyDTO> getNotifyOfDevicePending() { // Chỉ dùng cho queue schedule notify
-        StringBuilder sql = new StringBuilder("SELECT n.*, nd.device_token, null as full_name ");
-        sql.append("FROM tblNotify n ");
-        sql.append("JOIN tblNotifyDevice nd ON n.id = nd.notify_id ");
-        sql.append("WHERE nd.status IN ('PENDING') AND nd.is_read != 1");
-        return jdbcTemplate.query(sql.toString(), new NotifyDTOMapper());
+        String sql = "SELECT n.*, nd.device_token, null as full_name " + "FROM tblNotify n " +
+                "JOIN tblNotifyDevice nd ON n.id = nd.notify_id " +
+                "WHERE nd.status IN ('PENDING') AND nd.is_read != 1";
+        return jdbcTemplate.query(sql, new NotifyDTOMapper());
     }
 
     public int updateNoti(NotifyDevice notiDevice) {

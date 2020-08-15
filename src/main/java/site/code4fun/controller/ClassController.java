@@ -99,4 +99,14 @@ public class ClassController {
 			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
 		}
 	}
+
+	@RequestMapping(value = "get-list-teacher/{classId}", method = RequestMethod.POST)
+	public ResponseEntity<?> updatePoint(@PathVariable Long classId){
+		try {
+			return new ResponseEntity<>(new Response(200, ResponseMessage.QUERY_SUCCESS, classService.getListTeacher(classId)), HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
+		}
+	}
 }
