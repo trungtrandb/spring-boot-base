@@ -1,7 +1,5 @@
 package site.code4fun.entity;
 
-import javax.persistence.Column;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

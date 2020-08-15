@@ -170,7 +170,7 @@ public class StudentService extends BaseService{
 				.phone(s.getPhone())
 				.classId(s.getClassId())
 				.studentCode(normalizeCode)
-				.parentId(s.getParentId())
+				.parentId(u.getId())
 				.note(s.getNote()).build();
 		return studentRepository.saveAndFlush(student);
 	}
