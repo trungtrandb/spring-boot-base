@@ -27,18 +27,21 @@ public class JPointRepository {
 		parameters.addValue("numOfTest", numOfTest);
 		
 		HashMap<Long, PointDTO> mapRes = new HashMap<Long, PointDTO>();
-		jdbcTemplate.query(sql, parameters, rs -> {
-			PointDTO st = PointDTO.builder()
-					.id(rs.getLong("id"))
-					.studentId(rs.getLong("student_id"))
-					.subjectId(rs.getLong("subject_id"))
-					.sem(rs.getByte("sem"))
-					.numOfTest(rs.getByte("num_of_test"))
-					.pointMulti1(rs.getString("multiple1"))
-					.pointMulti2(rs.getString("multiple2"))
-					.pointMulti3(rs.getString("multiple3"))
-					.build();
-			mapRes.put(st.getStudentId(), st);
+		jdbcTemplate.query(sql, parameters, new RowCallbackHandler() {
+			@Override
+			public void processRow(ResultSet rs) throws SQLException {
+				PointDTO st = PointDTO.builder()
+						.id(rs.getLong("id"))
+						.studentId(rs.getLong("student_id"))
+						.subjectId(rs.getLong("subject_id"))
+						.sem(rs.getByte("sem"))
+						.numOfTest(rs.getByte("num_of_test"))
+						.pointMulti1(rs.getString("multiple1"))
+						.pointMulti2(rs.getString("multiple2"))
+						.pointMulti3(rs.getString("multiple3"))
+						.build();
+				mapRes.put(st.getStudentId(), st);
+			}
 		});
 		return mapRes;
 	}

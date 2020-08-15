@@ -2,7 +2,12 @@ package site.code4fun.service;
 
 import java.sql.Timestamp;
 import java.text.Normalizer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,13 +28,13 @@ import site.code4fun.util.StringUtils;
 @Service
 public class StudentService extends BaseService{
 
-	public List<StudentDTO> getAll(Long classId, Long groupId){
+	public List<StudentDTO> getAll(Long classId, Long groupId, Long organizationId){
 		List<Classes> lstClass = classService.getByGroupId(groupId);
 		Map<Long, String> mapClass = lstClass.stream().collect(Collectors.toMap(Classes::getId, Classes::getName));
-		List<Long> idsClass = new ArrayList<>(mapClass.keySet());
+		List<Long> idsClass = new ArrayList<Long>(mapClass.keySet());
 
 		if (null != classId && idsClass.contains(classId)) {
-			idsClass = Collections.singletonList(classId);
+			idsClass = Arrays.asList(classId);
 		}
 		return jStudentRepository.findStudentByClassId(idsClass);
 	}
@@ -42,7 +47,7 @@ public class StudentService extends BaseService{
 		
 	}
 	
-	public Optional<Student> getStudentById(Long id){
+	public Optional<Student> getStudentById(Long id) throws Exception {
 		return studentRepository.findById(id);
 	}
 	
@@ -80,15 +85,18 @@ public class StudentService extends BaseService{
 					.email(s.getParentPhoneOrEmail())
 					.status(Status.PENDING).build();
 			u = userRepository.saveAndFlush(u);
-
+			
+//			Thêm vào queue gửi mật khẩu cho tài khoản mới đăng ký
+			StringBuilder mailContent = new StringBuilder("Bạn đã được đăng ký tài khoản phụ huynh cho ");
+			mailContent.append(s.getName());
+			mailContent.append(". Vui lòng cài app và sử dụng tên tài khoản là địa chỉ email và mật khẩu: ");
+			mailContent.append(passWord);
+			mailContent.append(" để đăng nhập!");
+			
 			Map<String, String> mailMess = new HashMap<>();
 			mailMess.put("receiver", s.getParentPhoneOrEmail());
 			mailMess.put("subject", "Tạo tài khoản thành công");
-			String mailContent = "Bạn đã được đăng ký tài khoản phụ huynh cho " + s.getName() +
-					". Vui lòng cài app và sử dụng tên tài khoản là địa chỉ email và mật khẩu: " +
-					passWord +
-					" để đăng nhập!";
-			mailMess.put("content", mailContent);
+			mailMess.put("content", mailContent.toString());
 			String mesToQueue = new Gson().toJson(mailMess);
 			queueService.sendToQueue(Queue.QUEUE_MAIL, mesToQueue);
 		}
@@ -125,7 +133,7 @@ public class StudentService extends BaseService{
         
         List<Student> lst = studentRepository.findByStudentCode(normalizeCode);
         for(Student _st : lst) {
-        	if(idsClass.contains(_st.getClassId()) && !_st.getId().equals(s.getId())) throw new Exception("Mã học sinh phải là duy nhất!");
+        	if(idsClass.contains(_st.getClassId()) && _st.getId() != s.getId()) throw new Exception("Mã học sinh phải là duy nhất!");
         }		
 		
 		User u = userRepository.findByUserName(s.getParentPhoneOrEmail());
@@ -140,15 +148,18 @@ public class StudentService extends BaseService{
 					.role(Role.ROLE_USER.getVal())
 					.status(Status.PENDING).build();
 			u = userRepository.saveAndFlush(u);
-
+			
+//			Thêm vào queue gửi mật khẩu cho tài khoản mới đăng ký
+			StringBuilder mailContent = new StringBuilder("Bạn đã được đăng ký tài khoản phụ huynh cho ");
+			mailContent.append(s.getName());
+			mailContent.append(". Vui lòng cài app và sử dụng tên tài khoản là địa chỉ email và mật khẩu: ");
+			mailContent.append(passWord);
+			mailContent.append(" để đăng nhập!");
+			
 			Map<String, String> mailMess = new HashMap<>();
 			mailMess.put("receiver", s.getParentPhoneOrEmail());
 			mailMess.put("subject", "Tạo tài khoản thành công");
-			String mailContent = "Bạn đã được đăng ký tài khoản phụ huynh cho " + s.getName() +
-					". Vui lòng cài app và sử dụng tên tài khoản là địa chỉ email và mật khẩu: " +
-					passWord +
-					" để đăng nhập!";
-			mailMess.put("content", mailContent);
+			mailMess.put("content", mailContent.toString());
 			String mesToQueue = new Gson().toJson(mailMess);
 			queueService.sendToQueue(Queue.QUEUE_MAIL, mesToQueue);
 		}
