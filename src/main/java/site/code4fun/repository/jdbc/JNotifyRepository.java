@@ -43,7 +43,7 @@ public class JNotifyRepository {
 	}
 	
 	public List<NotifyDTO> getNotifyByUserId(Long Id,Integer start, Long offset){
-		StringBuilder sb = new StringBuilder("SELECT n.*, nd.user_id, u.full_name, null as device_token, n.title, n.content from tblNotify n ");
+		StringBuilder sb = new StringBuilder("SELECT n.*, nd.user_id, u.full_name, null as device_token, n.title, n.content, nd.is_read from tblNotify n ");
 		sb.append("JOIN tblNotifyDevice nd ON n.id = nd.notify_id ");
 		sb.append("JOIN tblUser u ON u.id = n.created_by ");
 		sb.append("WHERE user_id = :userId ");

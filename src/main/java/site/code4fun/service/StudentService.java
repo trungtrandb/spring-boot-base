@@ -50,6 +50,10 @@ public class StudentService extends BaseService{
 	public Optional<Student> getStudentById(Long id) throws Exception {
 		return studentRepository.findById(id);
 	}
+	
+	public ChooseStudentDTO getInfoStudent(Long id) throws Exception {
+		return jStudentRepository.getInfoStudent(id);
+	}
 
 	public Student create(StudentDTO s) throws Exception {
 		if (StringUtils.isNull(s.getName())) throw new Exception("Tên học sinh không được bỏ trống!");
