@@ -13,12 +13,11 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
-import site.code4fun.constant.Status;
 import site.code4fun.entity.*;
 import site.code4fun.entity.dto.ClassDTO;
 import site.code4fun.entity.dto.PointDTO;
 import site.code4fun.entity.dto.StudentDTO;
-import site.code4fun.entity.dto.UserDTO;
+import site.code4fun.repository.jdbc.JLessionRepository;
 import site.code4fun.util.StringUtils;
 
 @Service
@@ -39,7 +38,7 @@ public class ClassService extends BaseService {
         Optional<GroupClass> group = groupClassRepository.findById(c.getGroupClassId());
         Optional<User> user = userRepository.findById(c.getOwnerId());
 
-        if (group.isPresent()){
+        if (group.isPresent() && user.isPresent()){
             Classes clazz = Classes.builder()
                     .id(c.getId())
                     .name(c.getName())
@@ -51,7 +50,7 @@ public class ClassService extends BaseService {
                     .build();
             return classRepository.saveAndFlush(clazz);
         }
-        throw new Exception("Khối lớp không tồn tại");
+        throw new Exception("Khối lớp hoặc giáo viên không tồn tại");
     }
 
     public void delete(Long id) throws Exception {
@@ -313,8 +312,15 @@ public class ClassService extends BaseService {
         return "/resources/excel/" + file.getName();
     }
 
-    public List<UserDTO> getListTeacher(Long classId){
-
-        return null;
+    public List<User> getListTeacher(Long classId){
+        Optional<Classes> clazz = classRepository.findById(classId);
+        List<User> lstRes = new ArrayList<>();
+        if (clazz.isPresent()) {
+            User u = clazz.get().getOwner();
+            u.setFullName(u.getFullName() + " - GV chủ nhiệm");
+            lstRes.add(u);
+        }
+        lstRes.addAll(jLessionRepository.findUserByClassId(classId));
+        return lstRes;
     }
 }

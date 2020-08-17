@@ -40,20 +40,17 @@ public class JCheckinRepository {
 		if(createdDate != null) sql.append("AND DATE_FORMAT(c.created_date, '%Y-%m-%d') = DATE_FORMAT(:createdDate, '%Y-%m-%d') ");
 		sql.append("GROUP BY c.class_id, DATE_FORMAT(c.created_date, '%Y-%m-%d'), c.lession_id");
 		List<CheckinDTO> lstRes = new ArrayList<>();
-		jdbcTemplate.query(sql.toString(), parameters, new RowCallbackHandler() {
-			@Override
-			public void processRow(ResultSet rs) throws SQLException {
-				CheckinDTO dto = CheckinDTO.builder()
-						.classId(rs.getLong("class_id"))
-						.lessionId(rs.getLong("lession_id"))
-						.lessionName(rs.getString("title"))
-						.createdDate(rs.getTimestamp("created_date"))
-						.totalAbsent(rs.getInt("total_absent"))
-						.totalPresent(rs.getInt("total_present"))
-						.totalCheckin(rs.getInt("total_checkin"))
-						.build();
-				lstRes.add(dto);
-			}
+		jdbcTemplate.query(sql.toString(), parameters, rs -> {
+			CheckinDTO dto = CheckinDTO.builder()
+					.classId(rs.getLong("class_id"))
+					.lessionId(rs.getLong("lession_id"))
+					.lessionName(rs.getString("title"))
+					.createdDate(rs.getTimestamp("created_date"))
+					.totalAbsent(rs.getInt("total_absent"))
+					.totalPresent(rs.getInt("total_present"))
+					.totalCheckin(rs.getInt("total_checkin"))
+					.build();
+			lstRes.add(dto);
 		});
 		return lstRes;
 	}

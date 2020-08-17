@@ -99,7 +99,7 @@ public class ClassController {
 		}
 	}
 
-	@RequestMapping(value = "get-list-teacher/{classId}", method = RequestMethod.POST)
+	@RequestMapping(value = "get-list-teacher/{classId}", method = RequestMethod.GET)
 	public ResponseEntity<?> updatePoint(@PathVariable Long classId){
 		try {
 			return new ResponseEntity<>(new Response(200, ResponseMessage.QUERY_SUCCESS, classService.getListTeacher(classId)), HttpStatus.OK);
