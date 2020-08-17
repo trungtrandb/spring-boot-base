@@ -28,15 +28,16 @@ import site.code4fun.util.StringUtils;
 @Service
 public class StudentService extends BaseService{
 
-	public List<StudentDTO> getAll(Long classId, Long groupId){
-		List<Classes> lstClass = classService.getByGroupId(groupId);
+	public List<StudentDTO> getAll(Long classId, String name){
+		List<Classes> lstClass = getCurrentClasses();
 		Map<Long, String> mapClass = lstClass.stream().collect(Collectors.toMap(Classes::getId, Classes::getName));
 		List<Long> idsClass = new ArrayList<>(mapClass.keySet());
 
-		if (null != classId && idsClass.contains(classId)) {
+		if (null != classId) {
+			if (!idsClass.contains(classId)) return new ArrayList<>();
 			idsClass = Collections.singletonList(classId);
 		}
-		return jStudentRepository.findStudentByClassId(idsClass);
+		return jStudentRepository.findStudentByClassId(idsClass, name);
 	}
 
 	public StudentDTO getById(Long id) throws Exception {
@@ -51,7 +52,7 @@ public class StudentService extends BaseService{
 		return studentRepository.findById(id);
 	}
 	
-	public ChooseStudentDTO getInfoStudent(Long id) throws Exception {
+	public ChooseStudentDTO getInfoStudent(Long id){
 		return jStudentRepository.getInfoStudent(id);
 	}
 

@@ -36,9 +36,6 @@ public class Point {
 	
 	protected Byte multiple;
 	
-	@Column(name = "num_of_test")
-	protected Byte numOfTest;
-	
 	protected Byte sem;
 	
 	@Column(name = "created_by")

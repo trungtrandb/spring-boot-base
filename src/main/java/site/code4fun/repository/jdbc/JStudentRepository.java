@@ -14,13 +14,14 @@ import site.code4fun.entity.dto.ChooseStudentDTO;
 import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.entity.dto.UserDTO;
 import site.code4fun.mapper.StudentDTOMapper;
+import site.code4fun.util.StringUtils;
 
 @Repository
 public class JStudentRepository {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public List<StudentDTO> findStudentByClassId(List<Long> classIds) {
+    public List<StudentDTO> findStudentByClassId(List<Long> classIds, String name) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("classIds", classIds);
         StringBuilder sql = new StringBuilder(
@@ -28,6 +29,10 @@ public class JStudentRepository {
         sql.append("JOIN tblClass c on s.class_id = c.id ");
         sql.append("JOIN tblUser u on u.id = s.parent_id ");
         sql.append("WHERE s.class_id IN (:classIds) ");
+        if (!StringUtils.isNull(name)){
+            sql.append("AND (s.name LIKE :name OR s.student_code LIKE :name) ");
+            parameters.addValue("name", "%" + name + "%");
+        }
         List<StudentDTO> lstRes = new ArrayList<>();
         if (classIds.size() == 0) return lstRes;
 		return jdbcTemplate.query(sql.toString(), parameters, (rs, rowNum) ->

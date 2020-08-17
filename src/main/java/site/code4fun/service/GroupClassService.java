@@ -17,7 +17,6 @@ public class GroupClassService extends BaseService{
 		GroupClass gc = GroupClass.builder()
 				.id(item.getId())
 				.name(item.getName())
-				.schoolYear(item.getSchoolYear())
 				.organization(org)
 				.build();
 		return groupClassRepository.saveAndFlush(gc);

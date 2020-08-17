@@ -27,9 +27,6 @@ public class GroupClass {
 	protected Long id;
 	protected String name;
 	
-	@Column(name = "school_year")
-	protected Integer schoolYear;
-	
 	@ManyToOne
 	@JoinColumn(name = "organization_id")
 	private Organization organization;

@@ -16,6 +16,6 @@ public interface PointRepository extends JpaRepository<Point, Long>{
 
     @Modifying
     @Transactional
-    @Query(value = "Call deleteOldPoint(:studentId, :subjectId, :sem, :numOfTest)", nativeQuery = true)
-    void deleteOldPoint(Long studentId, Long subjectId, Byte sem, Byte numOfTest);
+    @Query(value = "Call deleteOldPoint(:studentId, :subjectId, :sem)", nativeQuery = true)
+    void deleteOldPoint(Long studentId, Long subjectId, Byte sem);
 }

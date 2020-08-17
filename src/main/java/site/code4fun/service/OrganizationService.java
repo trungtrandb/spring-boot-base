@@ -1,13 +1,12 @@
 package site.code4fun.service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import site.code4fun.entity.*;
+import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.entity.dto.UserDTO;
 import site.code4fun.util.StringUtils;
 
@@ -36,8 +35,8 @@ public class OrganizationService extends BaseService{
 			throw new Exception("Item not found!");
 		
 		Optional<User> user = userRepository.findById(getCurrentId());
-		item.setUser(user.get());
-		item.setCreatedBy(user.get().getId());
+//		user.ifPresent(item::setUser);
+		user.ifPresent(value -> item.setCreatedBy(value.getId()));
 		return organizationRepository.saveAndFlush(item);
 	}
 	
@@ -47,12 +46,11 @@ public class OrganizationService extends BaseService{
 	}
 
 	public List<User> getLstTeacherOfOrg() {
-		Long id = getCurrentOrganization().getId();
-		return jUserOrganizationRepository.getTeachersByOrgId(id);
+		Organization org = getCurrentOrganization();
+		return null != org ? jUserOrganizationRepository.getTeachersByOrgId(org.getId()) : new ArrayList<>();
 	}
 
 	public boolean deleteTeacher(Long teacherId) throws Exception {
-		Long orgId = getCurrentOrganization().getId();
 		List<Classes> lstTeacherClass = classRepository.findByOwnerId(teacherId);
 		List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
 		List<Lession> lstTeacherLession = lessionRepository.findByClassIds(classIds);
@@ -64,12 +62,35 @@ public class OrganizationService extends BaseService{
 			if (classIds.contains(_cl.getId())) throw new Exception("Không thể xóa giáo viên chủ nhiệm lớp " + _cl.getName());
 		}
 
-		userOrganizationRepository.deleteTeacherOrg(teacherId, orgId);
-		return true;
+		Organization org = getCurrentOrganization();
+		if(null != org){
+			userOrganizationRepository.deleteTeacherOrg(teacherId, org.getId());
+			return true;
+		}
+		return false;
 	}
 
 	public List<UserDTO> getLstParentOfOrg(){
 		List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
 		return jStudentRepository.findParentByClassIds(classIds);
+	}
+
+    public Object getReportOverview() {
+    	Map<String, Integer> mapRes = new HashMap<>();
+    	List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
+		mapRes.put("totalClass", classIds.size());
+
+    	List<StudentDTO> lstStudent = jStudentRepository.findStudentByClassId(classIds, null);
+		mapRes.put("totalStudent", lstStudent.size());
+
+		Organization org = getCurrentOrganization();
+		List<User> lstTeacher = org != null ? jUserOrganizationRepository.getTeachersByOrgId(org.getId()) : new ArrayList<>();
+		mapRes.put("totalTeacher", lstTeacher.size());
+
+		List<UserDTO> lstParent = jStudentRepository.findParentByClassIds(classIds);
+		List<UserDTO> lstParentActive = lstParent.stream().filter(userDTO -> "ACTIVE".equalsIgnoreCase(userDTO.getStatus())).collect(Collectors.toList());
+		mapRes.put("totalParentActive", lstParentActive.size());
+
+    	return mapRes;
 	}
 }

@@ -50,7 +50,6 @@
               <table id="tblCheckin" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>ID lớp</th>
                     <th>Tên lớp</th>
                     <th>Tên môn học</th>
@@ -63,7 +62,6 @@
                 </thead>
                 <tbody>
                   <tr ng-repeat="x in lstCheckinDTO" ng-click="view(x)" style="cursor: pointer;">
-                    <td>{{ x.id }}</td>
                     <td>{{ x.classId }}</td>
                     <td>{{ x.className }}</td>
                     <td>{{ x.lessionName }}</td>

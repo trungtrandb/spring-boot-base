@@ -13,6 +13,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
+import site.code4fun.constant.Status;
 import site.code4fun.entity.*;
 import site.code4fun.entity.dto.ClassDTO;
 import site.code4fun.entity.dto.PointDTO;
@@ -38,13 +39,19 @@ public class ClassService extends BaseService {
         Optional<GroupClass> group = groupClassRepository.findById(c.getGroupClassId());
         Optional<User> user = userRepository.findById(c.getOwnerId());
 
-        Classes clazz = Classes.builder()
-                .name(c.getName())
-                .note(c.getNote())
-                .groupClass(group.get())
-                .owner(user.get())
-                .build();
-        return classRepository.saveAndFlush(clazz);
+        if (group.isPresent()){
+            Classes clazz = Classes.builder()
+                    .id(c.getId())
+                    .name(c.getName())
+                    .note(c.getNote())
+                    .groupClass(group.get())
+                    .schoolYear(c.getSchoolYear())
+                    .status(c.getStatus())
+                    .owner(user.get())
+                    .build();
+            return classRepository.saveAndFlush(clazz);
+        }
+        throw new Exception("Khối lớp không tồn tại");
     }
 
     public void delete(Long id) throws Exception {
@@ -53,10 +60,10 @@ public class ClassService extends BaseService {
         classRepository.deleteById(id);
     }
 
-    public List<PointDTO> getPoint(Long classId, Long subjectId, Byte sem, Byte numOfTest) {
-        List<StudentDTO> lstStudent = jStudentRepository.findStudentByClassId(Collections.singletonList(classId));
+    public List<PointDTO> getPoint(Long classId, Long subjectId, Byte sem) {
+        List<StudentDTO> lstStudent = jStudentRepository.findStudentByClassId(Collections.singletonList(classId), null);
         List<Long> studentIds = lstStudent.stream().map(StudentDTO::getId).collect(Collectors.toList());
-        Map<Long, PointDTO> mapPoint = jPointRepository.getPoint(StringUtils.stringFromList(studentIds), subjectId, sem, numOfTest);
+        Map<Long, PointDTO> mapPoint = jPointRepository.getPoint(StringUtils.stringFromList(studentIds), subjectId, sem);
 
         return lstStudent.stream().map(_st -> {
             PointDTO dto;
@@ -66,7 +73,6 @@ public class ClassService extends BaseService {
                 dto = new PointDTO();
                 dto.setSubjectId(subjectId);
                 dto.setSem(sem);
-                dto.setNumOfTest(numOfTest);
             }
             dto.setStudentId(_st.getId());
             dto.setStudentName(_st.getName());
@@ -85,7 +91,7 @@ public class ClassService extends BaseService {
         String[] lstPointMulti3 = multi3.split(" ");
         Long currentId = getCurrentId();
 
-        pointRepository.deleteOldPoint(point.getStudentId(), point.getSubjectId(), point.getSem(), point.getNumOfTest());
+        pointRepository.deleteOldPoint(point.getStudentId(), point.getSubjectId(), point.getSem());
         List<Point> lstPoint = new ArrayList<>();
         for (String _item : lstPointMulti1) {
             if (StringUtils.isNull(_item)) continue;
@@ -96,7 +102,6 @@ public class ClassService extends BaseService {
             newPoint.setPoint(StringUtils.round1(_item));
             newPoint.setCreatedBy(currentId);
             newPoint.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-            newPoint.setNumOfTest(point.getNumOfTest());
             newPoint.setSem(point.getSem());
             lstPoint.add(newPoint);
         }
@@ -110,7 +115,6 @@ public class ClassService extends BaseService {
             newPoint.setPoint(StringUtils.round1(_item));
             newPoint.setCreatedBy(currentId);
             newPoint.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-            newPoint.setNumOfTest(point.getNumOfTest());
             newPoint.setSem(point.getSem());
             lstPoint.add(newPoint);
         }
@@ -124,7 +128,6 @@ public class ClassService extends BaseService {
             newPoint.setPoint(StringUtils.round1(_item));
             newPoint.setCreatedBy(currentId);
             newPoint.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-            newPoint.setNumOfTest(point.getNumOfTest());
             newPoint.setSem(point.getSem());
             lstPoint.add(newPoint);
         }
@@ -253,7 +256,7 @@ public class ClassService extends BaseService {
         styleCell.setBorderBottom(BorderStyle.THIN);
         styleCell.setBorderLeft(BorderStyle.THIN);
 
-        List<PointDTO> lstPoint = getPoint(classId, subjectId, sem, numOfTest);
+        List<PointDTO> lstPoint = getPoint(classId, subjectId, sem);
         int index = 1;
         for (PointDTO _item : lstPoint) {
             row = sheet.createRow(++rowNum);

@@ -35,10 +35,10 @@ public class StudentController {
 	StudentService studentService;
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
-	public ResponseEntity<?> getAll(@RequestParam(name = "class", required = false) Long classId,
-			@RequestParam(name = "group", required = false) Long groupId){
+	public ResponseEntity<?> getAll(@RequestParam(name = "classId", required = false) Long classId,
+									@RequestParam(name = "name", required = false) String name){
 		try {
-			return ResponseEntity.ok(new Response(200, ResponseMessage.ADD_SUCCESS, studentService.getAll(classId, groupId)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.ADD_SUCCESS, studentService.getAll(classId, name)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));

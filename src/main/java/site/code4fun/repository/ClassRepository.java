@@ -9,7 +9,7 @@ import site.code4fun.entity.Classes;
 
 public interface ClassRepository extends JpaRepository<Classes, Long>{
 	
-	@Query("Select new Classes(c.id, c.name || ' - ' || c.groupClass.name, c.note, c.groupClass, c.owner) from Classes c where c.groupClass.id in :ids")
+	@Query("Select new Classes(c.id, c.name || ' - ' || c.groupClass.name, c.note, c.groupClass, c.owner, c.status, c.schoolYear) from Classes c where c.groupClass.id in :ids")
 	List<Classes> findByGroupId(List<Long> ids);
 
 	@Query("SELECT c from Classes c where c.owner.id = :id")

@@ -66,6 +66,8 @@
                 }else{
                     toastr.error(response.message);                   
                 }
+            },function (argument) {
+               toastr.error(response.message);
             });
         }
 
@@ -76,6 +78,8 @@
                 }else{
                     toastr.error(response.message);
                 }
+            },function (argument) {
+               toastr.error(response.message);
             });
         }
     }
@@ -86,9 +90,6 @@
         $scope.submitAddGroup = submitAddGroupClass;
         $scope.remove = remove;
         $scope.edit = edit;
-        flatpickr(".datetimepicker",{
-            dateFormat: "Y",
-        });
         loadLstGroup();
 
         function loadLstGroup() {
@@ -142,6 +143,9 @@
         $scope.remove = remove;
         $scope.class = {};
         $scope.edit = edit;
+        flatpickr(".datetimepicker",{
+            dateFormat: "Y",
+        });
         loadLstClass();
         
         Restangular.one("/api/group-class/get-all").get().then(function (response) { $scope.lstGroup = response.data; });
@@ -204,12 +208,14 @@
         bsCustomFileInput.init();
         $scope.uploadFile = uploadFile;
         $scope.student = {};
+        $scope.filter = $location.search();
+        $scope.loadLstStudent = loadLstStudent;
 
         loadLstStudent();
         Restangular.one("/api/class/get-by-group").get().then(function (response) {$scope.lstClass = response.data;});
 
         function loadLstStudent() {
-            Restangular.one("/api/student/getAll").get().then(function (response) {$scope.lstStudent = response.data;});
+            Restangular.one("/api/student/getAll").get($scope.filter).then(function (response) {$scope.lstStudent = response.data;});
         }
 
 
@@ -546,7 +552,7 @@
 
     /* ============================================ */
     function DashboardController($scope, $rootScope, Restangular, ChatService) {
-
+        Restangular.one('/api/organization/get-report-overview').get().then(function (response) { $scope.overview = response.data; });
     }
 
     /* ============================================ */

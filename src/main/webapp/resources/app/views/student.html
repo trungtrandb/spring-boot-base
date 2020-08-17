@@ -27,6 +27,19 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
+              <div class="form-row mb-2">
+                <div class="col-md-2">
+                  <label for="class">Lớp: </label>
+                  <select class="form-control" ng-model="filter.classId" ng-change="loadLstStudent()">
+                    <option value="">-- Tất cả --</option>
+                    <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label for="class">Tên hoặc mã học sinh: </label>
+                  <input class="form-control" type="type" ng-model="filter.name" ng-change="loadLstStudent()"/>
+                </div>
+              </div>
               <table id="example1" class="table table-bordered table-striped text-center">
                 <thead>
                   <tr>

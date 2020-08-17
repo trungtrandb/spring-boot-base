@@ -58,6 +58,16 @@ public class OrganizationController {
 			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
 		}
 	}
+
+	@RequestMapping(path = "/get-report-overview", method = RequestMethod.GET)
+	public ResponseEntity<?> getReportOverview(){
+		try {
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, organizationService.getReportOverview()));
+		}catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
+		}
+	}
 	
 	@RequestMapping(path = "/delete/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> insert(@PathVariable Long id){
