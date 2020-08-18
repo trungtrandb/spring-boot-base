@@ -185,14 +185,6 @@ public class ClassService extends BaseService {
         sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 6));
         row = sheet.createRow(rowNum);
         cell = row.createCell(0);
-        cell.setCellValue("Lần thi:");
-        cell = row.createCell(2);
-        cell.setCellValue(numOfTest);
-
-        sheet.addMergedRegion(new CellRangeAddress(++rowNum, rowNum, 0, 1));
-        sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 6));
-        row = sheet.createRow(rowNum);
-        cell = row.createCell(0);
         cell.setCellValue("Kỳ học:");
         cell = row.createCell(sem);
         cell.setCellValue(numOfTest);

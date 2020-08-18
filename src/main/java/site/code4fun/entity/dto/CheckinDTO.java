@@ -1,22 +1,23 @@
 package site.code4fun.entity.dto;
 
-import java.sql.Timestamp;
+import lombok.*;
+import site.code4fun.entity.Checkin;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
+
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
-public class CheckinDTO {
-	private Long classId;
-	private String className;
-	
-	
-	private Long lessionId;
-	private String lessionName;
-	private Timestamp createdDate;
-	private String createdName;
-	private int totalCheckin;
-	private int totalPresent;
-	private int totalAbsent;
+@Setter
+@Getter
+@SuperBuilder
+public class CheckinDTO extends Checkin {
+    protected String studentCode;
+    protected String studentName;
+    protected String className;
+    protected String lessionName;
+    protected String createdName;
+    protected int totalCheckin;
+    protected int totalPresent;
+    protected int totalAbsent;
 }

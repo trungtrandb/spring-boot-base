@@ -341,7 +341,7 @@
         Restangular.one("/api/subject/getAll").get().then(function (response) { $scope.lstSubject = response.data; });  
 
         function loadLstLession() {
-            $http.get("/api/lession/getAll").then(function (response) {$scope.lstLession = response.data.data;});
+            Restangular.one("/api/lession/getAll").get().then(function (response) { $scope.lstLession = response.data; });  
         }
 
 
@@ -409,15 +409,15 @@
         Restangular.one('/api/lession/getAll').get().then(function (response) { $scope.lstLession = response.data; });
 
         function selectClass() {
-            Restangular.one("/api/student/getAll?class=" +$scope.checkin.classId).get().then(function (response) { $scope.lstStudent = response.data; });
+            Restangular.one("/api/student/getAll?classId=" +$scope.checkin.classId).get().then(function (response) { $scope.lstStudent = response.data; });
             Restangular.one('/api/lession/get-by-class?id='+$scope.checkin.classId).get().then(function (response) { $scope.lstLession = response.data; });
         }
 
         function view(checkinItem) {
             $location.path("/view-checkin").search({
                 'classId': checkinItem.classId, 
-                'date': $filter('date')(new Date(checkinItem.createdDate),'yyyy-MM-dd'),
-                'subjectId' :checkinItem.subjectId
+                'createdDate': $filter('date')(new Date(checkinItem.createdDate),'yyyy-MM-dd'),
+                'lessionId': checkinItem.lessionId
             });
         }
 
@@ -433,7 +433,7 @@
 
         function submitCheckin(studentId, status) {  
             $scope.checkin.studentId = studentId;
-            $scope.checkin.status = status;  
+            $scope.checkin.present = status;  
             Restangular.all('/api/checkin/insert').post($scope.checkin).then(function (response) {
                 if(response.code == 200){
                     toastr.success(response.message);
@@ -448,9 +448,8 @@
 
     /* ============================================ */
     function ViewCheckinController($scope,$location, Restangular) {
-        var paramSeach = $location.search();
-        Restangular.all("/api/checkin/get").getList($location.search()).then(function(response) {
-            console.log(response);            
+        Restangular.all("/api/checkin/get").post($location.search()).then(function(response) {
+            $scope.lstCheckin = response.data;           
         })   
     }
 

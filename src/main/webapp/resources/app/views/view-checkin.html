@@ -4,12 +4,13 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Checkin</h1>
+          <h1>Chi tiết điểm danh</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">DataTables</li>
+            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="#!checkin">Lịch sử điểm danh</a></li>
+            <li class="breadcrumb-item active">Chi tiết điểm danh</li>
           </ol>
         </div>
       </div>
@@ -23,35 +24,34 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <a href="javascript:window.history.back()" class="btn btn-default">Quay lại</a>
+              <a href="javascript:window.history.back()" class="btn btn-secondary">Quay lại</a>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
+              <div class="row">
+                <div class="col" ng-show="lstCheckin">
+                  <p>Lớp: <span class="text-bold"> {{ lstCheckin[0].className }}</span></p>
+                  <p>Môn học: <span class="text-bold">{{ lstCheckin[0].lessionName }}</span></p>
+                  <p>Ngày điểm danh: <span class="text-bold">{{ lstCheckin[0].createdDate | date:'dd/MM/yyyy' }}</span></p>
+                </div>
+              </div>
               <table id="tblCheckin" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Class Id</th>
-                    <th>Class Name</th>
-                    <th>Subject Name</th>
-                    <th>Date</th>
-                    <th>Total Student</th>
-                    <th>Total Present</th>
-                    <th>Total Absent</th>
-                    <th>% Present</th>
+                    <th>Mã học sinh</th>
+                    <th>Tên học sinh</th>
+                    <th>Điểm danh</th>
+                    <th>Người tạo</th>
+                    <th>Ngày tạo</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="x in lstCheckinDTO">
-                    <td>{{ x.id }}</td>
-                    <td>{{ x.classId }}</td>
-                    <td>{{ x.className }}</td>
-                    <td>{{ x.subjectName }}</td>
+                  <tr ng-repeat="x in lstCheckin">
+                    <td>{{ x.studentCode }}</td>
+                    <td>{{ x.studentName }}</td>
+                    <td>{{ x.present ? "Có mặt" : "Vắng mặt" }}</td>
+                    <td>{{ x.createdName }}</td>
                     <td>{{ x.createdDate | date:'dd/MM/yyyy' }}</td>
-                    <td>{{ x.totalCheckin }}</td>
-                    <td>{{ x.totalPresent }}</td>
-                    <td>{{ x.totalAbsent }}</td>
-                    <td>{{ x.totalPresent * 100 / x.totalCheckin }}</td>
                 </tbody>
               </table>
             </div>

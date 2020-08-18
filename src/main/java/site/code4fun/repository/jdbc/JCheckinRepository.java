@@ -1,13 +1,11 @@
 package site.code4fun.repository.jdbc;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -39,9 +37,8 @@ public class JCheckinRepository {
 		if(lessionId != null) sql.append("AND c.lession_id = :lessionId ");
 		if(createdDate != null) sql.append("AND DATE_FORMAT(c.created_date, '%Y-%m-%d') = DATE_FORMAT(:createdDate, '%Y-%m-%d') ");
 		sql.append("GROUP BY c.class_id, DATE_FORMAT(c.created_date, '%Y-%m-%d'), c.lession_id");
-		List<CheckinDTO> lstRes = new ArrayList<>();
-		jdbcTemplate.query(sql.toString(), parameters, rs -> {
-			CheckinDTO dto = CheckinDTO.builder()
+		return jdbcTemplate.query(sql.toString(), parameters, (rs, numRow) ->
+			CheckinDTO.builder()
 					.classId(rs.getLong("class_id"))
 					.lessionId(rs.getLong("lession_id"))
 					.lessionName(rs.getString("title"))
@@ -49,9 +46,30 @@ public class JCheckinRepository {
 					.totalAbsent(rs.getInt("total_absent"))
 					.totalPresent(rs.getInt("total_present"))
 					.totalCheckin(rs.getInt("total_checkin"))
-					.build();
-			lstRes.add(dto);
-		});
-		return lstRes;
+					.build()
+		);
 	}
+
+	public List<CheckinDTO> getDetailCheckin(Long classId, Long lessionId, Date createdDate){
+		String sql = "CALL getCheckin(:classId, :lessionId, :createdDate)";
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("classId", classId);
+		parameters.addValue("lessionId", lessionId);
+		parameters.addValue("createdDate", createdDate);
+		return jdbcTemplate.query(sql, parameters, (rs, numRow) ->
+				CheckinDTO.builder()
+						.classId(rs.getLong("class_id"))
+						.lessionId(rs.getLong("lession_id"))
+						.lessionName(rs.getString("title"))
+						.present(rs.getBoolean("present"))
+						.createdDate(rs.getTimestamp("created_date"))
+						.studentCode(rs.getString("student_code"))
+						.studentName(rs.getString("name"))
+						.className(rs.getString("class_name"))
+						.createdName(rs.getString("full_name"))
+						.build()
+		);
+	}
+
+
 }

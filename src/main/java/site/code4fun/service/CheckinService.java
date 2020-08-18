@@ -95,4 +95,8 @@ public class CheckinService extends BaseService{
 		}
 		return lstRes;
 	}
+
+	public List<CheckinDTO> getCheckin(Checkin c){
+		return jCheckinRepository.getDetailCheckin(c.getClassId(), c.getLessionId(), c.getCreatedDate());
+	}
 }

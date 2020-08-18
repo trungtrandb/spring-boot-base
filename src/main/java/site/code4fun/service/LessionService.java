@@ -1,6 +1,9 @@
 package site.code4fun.service;
 
-import java.util.Arrays;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,15 +17,20 @@ import site.code4fun.util.StringUtils;
 @Service
 public class LessionService extends BaseService{
 	
-	public List<Lession> getAll(){
-		List<Classes> lstClass = getCurrentClasses();
-		List<Long> idsClass = lstClass.stream().map(Classes::getId).collect(Collectors.toList());
-		
-		return jLessionRepository.findByClassIds(idsClass);
+	public List<Lession> getAll(Long classId, Date date){
+		Timestamp startTime = null != date ? new Timestamp(date.getTime()) : null;
+		List<Long> idsClass;
+		if (null != classId){
+			idsClass = Collections.singletonList(classId);
+		}else {
+			List<Classes> lstClass = getCurrentClasses();
+			idsClass = lstClass.stream().map(Classes::getId).collect(Collectors.toList());
+		}
+		return jLessionRepository.findByClassIds(idsClass, startTime);
 	}
 	
 	public List<Lession> getByClassId(Long id){
-		return jLessionRepository.findByClassIds(Arrays.asList(id));
+		return jLessionRepository.findByClassIds(Collections.singletonList(id), null );
 	}
 	
 	public Lession insert(Lession c) throws Exception {
