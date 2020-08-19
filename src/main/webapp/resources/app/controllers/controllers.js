@@ -212,7 +212,7 @@
         $scope.loadLstStudent = loadLstStudent;
 
         loadLstStudent();
-        Restangular.one("/api/class/get-by-group").get().then(function (response) {$scope.lstClass = response.data;});
+        Restangular.one("/api/class/get-by-group?status=ACTIVE").get().then(function (response) {$scope.lstClass = response.data;});
 
         function loadLstStudent() {
             Restangular.one("/api/student/getAll").get($scope.filter).then(function (response) {$scope.lstStudent = response.data;});
@@ -336,7 +336,7 @@
             dateFormat: "Y-m-d H:i",
         });
         loadLstLession();
-        Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
+        Restangular.one("/api/class/get-by-group?status=ACTIVE").get().then(function (response) { $scope.lstClass = response.data; });
         Restangular.one("/api/organization/get-teacher").get().then(function (response) { $scope.lstTeacher = response.data; });
         Restangular.one("/api/subject/getAll").get().then(function (response) { $scope.lstSubject = response.data; });  
 
@@ -404,7 +404,8 @@
             dateFormat: "Y-m-d",
         });
 
-        Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClass = response.data; });
+        Restangular.one("/api/class/get-by-group?status=ACTIVE").get().then(function (response) { $scope.lstClass = response.data; });
+        Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClassFilter = response.data; });
         Restangular.one('/api/organization/get-by-user').get().then(function (response) { $scope.lstOrganization = response.data; });
         Restangular.one('/api/lession/getAll').get().then(function (response) { $scope.lstLession = response.data; });
 
@@ -856,7 +857,7 @@ function PointController($scope,$location, Restangular) {
     }
 
     $scope.selectGroup = function() {
-        Restangular.one("/api/class/get-by-group?id=" + $scope.groupId).get().then(function (response) { $scope.lstClass = response.data; });
+        Restangular.one("/api/class/get-by-group?status=ACTIVE&id=" + $scope.groupId).get().then(function (response) { $scope.lstClass = response.data; });
     }
 
     $scope.exportExcel = function () {

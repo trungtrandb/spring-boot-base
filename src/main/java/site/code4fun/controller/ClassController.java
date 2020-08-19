@@ -25,9 +25,10 @@ public class ClassController {
 	ClassService classService;
 	
 	@RequestMapping(value = "/get-by-group", method = RequestMethod.GET)
-	public ResponseEntity<?> getAll(@RequestParam(required = false) Long id){
+	public ResponseEntity<?> getAll(@RequestParam(required = false) Long id,
+									@RequestParam(required = false) String status){
 		try {
-			return new ResponseEntity<>(new Response(200, ResponseMessage.QUERY_SUCCESS, classService.getByGroupId(id)), HttpStatus.OK);
+			return new ResponseEntity<>(new Response(200, ResponseMessage.QUERY_SUCCESS, classService.getByGroupId(id, status)), HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
 		}

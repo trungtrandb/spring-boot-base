@@ -24,8 +24,12 @@ import site.code4fun.util.StringUtils;
 @Service
 public class ClassService extends BaseService {
 
-    public List<Classes> getByGroupId(Long id) {
-        return null != id ? classRepository.findByGroupId(Collections.singletonList(id)) : getCurrentClasses();
+    public List<Classes> getByGroupId(Long id, String status) {
+        List<Classes> lstClass = null != id ? classRepository.findByGroupId(Collections.singletonList(id)) : getCurrentClasses();
+        if (!StringUtils.isNull(status)) {
+            lstClass = lstClass.stream().filter(x -> x.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+        }
+        return lstClass;
     }
 
     public Boolean authorizeClass(Long groupClassId) {
@@ -109,7 +113,10 @@ public class ClassService extends BaseService {
         }).collect(Collectors.toList());
     }
 
-    public List<Point> updatePoint(PointDTO point) {
+    public List<Point> updatePoint(PointDTO point) throws Exception {
+        List<Long> lstActive = getCurrentActiveClasses().stream().map(Classes::getId).collect(Collectors.toList());
+        Optional<Student> s = studentRepository.findById(point.getStudentId());
+        if (s.isPresent() && !lstActive.contains(s.get().getClassId())) throw new Exception("Không được sửa điểm của lớp đã hoàn thành!");
         String multi1 = StringUtils.cleanToFloat(point.getPointMulti1());
         String multi2 = StringUtils.cleanToFloat(point.getPointMulti2());
         String multi3 = StringUtils.cleanToFloat(point.getPointMulti3());

@@ -32,7 +32,7 @@
                   <label for="class">Lớp: </label>
                   <select class="form-control" ng-model="filter.classId" ng-change="filterCheckin()">
                     <option value="">-- Tất cả --</option>
-                    <option ng-repeat="x in lstClass" value="{{x.id}}">{{x.name}}</option>
+                    <option ng-repeat="x in lstClassFilter" value="{{x.id}}">{{x.name}}</option>
                   </select>
                 </div>
                 <div class="col">

@@ -134,6 +134,13 @@ public class BaseService {
 		List<Long> idsGroupClass = getCurrentGroupClass().stream().map(GroupClass::getId).collect(Collectors.toList());
 		return idsGroupClass.size() > 0 ? classRepository.findByGroupId(idsGroupClass) : new ArrayList<>();
 	}
+
+	protected final List<Classes> getCurrentActiveClasses(){
+		List<Long> idsGroupClass = getCurrentGroupClass().stream().map(GroupClass::getId).collect(Collectors.toList());
+		List<Classes> lstClass = idsGroupClass.size() > 0 ? classRepository.findByGroupId(idsGroupClass) : new ArrayList<>();
+		lstClass.removeIf(x -> !"ACTIVE".equalsIgnoreCase(x.getStatus()));
+		return lstClass;
+	}
 	
 	protected final User getCurrentUser() {
 		return userRepository.findById(getCurrentId()).get();
