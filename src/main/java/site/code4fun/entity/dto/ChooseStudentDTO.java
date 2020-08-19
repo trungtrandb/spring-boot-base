@@ -1,7 +1,5 @@
 package site.code4fun.entity.dto;
 
-import java.sql.Timestamp;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

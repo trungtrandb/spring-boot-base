@@ -17,7 +17,6 @@ import site.code4fun.entity.*;
 import site.code4fun.entity.dto.ClassDTO;
 import site.code4fun.entity.dto.PointDTO;
 import site.code4fun.entity.dto.StudentDTO;
-import site.code4fun.repository.jdbc.JLessionRepository;
 import site.code4fun.util.StringUtils;
 
 @Service
