@@ -331,17 +331,24 @@
         $scope.submitAddLession = submitAddLession;
         $scope.remove = remove;
         $scope.edit = edit;
+        $scope.loadLstLession = loadLstLession;
         flatpickr(".datetimepicker",{
             enableTime: true,
             dateFormat: "Y-m-d H:i",
         });
+
+        flatpickr(".datepicker",{
+            enableTime: false,
+            dateFormat: "Y-m-d",
+        });
         loadLstLession();
         Restangular.one("/api/class/get-by-group?status=ACTIVE").get().then(function (response) { $scope.lstClass = response.data; });
+        Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClassFilter = response.data; });
         Restangular.one("/api/organization/get-teacher").get().then(function (response) { $scope.lstTeacher = response.data; });
         Restangular.one("/api/subject/getAll").get().then(function (response) { $scope.lstSubject = response.data; });  
 
         function loadLstLession() {
-            Restangular.one("/api/lession/getAll").get().then(function (response) { $scope.lstLession = response.data; });  
+            Restangular.one("/api/lession/getAll").get($scope.filter).then(function (response) { $scope.lstLession = response.data; });  
         }
 
 

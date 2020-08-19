@@ -17,7 +17,7 @@ import site.code4fun.util.StringUtils;
 @Service
 public class LessionService extends BaseService{
 	
-	public List<Lession> getAll(Long classId, Date date){
+	public List<Lession> getAll(Long classId, Date date, Long subjectId, String name){
 		Timestamp startTime = null != date ? new Timestamp(date.getTime()) : null;
 		List<Long> idsClass;
 		if (null != classId){
@@ -26,11 +26,11 @@ public class LessionService extends BaseService{
 			List<Classes> lstClass = getCurrentClasses();
 			idsClass = lstClass.stream().map(Classes::getId).collect(Collectors.toList());
 		}
-		return jLessionRepository.findByClassIds(idsClass, startTime);
+		return jLessionRepository.findByClassIds(idsClass, startTime, subjectId, name);
 	}
 	
 	public List<Lession> getByClassId(Long id){
-		return jLessionRepository.findByClassIds(Collections.singletonList(id), null );
+		return jLessionRepository.findByClassIds(Collections.singletonList(id), null ,null, null);
 	}
 	
 	public Lession insert(Lession c) throws Exception {

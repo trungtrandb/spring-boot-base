@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import site.code4fun.entity.Lession;
 import site.code4fun.entity.User;
+import site.code4fun.util.StringUtils;
 
 @Repository
 public class JLessionRepository {
@@ -18,18 +19,21 @@ public class JLessionRepository {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public List<Lession> findByClassIds(List<Long> classIds, Timestamp startTime) {
+    public List<Lession> findByClassIds(List<Long> classIds, Timestamp startTime,Long subjectId, String name) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("classIds", classIds);
         parameters.addValue("startTime", startTime);
+        parameters.addValue("subjectId", subjectId);
+        parameters.addValue("name", "%" + name + "%");
         StringBuilder sql = new StringBuilder("SELECT ls.*, c.name as class_name, s.name as subject_name FROM tblLession ls ");
         sql.append("JOIN tblClass c on ls.class_id = c.id ");
         sql.append("JOIN tblSubject s ON ls.subject_id = s.id ");
         sql.append("WHERE ls.class_id IN (:classIds) ");
 
         if(startTime != null) sql.append("AND DATE_FORMAT(ls.start_time, '%Y-%m-%d') = DATE_FORMAT(:startTime, '%Y-%m-%d') ");
+        if(subjectId != null) sql.append("AND ls.subject_id = :subjectId ");
+        if(!StringUtils.isNull(name)) sql.append("AND ls.title LIKE :name");
         if (classIds.size() == 0) return new ArrayList<>();
-
         return jdbcTemplate.query(sql.toString(), parameters, (rs, numRow) ->
              Lession.builder()
                     .id(rs.getLong("id"))

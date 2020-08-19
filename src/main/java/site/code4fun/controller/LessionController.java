@@ -35,9 +35,11 @@ public class LessionController {
 	
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public ResponseEntity<?> getAll(@RequestParam(value = "classId", required = false) Long classId,
-									@RequestParam(value = "startTime", required = false) Date startTime){
+									@RequestParam(value = "startTime", required = false) Date startTime,
+									@RequestParam(value = "subjectId", required = false) Long subjectId,
+									@RequestParam(value = "name", required = false) String name){
 		try {
-			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, lessionService.getAll(classId, startTime)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, lessionService.getAll(classId, startTime, subjectId, name)));
 		}catch(Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
