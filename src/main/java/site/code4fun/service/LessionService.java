@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import site.code4fun.entity.Checkin;
 import site.code4fun.entity.Classes;
 import site.code4fun.entity.Lession;
 import site.code4fun.util.StringUtils;
@@ -45,7 +46,9 @@ public class LessionService extends BaseService{
 		return lessionRepository.saveAndFlush(c);
 	}
 
-	public boolean delete(Long id) {
+	public boolean delete(Long id) throws Exception {
+		List<Checkin> lstCheckin =  checkinRepository.findByLessionId(id);
+		if (lstCheckin.size() > 0) throw new Exception("Không thể xóa buổi học đã được điểm danh");
 		lessionRepository.deleteById(id);
 		return true;
 	}

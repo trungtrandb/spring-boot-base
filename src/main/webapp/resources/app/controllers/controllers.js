@@ -331,6 +331,7 @@
         $scope.submitAddLession = submitAddLession;
         $scope.remove = remove;
         $scope.edit = edit;
+        $scope.filter = {};
         $scope.loadLstLession = loadLstLession;
         flatpickr(".datetimepicker",{
             enableTime: true,
@@ -348,6 +349,7 @@
         Restangular.one("/api/subject/getAll").get().then(function (response) { $scope.lstSubject = response.data; });  
 
         function loadLstLession() {
+            if ($scope.filter.startTime == '') {$scope.filter.startTime = null}
             Restangular.one("/api/lession/getAll").get($scope.filter).then(function (response) { $scope.lstLession = response.data; });  
         }
 

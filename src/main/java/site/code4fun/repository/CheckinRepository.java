@@ -1,5 +1,6 @@
 package site.code4fun.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,6 @@ public interface CheckinRepository extends JpaRepository<Checkin, Long>{
 
 	@Transactional
     void deleteByStudentId(Long studentId);
+
+	List<Checkin> findByLessionId(Long id);
 }
