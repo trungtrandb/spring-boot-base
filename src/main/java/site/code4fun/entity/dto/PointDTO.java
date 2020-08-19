@@ -16,6 +16,7 @@ public class PointDTO extends Point{
 	protected String pointMulti1;
 	protected String pointMulti2;
 	protected String pointMulti3;
+	protected Double pointAvg;
 	protected String studentName;
 	protected String studentCode;
 }

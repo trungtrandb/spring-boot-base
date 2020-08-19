@@ -40,10 +40,10 @@
             Restangular.all("/api/notify/is-read").post(lstNotifId)
             .then( function (response) { 
                 if(response.code == 200) {
-                   Restangular.one("/api/notify/count-notify").get().then(function (response) { $scope.numNotiUnRead = response.data.notRead; });
-                   Restangular.one("/api/notify/get-by-user").get().then(function (response) { $scope.lstNotify = response.data; });
-               }
-           });
+                 Restangular.one("/api/notify/count-notify").get().then(function (response) { $scope.numNotiUnRead = response.data.notRead; });
+                 Restangular.one("/api/notify/get-by-user").get().then(function (response) { $scope.lstNotify = response.data; });
+             }
+         });
             $("#viewNotify .modal-title").text(noti.title);
             $("#viewNotify .modal-body").text(noti.content);
             $("#viewNotify").modal("show");
@@ -67,8 +67,8 @@
                     toastr.error(response.message);                   
                 }
             },function (argument) {
-               toastr.error(response.message);
-            });
+             toastr.error(response.message);
+         });
         }
 
         function remove(id){
@@ -79,8 +79,8 @@
                     toastr.error(response.message);
                 }
             },function (argument) {
-               toastr.error(response.message);
-            });
+             toastr.error(response.message);
+         });
         }
     }
 
@@ -844,12 +844,13 @@ function PointController($scope,$location, Restangular) {
                 }
             },
             fields: [
-            { name: "studentCode", title: "Mã học sinh", width: 50},
-            { name: "studentName", title: "Tên học sinh"},
-            { name: "pointMulti1", title: "Điểm hệ số 1", type: "text"},
-            { name: "pointMulti2", title: "Điểm hệ số 2", type: "text"},
-            { name: "pointMulti3", title: "Điểm hệ số 3", type: "text"},
-            { type: "control", deleteButton: false}
+                { name: "studentCode", title: "Mã học sinh", width: 50},
+                { name: "studentName", title: "Tên học sinh"},
+                { name: "pointMulti1", title: "Điểm hệ số 1", type: "text"},
+                { name: "pointMulti2", title: "Điểm hệ số 2", type: "text"},
+                { name: "pointMulti3", title: "Điểm hệ số 3", type: "text"},
+                { name: "pointAvg", title: "Điểm trung bình"},
+                { type: "control", deleteButton: false}
             ]
         });
     }

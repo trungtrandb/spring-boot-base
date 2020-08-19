@@ -106,7 +106,7 @@ public class NotifyService extends BaseService{
 	}
 	
 	public List<NotifyDTO> getByUser(Long page, Integer size){
-		Integer limit = null != size ? size : 10;
+		int limit = null != size ? size : 10;
 		Long start = null != page ? (page - 1) * limit : 0;
 		return jNotifyRepository.getNotifyByUserId(getCurrentId(), limit, start);
 	}
@@ -129,7 +129,7 @@ public class NotifyService extends BaseService{
 	public Map<String, Integer> countNotify() {
 		int isRead = notifyDeviceRepository.getNotifyByStatus(getCurrentId(), true).size();
 		int notRead = notifyDeviceRepository.getNotifyByStatus(getCurrentId(), false).size();
-		Map<String, Integer> mapRes = new HashMap<String, Integer>();
+		Map<String, Integer> mapRes = new HashMap<>();
 		mapRes.put("isRead", isRead);
 		mapRes.put("notRead", notRead);
 		mapRes.put("total", isRead + notRead);

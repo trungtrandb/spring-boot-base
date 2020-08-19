@@ -79,7 +79,7 @@
         <div class="dropdown-divider"></div>
 
         <div ng-repeat="x in lstNotify">
-          <a href="javascript:;" class="dropdown-item" ng-click="viewNotify(x)" ng-class="{ 'text-muted' : x.read}">
+          <a href="javascript:;" class="dropdown-item" ng-click="viewNotify(x)" ng-class="{ 'text-muted' : x.isRead}">
             <i class="fas fa-envelope mr-2"></i> {{ x.title.substring(0, 20) }}
             <span class="float-right text-muted text-sm">{{ x.createdDate | date:'dd/MM/yy HH:mm' }}</span>
           </a>
@@ -102,9 +102,9 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="/" class="brand-link">
-    <img src="/resources/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+    <img src="/resources/dist/img/logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
     style="opacity: .8">
-    <span class="brand-text font-weight-light">AdminLTE 3</span>
+    <span class="brand-text">ISchool</span>
   </a>
 
   <!-- Sidebar -->
@@ -135,12 +135,6 @@
         </a>
       </li>
       <li class="nav-item" ng-show="org">
-        <a href="#!point" class="nav-link">
-          <i class="nav-icon fas fa-list-ol"></i>
-          <p>Sổ điểm</p>
-        </a>
-      </li>
-      <li class="nav-item" ng-show="org">
         <a href="#!parent" class="nav-link">
           <i class="nav-icon fas fa-user-tie"></i>
           <p>Phụ huynh</p>
@@ -153,15 +147,15 @@
         </a>
       </li>
       <li class="nav-item" ng-show="org">
-        <a href="#!class" class="nav-link">
-          <i class="nav-icon fas fa-house-user"></i>
-          <p>Lớp học</p>
+        <a href="#!point" class="nav-link">
+          <i class="nav-icon fas fa-list-ol"></i>
+          <p>Sổ điểm</p>
         </a>
       </li>
       <li class="nav-item" ng-show="org">
-        <a href="#!subject" class="nav-link">
-          <i class="nav-icon fas fa-book"></i>
-          <p>Môn học</p>
+        <a href="#!checkin" class="nav-link">
+          <i class="nav-icon fas fa-user-check"></i>
+          <p>Điểm danh</p>
         </a>
       </li>
       <li class="nav-item" ng-show="org">
@@ -171,9 +165,15 @@
         </a>
       </li>
       <li class="nav-item" ng-show="org">
-        <a href="#!checkin" class="nav-link">
-          <i class="nav-icon fas fa-user-check"></i>
-          <p>Điểm danh</p>
+        <a href="#!subject" class="nav-link">
+          <i class="nav-icon fas fa-book"></i>
+          <p>Môn học</p>
+        </a>
+      </li>
+      <li class="nav-item" ng-show="org">
+        <a href="#!class" class="nav-link">
+          <i class="nav-icon fas fa-house-user"></i>
+          <p>Lớp học</p>
         </a>
       </li>
       <li class="nav-item" ng-show="org">
@@ -200,23 +200,23 @@
 </aside>
 
 <!-- The Modal -->
-  <div class="modal fade" id="viewNotify">
-    <div class="modal-dialog">
-      <div class="modal-content">
+<div class="modal fade" id="viewNotify">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title"></h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-
-        <!-- Modal body -->
-        <div class="modal-body">
-          
-        </div>
-        <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title"></h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
+</div>

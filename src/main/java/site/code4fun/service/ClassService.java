@@ -3,6 +3,8 @@ package site.code4fun.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -62,11 +64,39 @@ public class ClassService extends BaseService {
         List<StudentDTO> lstStudent = jStudentRepository.findStudentByClassId(Collections.singletonList(classId), null);
         List<Long> studentIds = lstStudent.stream().map(StudentDTO::getId).collect(Collectors.toList());
         Map<Long, PointDTO> mapPoint = jPointRepository.getPoint(StringUtils.stringFromList(studentIds), subjectId, sem);
-
         return lstStudent.stream().map(_st -> {
             PointDTO dto;
             if (mapPoint.containsKey(_st.getId())) {
                 dto = mapPoint.get(_st.getId());
+                String[] multi1 = dto.getPointMulti1().split(" ");
+                String[] multi2 = dto.getPointMulti2().split(" ");
+                String[] multi3 = dto.getPointMulti3().split(" ");
+
+                double total = 0;
+                int numOfPoint = 0;
+                for (String item : multi1){
+                    if (item.trim().length() > 0){
+                        total += Double.parseDouble(item.trim());
+                        numOfPoint++;
+                    }
+                }
+
+                for (String item : multi2){
+                    if (item.trim().length() > 0){
+                        total += Double.parseDouble(item.trim()) * 2;
+                        numOfPoint = numOfPoint + 2;
+                    }
+                }
+
+                for (String item : multi3){
+                    if (item.trim().length() > 0){
+                        total += Double.parseDouble(item.trim()) * 3;
+                        numOfPoint = numOfPoint + 3;
+                    }
+                }
+                double avg = total / numOfPoint;
+                BigDecimal bd = new BigDecimal(avg).setScale(2, RoundingMode.HALF_UP);
+                dto.setPointAvg(bd.doubleValue());
             } else {
                 dto = new PointDTO();
                 dto.setSubjectId(subjectId);
@@ -273,6 +303,10 @@ public class ClassService extends BaseService {
 
             cell = row.createCell(5);
             cell.setCellValue(_item.getPointMulti3());
+            cell.setCellStyle(styleCell);
+
+            cell = row.createCell(6);
+            cell.setCellValue(_item.getPointAvg());
             cell.setCellStyle(styleCell);
         }
 

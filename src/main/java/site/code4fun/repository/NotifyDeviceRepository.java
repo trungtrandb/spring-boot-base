@@ -9,9 +9,9 @@ import site.code4fun.entity.NotifyDevice;
 
 public interface NotifyDeviceRepository extends JpaRepository<NotifyDevice, Long>{
 	
-	public List<NotifyDevice> findByNotifyId(Long id);
+	List<NotifyDevice> findByNotifyId(Long id);
 	
 	@Query(value = "Call findNotifyByStatus(:userId, :status)", nativeQuery = true)
-	public List<NotifyDevice> getNotifyByStatus(Long userId, boolean status);
+	List<NotifyDevice> getNotifyByStatus(Long userId, boolean status);
 
 }
