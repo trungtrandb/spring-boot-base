@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50731
 File Encoding         : 65001
 
-Date: 2020-08-19 17:28:43
+Date: 2020-08-20 17:25:17
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,7 +20,6 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `tblCheckin`;
 CREATE TABLE `tblCheckin` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `class_id` bigint(20) DEFAULT NULL,
   `lession_id` bigint(20) DEFAULT NULL,
   `present` bit(1) NOT NULL,
   `student_id` bigint(20) DEFAULT NULL,
@@ -28,28 +27,37 @@ CREATE TABLE `tblCheckin` (
   `created_date` datetime DEFAULT NULL,
   `updated_date` datetime DEFAULT NULL,
   `updated_by` bigint(20) DEFAULT NULL,
+  `note` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `created_by` (`created_by`) USING BTREE,
   KEY `student_id` (`student_id`) USING BTREE,
-  KEY `tblCheckin_ibfk_1` (`class_id`) USING BTREE,
   KEY `lession_id` (`lession_id`),
-  CONSTRAINT `tblCheckin_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `tblClass` (`id`),
   CONSTRAINT `tblCheckin_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `tblUser` (`id`),
   CONSTRAINT `tblCheckin_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `tblStudent` (`id`),
   CONSTRAINT `tblCheckin_ibfk_4` FOREIGN KEY (`lession_id`) REFERENCES `tblLession` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of tblCheckin
 -- ----------------------------
-INSERT INTO tblCheckin VALUES ('3', '3', '4', '', '2', '5', '2020-08-07 02:24:16', null, null);
-INSERT INTO tblCheckin VALUES ('7', '4', '7', '', '4', '4', '2020-08-12 01:49:03', null, null);
-INSERT INTO tblCheckin VALUES ('8', '9', '13', '', '10', '8', '2020-08-14 12:39:57', null, null);
-INSERT INTO tblCheckin VALUES ('9', '4', '7', '', '4', '4', '2020-08-15 08:04:31', null, null);
-INSERT INTO tblCheckin VALUES ('17', '8', '14', '', '1', '1', '2020-08-19 06:48:22', null, null);
-INSERT INTO tblCheckin VALUES ('18', '8', '14', '', '7', '1', '2020-08-19 06:48:25', null, null);
-INSERT INTO tblCheckin VALUES ('19', '8', '14', '', '8', '1', '2020-08-19 06:48:27', null, null);
-INSERT INTO tblCheckin VALUES ('20', '8', '14', '', '9', '1', '2020-08-19 06:48:28', null, null);
+INSERT INTO tblCheckin VALUES ('3', '4', '', '2', '5', '2020-08-07 02:24:16', null, null, null);
+INSERT INTO tblCheckin VALUES ('7', '7', '', '4', '4', '2020-08-12 01:49:03', null, null, null);
+INSERT INTO tblCheckin VALUES ('8', '13', '', '10', '8', '2020-08-14 12:39:57', null, null, null);
+INSERT INTO tblCheckin VALUES ('9', '7', '', '4', '4', '2020-08-15 08:04:31', null, null, null);
+INSERT INTO tblCheckin VALUES ('17', '14', '', '1', '1', '2020-08-19 11:48:57', null, null, null);
+INSERT INTO tblCheckin VALUES ('18', '14', '', '7', '1', '2020-08-19 11:49:26', null, null, null);
+INSERT INTO tblCheckin VALUES ('19', '14', '', '8', '1', '2020-08-19 11:49:28', null, null, null);
+INSERT INTO tblCheckin VALUES ('20', '14', '', '9', '1', '2020-08-19 06:48:28', null, null, null);
+INSERT INTO tblCheckin VALUES ('21', '15', '', '7', '1', '2020-08-20 02:27:37', null, null, null);
+INSERT INTO tblCheckin VALUES ('22', '15', '', '8', '1', '2020-08-20 04:27:24', null, null, 'Đi học muộn');
+INSERT INTO tblCheckin VALUES ('23', '15', '', '9', '1', '2020-08-20 06:44:22', null, null, '');
+INSERT INTO tblCheckin VALUES ('24', '15', '', '1', '1', '2020-08-20 04:27:10', null, null, 'Note toán buổi 1');
+INSERT INTO tblCheckin VALUES ('25', '14', '', '1', '1', '2020-08-20 02:37:34', null, null, null);
+INSERT INTO tblCheckin VALUES ('26', '14', '', '7', '1', '2020-08-20 02:37:36', null, null, null);
+INSERT INTO tblCheckin VALUES ('27', '14', '', '8', '1', '2020-08-20 02:37:36', null, null, null);
+INSERT INTO tblCheckin VALUES ('28', '14', '', '9', '1', '2020-08-20 02:37:38', null, null, null);
+INSERT INTO tblCheckin VALUES ('29', '16', '', '7', '1', '2020-08-20 03:22:39', null, null, null);
+INSERT INTO tblCheckin VALUES ('30', '17', '', '1', '1', '2020-08-20 04:07:15', null, null, 'Note điểm danh');
 
 -- ----------------------------
 -- Table structure for `tblClass`
@@ -78,7 +86,7 @@ INSERT INTO tblClass VALUES ('2', 'Spring boot  2', 'Note', 'ACTIVE', '1', '2', 
 INSERT INTO tblClass VALUES ('3', 'mac van toan123', 'toan', null, '3', '6', '0000');
 INSERT INTO tblClass VALUES ('4', 'Lớp 3A1', null, 'COMPLETE', '4', '2', '2020');
 INSERT INTO tblClass VALUES ('5', 'Lớp 1A2', 'Không có ghi chú', 'COMPLETE', '4', '2', '2021');
-INSERT INTO tblClass VALUES ('8', 'Lớp 2A2', 'Note', 'COMPLETE', '2', '2', '2020');
+INSERT INTO tblClass VALUES ('8', 'Lớp 2A2', 'Note', 'ACTIVE', '2', '2', '2020');
 INSERT INTO tblClass VALUES ('9', '12A5', 'abc', null, '6', '4', '0000');
 INSERT INTO tblClass VALUES ('10', 'Lớp 2A2', 'Không có ghi chú', 'COMPLETE', '5', '2', '2021');
 INSERT INTO tblClass VALUES ('11', 'Lớp 2A1', 'Không có ghi chú', 'ACTIVE', '5', '2', '2020');
@@ -139,7 +147,7 @@ CREATE TABLE `tblLession` (
   CONSTRAINT `tblLession_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tblUser` (`id`),
   CONSTRAINT `tblLession_ibfk_2` FOREIGN KEY (`class_id`) REFERENCES `tblClass` (`id`),
   CONSTRAINT `tblLession_ibfk_3` FOREIGN KEY (`subject_id`) REFERENCES `tblSubject` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of tblLession
@@ -148,11 +156,13 @@ INSERT INTO tblLession VALUES ('3', '3', 'Phải đi học đẩy đủ đó', '
 INSERT INTO tblLession VALUES ('4', '3', 'đi học đầy đủ nha', '2020-08-21 12:00:00', '2020-08-28 12:00:00', '14', 'hoc hai quan123', '6', null, null, null, null);
 INSERT INTO tblLession VALUES ('7', '4', null, '2020-08-11 12:14:00', '2020-08-11 12:00:00', '16', 'Buổi 1', '2', null, null, null, null);
 INSERT INTO tblLession VALUES ('8', '4', null, '2020-08-18 12:00:00', null, '17', 'Buổi 2', '2', null, null, null, null);
-INSERT INTO tblLession VALUES ('10', '1', 'Note buổi học 3', '2020-08-14 11:00:00', '2020-08-14 12:00:00', '2', 'Buổi 3', '2', null, null, null, null);
 INSERT INTO tblLession VALUES ('11', '5', 'No note', null, null, '17', 'Buổi 1', '2', null, null, null, null);
 INSERT INTO tblLession VALUES ('12', '5', 'Note', '2020-08-11 12:00:00', null, '15', 'Toán buổi 1', '2', null, null, null, null);
 INSERT INTO tblLession VALUES ('13', '9', 'abc', '2020-08-15 13:00:00', '2020-08-15 02:00:00', '18', 'Văn buổi 1', '9', null, null, null, null);
 INSERT INTO tblLession VALUES ('14', '8', null, '2020-08-19 12:00:00', '2020-08-19 12:00:00', '1', 'Test Notify phụ huynh', '2', null, null, null, null);
+INSERT INTO tblLession VALUES ('15', '8', null, '2020-08-19 08:00:00', '2020-08-19 07:00:00', '1', 'Toán buổi 1', '2', null, null, null, null);
+INSERT INTO tblLession VALUES ('16', '2', null, '2020-08-20 12:00:00', '2020-08-20 12:00:00', '2', 'Toán buổi 2', '2', null, null, null, null);
+INSERT INTO tblLession VALUES ('17', '8', null, '2020-08-20 12:00:00', '2020-08-20 12:00:00', '1', 'Toán buổi 3', '2', null, null, null, null);
 
 -- ----------------------------
 -- Table structure for `tblMessage`
@@ -170,7 +180,7 @@ CREATE TABLE `tblMessage` (
   PRIMARY KEY (`id`),
   KEY `send_from` (`send_from`),
   KEY `send_to` (`send_to`)
-) ENGINE=InnoDB AUTO_INCREMENT=7742 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7750 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of tblMessage
@@ -7915,6 +7925,14 @@ INSERT INTO tblMessage VALUES ('7738', 'trungtrandb@gmail.com', 'admin', '2020-0
 INSERT INTO tblMessage VALUES ('7739', 'trungtrandb@gmail.com', 'admin', '2020-08-19 07:49:25', 'mmmm', 'PENDING', '4', '1');
 INSERT INTO tblMessage VALUES ('7740', 'trungtrandb@gmail.com', 'admin', '2020-08-19 07:51:07', 'aaxcsdgsfs', 'PENDING', '4', '1');
 INSERT INTO tblMessage VALUES ('7741', 'trungtrandb@gmail.com', 'admin', '2020-08-19 07:51:26', 'bbb', 'PENDING', '4', '1');
+INSERT INTO tblMessage VALUES ('7742', 'trungtrandb@gmail.com', 'admin', '2020-08-19 12:14:10', 'ccc', 'PENDING', '4', '1');
+INSERT INTO tblMessage VALUES ('7743', 'trungtrandb@gmail.com', 'admin', '2020-08-19 12:14:17', 'nn', 'PENDING', '4', '1');
+INSERT INTO tblMessage VALUES ('7744', 'trungtrandb@gmail.com', 'admin', '2020-08-19 12:14:26', 'ccc', 'PENDING', '4', '1');
+INSERT INTO tblMessage VALUES ('7745', 'trungtrandb@gmail.com', 'admin', '2020-08-19 12:14:34', 'mmmm', 'PENDING', '4', '1');
+INSERT INTO tblMessage VALUES ('7746', 'admin', 'trungtrandb1@gmail.com', '2020-08-19 13:11:11', '12', 'PENDING', '1', null);
+INSERT INTO tblMessage VALUES ('7747', 'trungtrandb@gmail.com', 'admin', '2020-08-19 18:44:40', 'bbb', 'PENDING', '4', null);
+INSERT INTO tblMessage VALUES ('7748', 'trungtrandb@gmail.com', 'admin', '2020-08-19 18:47:41', 'cc', 'PENDING', '4', null);
+INSERT INTO tblMessage VALUES ('7749', 'trungtrandb@gmail.com', 'admin', '2020-08-19 18:48:00', 'bb', 'PENDING', '4', null);
 
 -- ----------------------------
 -- Table structure for `tblNotify`
@@ -7931,7 +7949,7 @@ CREATE TABLE `tblNotify` (
   `updated_date` datetime DEFAULT NULL,
   `updated_by` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of tblNotify
@@ -7988,6 +8006,9 @@ INSERT INTO tblNotify VALUES ('65', 'Học sinh 2đã điểm danh vắng trong 
 INSERT INTO tblNotify VALUES ('66', 'Học sinh 3đã điểm danh vắng trong buổi học Test Notify phụ huynh!', 'PENDING', 'Thông báo điểm danh', null, '1', '2020-08-19 06:48:26', null, null);
 INSERT INTO tblNotify VALUES ('67', 'Hs lớp 2đã điểm danh vắng trong buổi học Test Notify phụ huynh!', 'PENDING', 'Thông báo điểm danh', null, '1', '2020-08-19 06:48:27', null, null);
 INSERT INTO tblNotify VALUES ('68', '123', 'ACTIVE', 'Thông báo test', '1', '1', '2020-08-19 06:58:36', null, null);
+INSERT INTO tblNotify VALUES ('69', 'aaa', 'ACTIVE', 'Thong bao test', '3', '4', '2020-08-19 19:40:44', null, null);
+INSERT INTO tblNotify VALUES ('70', 'xx', 'ACTIVE', 'tesst', '1', '1', '2020-08-19 19:42:01', null, null);
+INSERT INTO tblNotify VALUES ('71', 'Nguyễn Minh Phươngđã điểm danh vắng trong buổi học Toán buổi 1!', 'PENDING', 'Thông báo điểm danh', null, '1', '2020-08-20 02:18:13', null, null);
 
 -- ----------------------------
 -- Table structure for `tblNotifyDevice`
@@ -8103,91 +8124,91 @@ INSERT INTO tblNotifyDevice VALUES ('37', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN
 INSERT INTO tblNotifyDevice VALUES ('39', '2', '', 'PENDING', null, '', '4', '2020-08-15 08:04:30', null, null);
 INSERT INTO tblNotifyDevice VALUES ('40', '2', '', 'PENDING', null, '', '4', '2020-08-15 08:04:33', null, null);
 INSERT INTO tblNotifyDevice VALUES ('41', '2', '', 'PENDING', null, '', '4', '2020-08-15 08:04:35', null, null);
-INSERT INTO tblNotifyDevice VALUES ('43', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 09:11:34', '2020-08-15 09:12:00', null);
+INSERT INTO tblNotifyDevice VALUES ('43', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 09:11:34', '2020-08-15 09:12:00', null);
 INSERT INTO tblNotifyDevice VALUES ('43', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'COMPLETE', null, '', '1', '2020-08-15 09:11:34', '2020-08-15 09:12:01', null);
 INSERT INTO tblNotifyDevice VALUES ('43', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-15 09:11:34', '2020-08-15 09:12:01', null);
-INSERT INTO tblNotifyDevice VALUES ('44', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 09:13:22', '2020-08-15 09:14:00', null);
+INSERT INTO tblNotifyDevice VALUES ('44', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 09:13:22', '2020-08-15 09:14:00', null);
 INSERT INTO tblNotifyDevice VALUES ('44', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'COMPLETE', null, '', '1', '2020-08-15 09:13:22', '2020-08-15 09:14:00', null);
 INSERT INTO tblNotifyDevice VALUES ('44', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-15 09:13:22', '2020-08-15 09:14:00', null);
-INSERT INTO tblNotifyDevice VALUES ('45', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 13:48:41', '2020-08-17 02:52:00', null);
+INSERT INTO tblNotifyDevice VALUES ('45', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 13:48:41', '2020-08-17 02:52:00', null);
 INSERT INTO tblNotifyDevice VALUES ('45', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'PENDING', null, '', '1', '2020-08-15 13:48:41', null, null);
 INSERT INTO tblNotifyDevice VALUES ('45', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'PENDING', null, '', '1', '2020-08-15 13:48:41', null, null);
 INSERT INTO tblNotifyDevice VALUES ('45', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'PENDING', null, '', '1', '2020-08-15 13:48:41', null, null);
 INSERT INTO tblNotifyDevice VALUES ('45', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'PENDING', null, '', '1', '2020-08-15 13:48:41', null, null);
-INSERT INTO tblNotifyDevice VALUES ('46', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 13:56:48', '2020-08-17 02:52:00', null);
+INSERT INTO tblNotifyDevice VALUES ('46', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 13:56:48', '2020-08-17 02:52:00', null);
 INSERT INTO tblNotifyDevice VALUES ('46', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'PENDING', null, '', '1', '2020-08-15 13:56:48', null, null);
 INSERT INTO tblNotifyDevice VALUES ('46', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'PENDING', null, '', '1', '2020-08-15 13:56:48', null, null);
 INSERT INTO tblNotifyDevice VALUES ('46', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'PENDING', null, '', '1', '2020-08-15 13:56:48', null, null);
 INSERT INTO tblNotifyDevice VALUES ('46', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'PENDING', null, '', '1', '2020-08-15 13:56:48', null, null);
-INSERT INTO tblNotifyDevice VALUES ('47', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 14:03:11', '2020-08-17 02:52:00', null);
+INSERT INTO tblNotifyDevice VALUES ('47', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 14:03:11', '2020-08-17 02:52:00', null);
 INSERT INTO tblNotifyDevice VALUES ('47', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'PENDING', null, '', '1', '2020-08-15 14:03:11', null, null);
 INSERT INTO tblNotifyDevice VALUES ('47', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'PENDING', null, '', '1', '2020-08-15 14:03:11', null, null);
 INSERT INTO tblNotifyDevice VALUES ('47', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'PENDING', null, '', '1', '2020-08-15 14:03:11', null, null);
 INSERT INTO tblNotifyDevice VALUES ('47', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'PENDING', null, '', '1', '2020-08-15 14:03:11', null, null);
-INSERT INTO tblNotifyDevice VALUES ('48', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 14:33:35', '2020-08-17 02:52:00', null);
+INSERT INTO tblNotifyDevice VALUES ('48', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 14:33:35', '2020-08-17 02:52:00', null);
 INSERT INTO tblNotifyDevice VALUES ('48', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'PENDING', null, '', '1', '2020-08-15 14:33:35', null, null);
 INSERT INTO tblNotifyDevice VALUES ('48', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'PENDING', null, '', '1', '2020-08-15 14:33:35', null, null);
 INSERT INTO tblNotifyDevice VALUES ('48', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'PENDING', null, '', '1', '2020-08-15 14:33:35', null, null);
 INSERT INTO tblNotifyDevice VALUES ('48', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'PENDING', null, '', '1', '2020-08-15 14:33:35', null, null);
-INSERT INTO tblNotifyDevice VALUES ('49', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 14:33:41', '2020-08-17 02:52:00', null);
+INSERT INTO tblNotifyDevice VALUES ('49', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 14:33:41', '2020-08-17 02:52:00', null);
 INSERT INTO tblNotifyDevice VALUES ('49', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'PENDING', null, '', '1', '2020-08-15 14:33:41', null, null);
 INSERT INTO tblNotifyDevice VALUES ('49', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'PENDING', null, '', '1', '2020-08-15 14:33:41', null, null);
 INSERT INTO tblNotifyDevice VALUES ('49', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'PENDING', null, '', '1', '2020-08-15 14:33:41', null, null);
 INSERT INTO tblNotifyDevice VALUES ('49', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'PENDING', null, '', '1', '2020-08-15 14:33:41', null, null);
-INSERT INTO tblNotifyDevice VALUES ('50', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 15:08:49', '2020-08-17 02:52:00', null);
+INSERT INTO tblNotifyDevice VALUES ('50', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 15:08:49', '2020-08-17 02:52:00', null);
 INSERT INTO tblNotifyDevice VALUES ('50', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'PENDING', null, '', '1', '2020-08-15 15:08:49', null, null);
 INSERT INTO tblNotifyDevice VALUES ('50', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'PENDING', null, '', '1', '2020-08-15 15:08:49', null, null);
 INSERT INTO tblNotifyDevice VALUES ('50', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'PENDING', null, '', '1', '2020-08-15 15:08:49', null, null);
 INSERT INTO tblNotifyDevice VALUES ('50', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'PENDING', null, '', '1', '2020-08-15 15:08:49', null, null);
-INSERT INTO tblNotifyDevice VALUES ('51', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 15:09:08', '2020-08-17 02:52:00', null);
+INSERT INTO tblNotifyDevice VALUES ('51', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 15:09:08', '2020-08-17 02:52:00', null);
 INSERT INTO tblNotifyDevice VALUES ('51', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'PENDING', null, '', '1', '2020-08-15 15:09:08', null, null);
 INSERT INTO tblNotifyDevice VALUES ('51', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'PENDING', null, '', '1', '2020-08-15 15:09:08', null, null);
 INSERT INTO tblNotifyDevice VALUES ('51', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'PENDING', null, '', '1', '2020-08-15 15:09:08', null, null);
 INSERT INTO tblNotifyDevice VALUES ('51', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'PENDING', null, '', '1', '2020-08-15 15:09:08', null, null);
-INSERT INTO tblNotifyDevice VALUES ('52', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 15:10:39', '2020-08-17 02:52:00', null);
+INSERT INTO tblNotifyDevice VALUES ('52', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 15:10:39', '2020-08-17 02:52:00', null);
 INSERT INTO tblNotifyDevice VALUES ('52', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'PENDING', null, '', '1', '2020-08-15 15:10:39', null, null);
 INSERT INTO tblNotifyDevice VALUES ('52', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'PENDING', null, '', '1', '2020-08-15 15:10:39', null, null);
 INSERT INTO tblNotifyDevice VALUES ('52', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'PENDING', null, '', '1', '2020-08-15 15:10:39', null, null);
 INSERT INTO tblNotifyDevice VALUES ('52', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'PENDING', null, '', '1', '2020-08-15 15:10:39', null, null);
-INSERT INTO tblNotifyDevice VALUES ('53', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 15:11:36', '2020-08-17 02:52:00', null);
-INSERT INTO tblNotifyDevice VALUES ('53', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-15 15:11:36', '2020-08-17 02:52:01', null);
-INSERT INTO tblNotifyDevice VALUES ('53', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-15 15:11:36', '2020-08-17 02:52:02', null);
-INSERT INTO tblNotifyDevice VALUES ('53', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-15 15:11:36', '2020-08-17 02:52:02', null);
-INSERT INTO tblNotifyDevice VALUES ('53', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-15 15:11:36', '2020-08-17 02:52:02', null);
-INSERT INTO tblNotifyDevice VALUES ('54', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '4', '2020-08-17 04:26:17', '2020-08-17 04:27:00', null);
-INSERT INTO tblNotifyDevice VALUES ('55', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:14:10', '2020-08-19 06:57:00', null);
-INSERT INTO tblNotifyDevice VALUES ('56', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:11', '2020-08-19 06:57:02', null);
-INSERT INTO tblNotifyDevice VALUES ('56', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:11', '2020-08-19 06:57:02', null);
-INSERT INTO tblNotifyDevice VALUES ('56', '4', 'dm0D_plj2gc:APA91bHSgfNBHb9U6vBeTV3zpk_mHNPmf9nL2y1LDD3-QAtLMdsMQXYEaVQkCdPNPQiTJbWfeQXfdwpoAiPoF3TKHYRrhO8c656O_v4uklLl720MM7W8WdD3pUxocV3ad2iq48jMX_HO', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:11', '2020-08-19 06:57:03', null);
-INSERT INTO tblNotifyDevice VALUES ('56', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:11', '2020-08-19 06:57:03', null);
-INSERT INTO tblNotifyDevice VALUES ('56', '4', 'euuYkjZMdxw:APA91bEsd4ymKejWrv_Uaoeaao_rKGd2P_dU5Vb9IOr3Sh4gapdla0NwntVb1LlPUwdiRz95Z0MIF1tOk8IAXXJHindq9ucdOytElaOp6dON4lEjzC7Hw76NLyiK97-WtrHdJxPNFgUx', 'COMPLETE', null, '', '1', '2020-08-18 09:14:11', '2020-08-19 06:57:03', null);
-INSERT INTO tblNotifyDevice VALUES ('56', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:11', '2020-08-19 06:57:03', null);
-INSERT INTO tblNotifyDevice VALUES ('57', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:14:12', '2020-08-19 06:57:03', null);
-INSERT INTO tblNotifyDevice VALUES ('58', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:14:19', '2020-08-19 06:57:03', null);
-INSERT INTO tblNotifyDevice VALUES ('59', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:22', '2020-08-19 06:57:04', null);
-INSERT INTO tblNotifyDevice VALUES ('59', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:22', '2020-08-19 06:57:04', null);
-INSERT INTO tblNotifyDevice VALUES ('59', '4', 'dm0D_plj2gc:APA91bHSgfNBHb9U6vBeTV3zpk_mHNPmf9nL2y1LDD3-QAtLMdsMQXYEaVQkCdPNPQiTJbWfeQXfdwpoAiPoF3TKHYRrhO8c656O_v4uklLl720MM7W8WdD3pUxocV3ad2iq48jMX_HO', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:22', '2020-08-19 06:57:04', null);
-INSERT INTO tblNotifyDevice VALUES ('59', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:22', '2020-08-19 06:57:04', null);
-INSERT INTO tblNotifyDevice VALUES ('59', '4', 'euuYkjZMdxw:APA91bEsd4ymKejWrv_Uaoeaao_rKGd2P_dU5Vb9IOr3Sh4gapdla0NwntVb1LlPUwdiRz95Z0MIF1tOk8IAXXJHindq9ucdOytElaOp6dON4lEjzC7Hw76NLyiK97-WtrHdJxPNFgUx', 'COMPLETE', null, '', '1', '2020-08-18 09:14:22', '2020-08-19 06:57:05', null);
-INSERT INTO tblNotifyDevice VALUES ('59', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:22', '2020-08-19 06:57:05', null);
-INSERT INTO tblNotifyDevice VALUES ('60', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:14:23', '2020-08-19 06:57:05', null);
-INSERT INTO tblNotifyDevice VALUES ('61', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:15:08', '2020-08-19 06:57:05', null);
-INSERT INTO tblNotifyDevice VALUES ('62', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:15:11', '2020-08-19 06:57:05', null);
-INSERT INTO tblNotifyDevice VALUES ('62', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:15:11', '2020-08-19 06:57:05', null);
-INSERT INTO tblNotifyDevice VALUES ('62', '4', 'dm0D_plj2gc:APA91bHSgfNBHb9U6vBeTV3zpk_mHNPmf9nL2y1LDD3-QAtLMdsMQXYEaVQkCdPNPQiTJbWfeQXfdwpoAiPoF3TKHYRrhO8c656O_v4uklLl720MM7W8WdD3pUxocV3ad2iq48jMX_HO', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:15:11', '2020-08-19 06:57:06', null);
-INSERT INTO tblNotifyDevice VALUES ('62', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:15:11', '2020-08-19 06:57:06', null);
-INSERT INTO tblNotifyDevice VALUES ('62', '4', 'euuYkjZMdxw:APA91bEsd4ymKejWrv_Uaoeaao_rKGd2P_dU5Vb9IOr3Sh4gapdla0NwntVb1LlPUwdiRz95Z0MIF1tOk8IAXXJHindq9ucdOytElaOp6dON4lEjzC7Hw76NLyiK97-WtrHdJxPNFgUx', 'COMPLETE', null, '', '1', '2020-08-18 09:15:11', '2020-08-19 06:57:06', null);
-INSERT INTO tblNotifyDevice VALUES ('62', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:15:11', '2020-08-19 06:57:07', null);
-INSERT INTO tblNotifyDevice VALUES ('63', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:15:12', '2020-08-19 06:57:07', null);
-INSERT INTO tblNotifyDevice VALUES ('64', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:15:58', '2020-08-19 06:57:07', null);
-INSERT INTO tblNotifyDevice VALUES ('65', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:07', null);
-INSERT INTO tblNotifyDevice VALUES ('65', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:07', null);
-INSERT INTO tblNotifyDevice VALUES ('65', '4', 'dm0D_plj2gc:APA91bHSgfNBHb9U6vBeTV3zpk_mHNPmf9nL2y1LDD3-QAtLMdsMQXYEaVQkCdPNPQiTJbWfeQXfdwpoAiPoF3TKHYRrhO8c656O_v4uklLl720MM7W8WdD3pUxocV3ad2iq48jMX_HO', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:08', null);
-INSERT INTO tblNotifyDevice VALUES ('65', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:08', null);
-INSERT INTO tblNotifyDevice VALUES ('65', '4', 'euuYkjZMdxw:APA91bEsd4ymKejWrv_Uaoeaao_rKGd2P_dU5Vb9IOr3Sh4gapdla0NwntVb1LlPUwdiRz95Z0MIF1tOk8IAXXJHindq9ucdOytElaOp6dON4lEjzC7Hw76NLyiK97-WtrHdJxPNFgUx', 'COMPLETE', null, '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:08', null);
-INSERT INTO tblNotifyDevice VALUES ('65', '4', 'fcS8DWwtY84:APA91bH2WKfiIblAVggttEk6zXjVD-_O5c8LQiWwaJJbN00JEMvTQerlsF03JDeT_9i77beVeHqM6s7Cp6B3EnDbw1cz0slBzFnGNhT91raHA_s9x8P-FbzC9QOhfRTRHRPc7XXybDeq', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:08', null);
-INSERT INTO tblNotifyDevice VALUES ('65', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:09', null);
-INSERT INTO tblNotifyDevice VALUES ('66', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-19 06:48:26', '2020-08-19 06:57:09', null);
+INSERT INTO tblNotifyDevice VALUES ('53', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-15 15:11:36', '2020-08-17 02:52:00', null);
+INSERT INTO tblNotifyDevice VALUES ('53', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-15 15:11:36', '2020-08-17 02:52:01', null);
+INSERT INTO tblNotifyDevice VALUES ('53', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-15 15:11:36', '2020-08-17 02:52:02', null);
+INSERT INTO tblNotifyDevice VALUES ('53', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-15 15:11:36', '2020-08-17 02:52:02', null);
+INSERT INTO tblNotifyDevice VALUES ('53', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-15 15:11:36', '2020-08-17 02:52:02', null);
+INSERT INTO tblNotifyDevice VALUES ('54', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '4', '2020-08-17 04:26:17', '2020-08-17 04:27:00', null);
+INSERT INTO tblNotifyDevice VALUES ('55', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:14:10', '2020-08-19 06:57:00', null);
+INSERT INTO tblNotifyDevice VALUES ('56', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:11', '2020-08-19 06:57:02', null);
+INSERT INTO tblNotifyDevice VALUES ('56', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:11', '2020-08-19 06:57:02', null);
+INSERT INTO tblNotifyDevice VALUES ('56', '4', 'dm0D_plj2gc:APA91bHSgfNBHb9U6vBeTV3zpk_mHNPmf9nL2y1LDD3-QAtLMdsMQXYEaVQkCdPNPQiTJbWfeQXfdwpoAiPoF3TKHYRrhO8c656O_v4uklLl720MM7W8WdD3pUxocV3ad2iq48jMX_HO', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:11', '2020-08-19 06:57:03', null);
+INSERT INTO tblNotifyDevice VALUES ('56', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:11', '2020-08-19 06:57:03', null);
+INSERT INTO tblNotifyDevice VALUES ('56', '4', 'euuYkjZMdxw:APA91bEsd4ymKejWrv_Uaoeaao_rKGd2P_dU5Vb9IOr3Sh4gapdla0NwntVb1LlPUwdiRz95Z0MIF1tOk8IAXXJHindq9ucdOytElaOp6dON4lEjzC7Hw76NLyiK97-WtrHdJxPNFgUx', 'COMPLETE', null, '', '1', '2020-08-18 09:14:11', '2020-08-19 06:57:03', null);
+INSERT INTO tblNotifyDevice VALUES ('56', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:11', '2020-08-19 06:57:03', null);
+INSERT INTO tblNotifyDevice VALUES ('57', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:14:12', '2020-08-19 06:57:03', null);
+INSERT INTO tblNotifyDevice VALUES ('58', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:14:19', '2020-08-19 06:57:03', null);
+INSERT INTO tblNotifyDevice VALUES ('59', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:22', '2020-08-19 06:57:04', null);
+INSERT INTO tblNotifyDevice VALUES ('59', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:22', '2020-08-19 06:57:04', null);
+INSERT INTO tblNotifyDevice VALUES ('59', '4', 'dm0D_plj2gc:APA91bHSgfNBHb9U6vBeTV3zpk_mHNPmf9nL2y1LDD3-QAtLMdsMQXYEaVQkCdPNPQiTJbWfeQXfdwpoAiPoF3TKHYRrhO8c656O_v4uklLl720MM7W8WdD3pUxocV3ad2iq48jMX_HO', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:22', '2020-08-19 06:57:04', null);
+INSERT INTO tblNotifyDevice VALUES ('59', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:22', '2020-08-19 06:57:04', null);
+INSERT INTO tblNotifyDevice VALUES ('59', '4', 'euuYkjZMdxw:APA91bEsd4ymKejWrv_Uaoeaao_rKGd2P_dU5Vb9IOr3Sh4gapdla0NwntVb1LlPUwdiRz95Z0MIF1tOk8IAXXJHindq9ucdOytElaOp6dON4lEjzC7Hw76NLyiK97-WtrHdJxPNFgUx', 'COMPLETE', null, '', '1', '2020-08-18 09:14:22', '2020-08-19 06:57:05', null);
+INSERT INTO tblNotifyDevice VALUES ('59', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:14:22', '2020-08-19 06:57:05', null);
+INSERT INTO tblNotifyDevice VALUES ('60', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:14:23', '2020-08-19 06:57:05', null);
+INSERT INTO tblNotifyDevice VALUES ('61', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:15:08', '2020-08-19 06:57:05', null);
+INSERT INTO tblNotifyDevice VALUES ('62', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:15:11', '2020-08-19 06:57:05', null);
+INSERT INTO tblNotifyDevice VALUES ('62', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:15:11', '2020-08-19 06:57:05', null);
+INSERT INTO tblNotifyDevice VALUES ('62', '4', 'dm0D_plj2gc:APA91bHSgfNBHb9U6vBeTV3zpk_mHNPmf9nL2y1LDD3-QAtLMdsMQXYEaVQkCdPNPQiTJbWfeQXfdwpoAiPoF3TKHYRrhO8c656O_v4uklLl720MM7W8WdD3pUxocV3ad2iq48jMX_HO', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:15:11', '2020-08-19 06:57:06', null);
+INSERT INTO tblNotifyDevice VALUES ('62', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:15:11', '2020-08-19 06:57:06', null);
+INSERT INTO tblNotifyDevice VALUES ('62', '4', 'euuYkjZMdxw:APA91bEsd4ymKejWrv_Uaoeaao_rKGd2P_dU5Vb9IOr3Sh4gapdla0NwntVb1LlPUwdiRz95Z0MIF1tOk8IAXXJHindq9ucdOytElaOp6dON4lEjzC7Hw76NLyiK97-WtrHdJxPNFgUx', 'COMPLETE', null, '', '1', '2020-08-18 09:15:11', '2020-08-19 06:57:06', null);
+INSERT INTO tblNotifyDevice VALUES ('62', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-18 09:15:11', '2020-08-19 06:57:07', null);
+INSERT INTO tblNotifyDevice VALUES ('63', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:15:12', '2020-08-19 06:57:07', null);
+INSERT INTO tblNotifyDevice VALUES ('64', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-18 09:15:58', '2020-08-19 06:57:07', null);
+INSERT INTO tblNotifyDevice VALUES ('65', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:07', null);
+INSERT INTO tblNotifyDevice VALUES ('65', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:07', null);
+INSERT INTO tblNotifyDevice VALUES ('65', '4', 'dm0D_plj2gc:APA91bHSgfNBHb9U6vBeTV3zpk_mHNPmf9nL2y1LDD3-QAtLMdsMQXYEaVQkCdPNPQiTJbWfeQXfdwpoAiPoF3TKHYRrhO8c656O_v4uklLl720MM7W8WdD3pUxocV3ad2iq48jMX_HO', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:08', null);
+INSERT INTO tblNotifyDevice VALUES ('65', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:08', null);
+INSERT INTO tblNotifyDevice VALUES ('65', '4', 'euuYkjZMdxw:APA91bEsd4ymKejWrv_Uaoeaao_rKGd2P_dU5Vb9IOr3Sh4gapdla0NwntVb1LlPUwdiRz95Z0MIF1tOk8IAXXJHindq9ucdOytElaOp6dON4lEjzC7Hw76NLyiK97-WtrHdJxPNFgUx', 'COMPLETE', null, '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:08', null);
+INSERT INTO tblNotifyDevice VALUES ('65', '4', 'fcS8DWwtY84:APA91bH2WKfiIblAVggttEk6zXjVD-_O5c8LQiWwaJJbN00JEMvTQerlsF03JDeT_9i77beVeHqM6s7Cp6B3EnDbw1cz0slBzFnGNhT91raHA_s9x8P-FbzC9QOhfRTRHRPc7XXybDeq', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:08', null);
+INSERT INTO tblNotifyDevice VALUES ('65', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:24', '2020-08-19 06:57:09', null);
+INSERT INTO tblNotifyDevice VALUES ('66', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-19 06:48:26', '2020-08-19 06:57:09', null);
 INSERT INTO tblNotifyDevice VALUES ('67', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:27', '2020-08-19 06:57:09', null);
 INSERT INTO tblNotifyDevice VALUES ('67', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:27', '2020-08-19 06:57:09', null);
 INSERT INTO tblNotifyDevice VALUES ('67', '4', 'dm0D_plj2gc:APA91bHSgfNBHb9U6vBeTV3zpk_mHNPmf9nL2y1LDD3-QAtLMdsMQXYEaVQkCdPNPQiTJbWfeQXfdwpoAiPoF3TKHYRrhO8c656O_v4uklLl720MM7W8WdD3pUxocV3ad2iq48jMX_HO', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:27', '2020-08-19 06:57:10', null);
@@ -8195,7 +8216,7 @@ INSERT INTO tblNotifyDevice VALUES ('67', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN
 INSERT INTO tblNotifyDevice VALUES ('67', '4', 'euuYkjZMdxw:APA91bEsd4ymKejWrv_Uaoeaao_rKGd2P_dU5Vb9IOr3Sh4gapdla0NwntVb1LlPUwdiRz95Z0MIF1tOk8IAXXJHindq9ucdOytElaOp6dON4lEjzC7Hw76NLyiK97-WtrHdJxPNFgUx', 'COMPLETE', null, '', '1', '2020-08-19 06:48:27', '2020-08-19 06:57:10', null);
 INSERT INTO tblNotifyDevice VALUES ('67', '4', 'fcS8DWwtY84:APA91bH2WKfiIblAVggttEk6zXjVD-_O5c8LQiWwaJJbN00JEMvTQerlsF03JDeT_9i77beVeHqM6s7Cp6B3EnDbw1cz0slBzFnGNhT91raHA_s9x8P-FbzC9QOhfRTRHRPc7XXybDeq', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:27', '2020-08-19 06:57:10', null);
 INSERT INTO tblNotifyDevice VALUES ('67', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 06:48:27', '2020-08-19 06:57:11', null);
-INSERT INTO tblNotifyDevice VALUES ('68', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-19 06:58:37', '2020-08-19 06:59:00', null);
+INSERT INTO tblNotifyDevice VALUES ('68', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-19 06:58:37', '2020-08-19 06:59:00', null);
 INSERT INTO tblNotifyDevice VALUES ('68', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'PENDING', null, '', '1', '2020-08-19 06:58:37', null, null);
 INSERT INTO tblNotifyDevice VALUES ('68', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'PENDING', null, '', '1', '2020-08-19 06:58:37', null, null);
 INSERT INTO tblNotifyDevice VALUES ('68', '4', 'dm0D_plj2gc:APA91bHSgfNBHb9U6vBeTV3zpk_mHNPmf9nL2y1LDD3-QAtLMdsMQXYEaVQkCdPNPQiTJbWfeQXfdwpoAiPoF3TKHYRrhO8c656O_v4uklLl720MM7W8WdD3pUxocV3ad2iq48jMX_HO', 'PENDING', null, '', '1', '2020-08-19 06:58:37', null, null);
@@ -8203,6 +8224,17 @@ INSERT INTO tblNotifyDevice VALUES ('68', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN
 INSERT INTO tblNotifyDevice VALUES ('68', '4', 'euuYkjZMdxw:APA91bEsd4ymKejWrv_Uaoeaao_rKGd2P_dU5Vb9IOr3Sh4gapdla0NwntVb1LlPUwdiRz95Z0MIF1tOk8IAXXJHindq9ucdOytElaOp6dON4lEjzC7Hw76NLyiK97-WtrHdJxPNFgUx', 'PENDING', null, '', '1', '2020-08-19 06:58:37', null, null);
 INSERT INTO tblNotifyDevice VALUES ('68', '4', 'fcS8DWwtY84:APA91bH2WKfiIblAVggttEk6zXjVD-_O5c8LQiWwaJJbN00JEMvTQerlsF03JDeT_9i77beVeHqM6s7Cp6B3EnDbw1cz0slBzFnGNhT91raHA_s9x8P-FbzC9QOhfRTRHRPc7XXybDeq', 'PENDING', null, '', '1', '2020-08-19 06:58:37', null, null);
 INSERT INTO tblNotifyDevice VALUES ('68', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'PENDING', null, '', '1', '2020-08-19 06:58:37', null, null);
+INSERT INTO tblNotifyDevice VALUES ('69', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '4', '2020-08-19 19:40:45', '2020-08-19 19:41:00', null);
+INSERT INTO tblNotifyDevice VALUES ('70', '2', '', 'ERROR', 'Exactly one of token, topic or condition must be specified', '', '1', '2020-08-19 19:42:02', '2020-08-19 19:43:00', null);
+INSERT INTO tblNotifyDevice VALUES ('70', '4', 'cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAIPjyk-xk8Yr2wHd7h81BjAEdWsPuaEqta20T0TI5zTc1Lta4ZiY8aM1td0-4TkNw02_DJ-chkMLvM_OeL2qBqlJ5KE0JuUwUsBeQBxvuuWSE', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 19:42:02', '2020-08-19 19:43:02', null);
+INSERT INTO tblNotifyDevice VALUES ('70', '4', 'cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 19:42:02', '2020-08-19 19:43:03', null);
+INSERT INTO tblNotifyDevice VALUES ('70', '4', 'crE7JhagDoA:APA91bGc2rWAtbSKWhLWDUSuR8jGxVQwaBdte7VL0yzwtQA4AidwKXF20LB1jFdH4caCttqQPROzBbMEaQcvIrO9tvVdVr-nu2s-_MtglObNDB30ykJj6Hof60qnqZbWqMnj8D7CDT2L', 'COMPLETE', null, '', '1', '2020-08-19 19:42:02', '2020-08-19 19:43:03', null);
+INSERT INTO tblNotifyDevice VALUES ('70', '4', 'dm0D_plj2gc:APA91bHSgfNBHb9U6vBeTV3zpk_mHNPmf9nL2y1LDD3-QAtLMdsMQXYEaVQkCdPNPQiTJbWfeQXfdwpoAiPoF3TKHYRrhO8c656O_v4uklLl720MM7W8WdD3pUxocV3ad2iq48jMX_HO', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 19:42:02', '2020-08-19 19:43:03', null);
+INSERT INTO tblNotifyDevice VALUES ('70', '4', 'dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 19:42:02', '2020-08-19 19:43:03', null);
+INSERT INTO tblNotifyDevice VALUES ('70', '4', 'euuYkjZMdxw:APA91bEsd4ymKejWrv_Uaoeaao_rKGd2P_dU5Vb9IOr3Sh4gapdla0NwntVb1LlPUwdiRz95Z0MIF1tOk8IAXXJHindq9ucdOytElaOp6dON4lEjzC7Hw76NLyiK97-WtrHdJxPNFgUx', 'COMPLETE', null, '', '1', '2020-08-19 19:42:02', '2020-08-19 19:43:04', null);
+INSERT INTO tblNotifyDevice VALUES ('70', '4', 'ev68ZY7Fmw0:APA91bEBYyZsfz0qhfsk_z4KFZd-nnBFfkjRzimPAKAO75_Kj03rSSwLNB8CCVT-ysMVfAeMJcAZSXkXRjWedtAC9uuTP9d4a02Hcf3NsiZCbsc4JKKSJ_-Tx85udBcI15BGQ9Ks-zeo', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 19:42:02', '2020-08-19 19:43:04', null);
+INSERT INTO tblNotifyDevice VALUES ('70', '4', 'fcS8DWwtY84:APA91bH2WKfiIblAVggttEk6zXjVD-_O5c8LQiWwaJJbN00JEMvTQerlsF03JDeT_9i77beVeHqM6s7Cp6B3EnDbw1cz0slBzFnGNhT91raHA_s9x8P-FbzC9QOhfRTRHRPc7XXybDeq', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 19:42:02', '2020-08-19 19:43:04', null);
+INSERT INTO tblNotifyDevice VALUES ('70', '4', 'fMt44PQ7KIc:APA91bEVIwor6vTZsA6ZzJ6d_saYqUEMHECasrCLzHRfauj3cqi6Ip8nPAJie4QX4mVOdiy5hPqr0SmiRXtNfY3UhaIwVK2Gq3rTRoRy8tf2hilDvcn8MvDLso_E68suWZmnd_8qHeAU', 'ERROR', 'com.google.firebase.messaging.FirebaseMessagingException: Requested entity was not found.', '', '1', '2020-08-19 19:42:02', '2020-08-19 19:43:04', null);
 
 -- ----------------------------
 -- Table structure for `tblOrganization`
@@ -8255,7 +8287,7 @@ CREATE TABLE `tblPoint` (
   KEY `subject_id` (`subject_id`),
   CONSTRAINT `tblPoint_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `tblStudent` (`id`),
   CONSTRAINT `tblPoint_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `tblSubject` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=221 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=227 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of tblPoint
@@ -8298,6 +8330,12 @@ INSERT INTO tblPoint VALUES ('217', '7', '2', '23', '1', '1', '1', '2020-08-19 0
 INSERT INTO tblPoint VALUES ('218', '7', '2', '4', '1', '1', '1', '2020-08-19 09:54:34', null, null);
 INSERT INTO tblPoint VALUES ('219', '7', '2', '5', '1', '1', '1', '2020-08-19 09:54:34', null, null);
 INSERT INTO tblPoint VALUES ('220', '7', '2', '1', '3', '1', '1', '2020-08-19 09:54:34', null, null);
+INSERT INTO tblPoint VALUES ('221', '1', '2', '10', '1', '2', '1', '2020-08-20 08:11:38', null, null);
+INSERT INTO tblPoint VALUES ('222', '1', '2', '9', '2', '2', '1', '2020-08-20 08:11:38', null, null);
+INSERT INTO tblPoint VALUES ('223', '1', '2', '9', '2', '2', '1', '2020-08-20 08:11:38', null, null);
+INSERT INTO tblPoint VALUES ('224', '1', '2', '4', '3', '2', '1', '2020-08-20 08:11:38', null, null);
+INSERT INTO tblPoint VALUES ('225', '7', '1', '10', '1', '1', '1', '2020-08-20 10:15:30', null, null);
+INSERT INTO tblPoint VALUES ('226', '7', '1', '9', '2', '1', '1', '2020-08-20 10:15:30', null, null);
 
 -- ----------------------------
 -- Table structure for `tblStudent`
@@ -8402,7 +8440,7 @@ CREATE TABLE `tblUser` (
 -- Records of tblUser
 -- ----------------------------
 INSERT INTO tblUser VALUES ('1', 'admin', null, '/resources/image/1588848512591.JPEG', 'trungtrandb@gmail.com', 'Trần Quang Trung', '0', null, null, null, '$2a$10$SNpM9SIASfw9.OmzY6pkc.9at.N3ZHEV0d8EEwUuHmNzNI7H4oxZW', '', 'ROLE_USER', 'ACTIVE', null, '2020-07-30 08:40:47', null, '2020-07-30 08:41:54');
-INSERT INTO tblUser VALUES ('2', 'trungtrandb1@gmail.com', 'Dũng Tiến, Thường Tín, Hà Nội', '/resources/image/avatar2.png', 'trungtrandb1@gmail.com', 'Nguyễn Minh Phương', '0', null, null, null, '$2a$10$uNT3CpyQBdPBTRCY70tUt.8FikgDHkQzAKRx6yIjjE.pSGPgpaoB.', '0962543321', 'ROLE_USER', 'ACTIVE', '1', '2020-07-30 08:58:17', null, '2020-08-10 02:48:20');
+INSERT INTO tblUser VALUES ('2', 'trungtrandb1@gmail.com', 'Dũng Tiến, Thường Tín, Hà Nội', '/resources/image/avatar2.png', 'trungtrandb1@gmail.com', 'Nguyễn Minh Phương', '0', null, null, null, '$2a$10$tOAiwunqVl90vBN91OxCKeKTsTC5ccKWUO9RCn3VjkOt4Yz.SUz9C', '0962543321', 'ROLE_USER', 'ACTIVE', '1', '2020-07-30 08:58:17', null, '2020-08-10 02:48:20');
 INSERT INTO tblUser VALUES ('3', 'trungtq@sopen.vn', 'Dũng Tiến, Thường Tín, Hà Nội', null, 'trungtq@sopen.vn', 'Nguyễn Minh Phương 1', '0', null, null, null, '$2a$10$OOXr/FwuNEGybigaQUw0m.5Upvk6eZjrfj0wi4WsVIYscuKfGHLQy', '0962543321', 'ROLE_USER', 'ACTIVE', '1', '2020-07-30 08:58:46', null, null);
 INSERT INTO tblUser VALUES ('4', 'trungtrandb@gmail.com', 'Địa chỉ', '/resources/image/avatar.png', 'trungtrandb@gmail.com', 'Trần Quang Trung', '0', null, null, null, '$2a$10$cP57X.7erS0dsOf2dtfOHeJqz8zSBjsJgdMNTb8kg6b51a7NlIbAG', '0987654321', 'ROLE_USER', 'ACTIVE', null, '2020-07-31 01:56:23', null, '2020-08-12 01:23:19');
 INSERT INTO tblUser VALUES ('5', 'toan34', 'hai duong', '/resources/image/1.jpg', 'daicatoanmasao@gmail.com', 'toan34', '0', null, null, null, '$2a$10$L07NXg64lmUgKKcuzoWwuumLn.KpMNNieSr9nDMz3p/3bACQGBUNm', '012345678', 'ROLE_USER', 'ACTIVE', null, '2020-08-06 02:12:49', null, '2020-08-06 02:13:58');
@@ -8436,6 +8474,7 @@ INSERT INTO tblUserDevice VALUES ('cNu2_nhe-3A:APA91bEu65VSvLr3u0u5OOxqd6WGmkwAI
 INSERT INTO tblUserDevice VALUES ('cPrJvEOdT3WuYi_LVyULED:APA91bFfdxhI3HexGnkhf4NKe-fqbNrir1L0CKIgJNfU_Y5w-NhgNn0455NnqOt0Gybc5YwqR7Aq3o1am2SuMr2wjn5-7YCzhbeOnkoQYO7YVWbgFSTQE_v6k9zQc-ygwUckSoPCs5bO', '1');
 INSERT INTO tblUserDevice VALUES ('cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', '1');
 INSERT INTO tblUserDevice VALUES ('cQUptc0DvTI:APA91bHzdwUKRw55RdlrcLeznfRCrn1ze9SpbGySMdF3S8HRCS5YEzBSr9_xI8tCqH1BqgNodmOuMaFnOenvfjRKmxKw7Zeh_pbIACXgM7GEF4He-wMA2gcQBa_TfHPhvSL-4ngZrxOH', '4');
+INSERT INTO tblUserDevice VALUES ('crE7JhagDoA:APA91bGc2rWAtbSKWhLWDUSuR8jGxVQwaBdte7VL0yzwtQA4AidwKXF20LB1jFdH4caCttqQPROzBbMEaQcvIrO9tvVdVr-nu2s-_MtglObNDB30ykJj6Hof60qnqZbWqMnj8D7CDT2L', '4');
 INSERT INTO tblUserDevice VALUES ('dm0D_plj2gc:APA91bHSgfNBHb9U6vBeTV3zpk_mHNPmf9nL2y1LDD3-QAtLMdsMQXYEaVQkCdPNPQiTJbWfeQXfdwpoAiPoF3TKHYRrhO8c656O_v4uklLl720MM7W8WdD3pUxocV3ad2iq48jMX_HO', '4');
 INSERT INTO tblUserDevice VALUES ('dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', '1');
 INSERT INTO tblUserDevice VALUES ('dxXw4EGybbc:APA91bHHpijjRnjqoYkN5LxTIMcKM_t9DEv8FY0U2oW3TVmCbMZY2Clg07SoSLLtDglGH4ZGKDJYNKBA9uSQty9VA8C2eNEGwUqJqhSn2oWnQHCusb-egLw_2ChlnAcZ_OZ3JeO02U04', '4');
@@ -8486,6 +8525,21 @@ END
 DELIMITER ;
 
 -- ----------------------------
+-- Procedure structure for `findByClassIds`
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `findByClassIds`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `findByClassIds`(IN classIds VARCHAR(100))
+BEGIN
+	SELECT s.*, c.name as class_name, u.full_name FROM tblStudent s
+    JOIN tblClass c on s.class_id = c.id 
+    JOIN tblUser u on u.id = s.parent_id 
+    WHERE FIND_IN_SET(s.class_id, classIds);
+END
+;;
+DELIMITER ;
+
+-- ----------------------------
 -- Procedure structure for `findNotifyByStatus`
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `findNotifyByStatus`;
@@ -8519,15 +8573,15 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `getCheckin`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`%` PROCEDURE `getCheckin`(IN `classId` bigint,IN `lessionId` bigint,IN `createdDate` date)
+CREATE DEFINER=`root`@`%` PROCEDURE `getCheckin`(IN `studentIds` varchar(250),IN `lessionId` bigint,IN `createdDate` date)
 BEGIN
-	SELECT s.student_code, s.`name`, u.full_name, cl.`name` as 'class_name', ls.title, c.* 
+	SELECT s.student_code, s.`name`, u.full_name, cl.`name` as 'class_name', ls.title, c.* ,s.class_id
 	FROM tblCheckin c 
-	JOIN tblStudent s on c.student_id = s.id
-	JOIN tblClass cl ON c.class_id = cl.id
+	LEFT JOIN tblStudent s on s.id = c.student_id
+	JOIN tblClass cl ON s.class_id = cl.id
 	JOIN tblLession ls on c.lession_id = ls.id
 	JOIN tblUser u ON c.created_by = u.id
-	WHERE c.class_id = classId AND c.lession_id = lessionId AND DATE_FORMAT(c.created_date, '%Y-%m-%d') = DATE_FORMAT(createdDate, '%Y-%m-%d');
+	WHERE FIND_IN_SET(s.id, studentIds) AND c.lession_id = lessionId AND DATE_FORMAT(c.created_date, '%Y-%m-%d') = DATE_FORMAT(createdDate, '%Y-%m-%d');
 END
 ;;
 DELIMITER ;
@@ -8602,23 +8656,6 @@ BEGIN
 	ORDER BY created_date DESC
 	LIMIT startFrom, size;
 
-END
-;;
-DELIMITER ;
-
--- ----------------------------
--- Procedure structure for `getStudentByClassIds`
--- ----------------------------
-DROP PROCEDURE IF EXISTS `getStudentByClassIds`;
-DELIMITER ;;
-CREATE DEFINER=`root`@`%` PROCEDURE `getStudentByClassIds`(
-	IN classIds VARCHAR(100)
-)
-BEGIN
-	SELECT s.*, c.name as class_name, u.full_name FROM tblStudent s
-    JOIN tblClass c on s.class_id = c.id 
-    JOIN tblUser u on u.id = s.parent_id 
-    WHERE FIND_IN_SET(s.class_id, classIds);
 END
 ;;
 DELIMITER ;
