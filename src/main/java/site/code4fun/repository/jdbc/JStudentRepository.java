@@ -134,7 +134,7 @@ public class JStudentRepository {
 
     public List<ChooseStudentDTO> getListChooseSt(Long parentId) {
         StringBuilder sql = new StringBuilder(
-                "SELECT s.id as id,s.name as name,s.avatar as avatar,s.date_of_birth as date_of_birth, c.name as class_name, g.name as group_class_name, o.name as school_name FROM tblStudent s ");
+                "SELECT s.id as id,s.name as name,s.avatar as avatar,s.date_of_birth as date_of_birth, c.name as class_name, g.name as group_class_name, o.name as school_name,s.class_id as class_id,o.id as school_id FROM tblStudent s ");
         sql.append("JOIN tblClass c on s.class_id = c.id ");
         sql.append("JOIN tblGroupClass g on c.group_class_id = g.id ");
         sql.append("JOIN tblOrganization o on g.organization_id = o.id ");
@@ -151,6 +151,8 @@ public class JStudentRepository {
                         .className(rs.getString("class_name"))
                         .groupClassName(rs.getString("group_class_name"))
                         .schoolName(rs.getString("school_name"))
+                        .classId(rs.getLong("class_id"))
+                        .schoolId(rs.getLong("school_id"))
                         .build());
     }
 }
