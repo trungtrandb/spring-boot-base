@@ -77,6 +77,18 @@ public class ClassController {
 		}
 	}
 	
+	@RequestMapping(value = "get-point-by-student/{studentId}", method = RequestMethod.GET)
+	public ResponseEntity<?> getPointByStudent(@PathVariable Long studentId, 
+			@RequestParam(required = false) Long subjectId, 
+			@RequestParam(required = false) Byte sem){
+		try {
+			return new ResponseEntity<>(new Response(200, ResponseMessage.QUERY_SUCCESS, classService.getPointStudent(studentId, subjectId, sem)), HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.OK);
+		}
+	}
+	
 	@RequestMapping(value = "update-point", method = RequestMethod.POST)
 	public ResponseEntity<?> updatePoint(@RequestBody PointDTO point){
 		try {

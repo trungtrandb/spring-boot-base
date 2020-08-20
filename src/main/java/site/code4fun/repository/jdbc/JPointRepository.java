@@ -1,6 +1,7 @@
 package site.code4fun.repository.jdbc;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,31 @@ public class JPointRepository {
 			mapRes.put(st.getStudentId(), st);
 		});
 		return mapRes;
+	}
+	
+	public List<PointDTO> getPointStudent(Long studentId, Long subjectId, Byte sem){
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("studentId", studentId);
+		String sql = "SELECT * FROM tblPoint p JOIN tblSubject s ON p.subject_id = s.id WHERE p.student_id = :studentId ";
+		if(null != subjectId) {
+			sql += "AND p.subject_id = :subjectId ";
+			parameters.addValue("subjectId", subjectId);
+		}
+		
+		if(null != sem) {
+			sql += "AND p.sem = :sem";
+			parameters.addValue("sem", sem);
+		}
+		return jdbcTemplate.query(sql, parameters, (rs, numRow) -> 
+			PointDTO.builder()
+					.id(rs.getLong("id"))
+					.studentId(rs.getLong("student_id"))
+					.subjectId(rs.getLong("subject_id"))
+					.sem(rs.getByte("sem"))
+					.point(rs.getFloat("point"))
+					.multiple(rs.getByte("multiple"))
+					.subjectName(rs.getString("name"))
+					.build()
+		);
 	}
 }

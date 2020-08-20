@@ -19,4 +19,5 @@ public class PointDTO extends Point{
 	protected Double pointAvg;
 	protected String studentName;
 	protected String studentCode;
+	protected String subjectName;
 }

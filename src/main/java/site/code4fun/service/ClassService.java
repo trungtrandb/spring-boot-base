@@ -112,6 +112,35 @@ public class ClassService extends BaseService {
             return dto;
         }).collect(Collectors.toList());
     }
+    
+    public List<PointDTO> getPointStudent(Long studentId, Long subjectId, Byte sem){
+    	List<PointDTO> lstPoint = jPointRepository.getPointStudent(studentId, subjectId, sem);
+    	int num = 0;
+    	double totalPoint = 0;
+    	for(PointDTO _item : lstPoint) {
+    		switch (_item.getMultiple()) {
+			case 1:
+				totalPoint += _item.getPoint();
+    			num++;
+				break;
+			case 2:
+				totalPoint += _item.getPoint() * 2;
+    			num += 2;
+				break;
+				
+			case 3:
+				totalPoint += _item.getPoint() * 3;
+    			num += 3;
+				break;
+			default:
+				break;
+			}
+    	}
+    	double avg = totalPoint / num;
+        BigDecimal bd = new BigDecimal(avg).setScale(2, RoundingMode.HALF_UP);
+    	if(lstPoint.size() > 0) lstPoint.get(0).setPointAvg(bd.doubleValue());
+    	return lstPoint;
+    }
 
     public List<Point> updatePoint(PointDTO point) throws Exception {
         List<Long> lstActive = getCurrentActiveClasses().stream().map(Classes::getId).collect(Collectors.toList());

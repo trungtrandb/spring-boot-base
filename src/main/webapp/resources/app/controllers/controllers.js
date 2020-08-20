@@ -660,16 +660,6 @@
             $('.action_menu').toggle();
         });
 
-
-
-        // $(document).mouseup(function(e){
-        //     var container = $('.action_menu');
-        //     if (!container.is(e.target) && container.has(e.target).length === 0) 
-        //     {
-        //         $('.action_menu').css("display", "none");
-        //     }
-        // }); 
-
         function sendMessage() {
             if ($scope.messageContent.length == 0) return;
             userName = $(".contacts a.active").data("target").replace("#", "");
