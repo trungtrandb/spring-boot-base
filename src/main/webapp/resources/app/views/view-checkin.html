@@ -41,6 +41,7 @@
                     <th>Mã học sinh</th>
                     <th>Tên học sinh</th>
                     <th>Điểm danh</th>
+                    <th>Ghi chú</th>
                     <th>Người tạo</th>
                     <th>Ngày tạo</th>
                   </tr>
@@ -49,7 +50,8 @@
                   <tr ng-repeat="x in lstCheckin">
                     <td>{{ x.studentCode }}</td>
                     <td>{{ x.studentName }}</td>
-                    <td>{{ x.present ? "Có mặt" : "Vắng mặt" }}</td>
+                    <td>{{ x.present != null ? x.present ? "Có mặt" : "Vắng mặt" : "Chưa điểm danh" }}</td>
+                    <td>{{ x.note }}</td>
                     <td>{{ x.createdName }}</td>
                     <td>{{ x.createdDate | date:'dd/MM/yyyy' }}</td>
                 </tbody>

@@ -22,7 +22,6 @@ public class JLessionRepository {
     public List<Lession> findByClassIds(List<Long> classIds, Timestamp startTime,Long subjectId, String name) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("classIds", classIds);
-        parameters.addValue("startTime", startTime);
         parameters.addValue("subjectId", subjectId);
         parameters.addValue("name", "%" + name + "%");
         StringBuilder sql = new StringBuilder("SELECT ls.*, c.name as class_name, s.name as subject_name FROM tblLession ls ");
@@ -30,7 +29,10 @@ public class JLessionRepository {
         sql.append("JOIN tblSubject s ON ls.subject_id = s.id ");
         sql.append("WHERE ls.class_id IN (:classIds) ");
 
-        if(startTime != null) sql.append("AND DATE_FORMAT(ls.start_time, '%Y-%m-%d') = DATE_FORMAT(:startTime, '%Y-%m-%d') ");
+        if(startTime != null) {
+        	sql.append("AND DATE_FORMAT(ls.start_time, '%Y-%m-%d') = DATE_FORMAT(:startTime, '%Y-%m-%d') ");
+        	parameters.addValue("startTime", startTime.toString());
+        }
         if(subjectId != null) sql.append("AND ls.subject_id = :subjectId ");
         if(!StringUtils.isNull(name)) sql.append("AND ls.title LIKE :name");
         if (classIds.size() == 0) return new ArrayList<>();

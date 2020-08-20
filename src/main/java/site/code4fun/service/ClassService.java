@@ -65,7 +65,7 @@ public class ClassService extends BaseService {
     }
 
     public List<PointDTO> getPoint(Long classId, Long subjectId, Byte sem) {
-        List<StudentDTO> lstStudent = jStudentRepository.findStudentByClassId(Collections.singletonList(classId), null);
+        List<StudentDTO> lstStudent = jStudentRepository.findByClassId(Collections.singletonList(classId), null);
         List<Long> studentIds = lstStudent.stream().map(StudentDTO::getId).collect(Collectors.toList());
         Map<Long, PointDTO> mapPoint = jPointRepository.getPoint(StringUtils.stringFromList(studentIds), subjectId, sem);
         return lstStudent.stream().map(_st -> {

@@ -27,45 +27,18 @@
               <div class="form-row">
                 <div class="col">
                   <label for="">Lớp: </label>
-                  <select class="form-control" ng-model="checkin.classId" ng-change="selectClass()" ng-options="item.id as item.name for item in lstClass"></select>
+                  <select class="form-control" ng-model="checkin.classId" ng-change="loadCheckin()" ng-options="item.id as item.name for item in lstClass"></select>
                 </div>
                 <div class="col">
                   <label for="">Buổi học: </label>
-                  <select class="form-control" ng-model="checkin.lessionId" ng-options="item.id as item.title for item in lstLession"></select>
+                  <select class="form-control" ng-model="checkin.lessionId" ng-change="loadCheckin()" ng-options="item.id as item.title for item in lstLession"></select>
                 </div>
               </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="example1" class="table table-bordered table-striped text-center">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Tên học sinh</th>
-                    <th>Số điện thoại</th>
-                    <th>Tên phụ huynh</th>
-                    <th>Lớp</th>
-                    <th>Ghi chú</th>
-                    <th>Thao tác</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="x in lstStudent">
-                    <td>{{ x.id }}</td>
-                    <td>{{ x.name }}</td>
-                    <td>{{ x.phone }}</td>
-                    <td>{{ x.parentName }}</td>
-                    <td>{{ x.className }}</td>
-                    <td>{{ x.note }}</td>
-                    <td>
-                      <select style="width: 100%" ng-model="x.present" ng-change="submitCheckin(x.id, x.present)">
-                        <option value="true">Present</option>
-                        <option value="false">Absent</option>
-                      </select>
-                    </td>
-                  </tbody>
-                </table>
-              </div>
+              <div id="jsGrid"></div>
+            </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->

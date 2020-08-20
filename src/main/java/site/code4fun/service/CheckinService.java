@@ -1,11 +1,7 @@
 package site.code4fun.service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -13,7 +9,6 @@ import org.springframework.stereotype.Service;
 import site.code4fun.constant.Status;
 import site.code4fun.entity.Checkin;
 import site.code4fun.entity.Classes;
-import site.code4fun.entity.GroupClass;
 import site.code4fun.entity.Lession;
 import site.code4fun.entity.Notify;
 import site.code4fun.entity.NotifyDevice;
@@ -21,6 +16,8 @@ import site.code4fun.entity.UserDevice;
 import site.code4fun.entity.Student;
 import site.code4fun.entity.dto.CheckinDTO;
 import site.code4fun.entity.dto.CheckinFilterDTO;
+import site.code4fun.entity.dto.StudentDTO;
+import site.code4fun.util.StringUtils;
 
 @Service
 public class CheckinService extends BaseService{
@@ -37,36 +34,39 @@ public class CheckinService extends BaseService{
 		if(!lession.isPresent() || !lession.get().getClassId().equals(check.getClassId())) throw new Exception("Không tìm thấy buổi học!");
 		
 		// Update nếu điểm danh lại
-		Optional<Checkin> checked = checkinRepository.checkExist(check.getStudentId(), check.getClassId(), check.getLessionId());
+		Optional<Checkin> checked = checkinRepository.checkExist(check.getStudentId(), check.getLessionId());
 		checked.ifPresent(checkin -> check.setId(checkin.getId()));
 		
-		if (!check.isPresent()) { // Vắng mặt
-			List<UserDevice> lstDevice = jStudentRepository.findParentDeviceByStudentId(check.getStudentId());
-			if(lstDevice.size() > 0) {
-				String title = "Thông báo điểm danh";
-				Notify noti = Notify.builder()
-						.title(title)
-						.content(student.get().getName() + "đã điểm danh vắng trong buổi học " + lession.get().getTitle() + "!")
-						.status(Status.PENDING)
-						.createdBy(getCurrentId())
-						.createdDate(new Timestamp(System.currentTimeMillis()))
-						.build();
-				noti = notifyRepository.saveAndFlush(noti);
-				
-				List<NotifyDevice> lstNotifyDevice = new ArrayList<>();
-				for(UserDevice _item : lstDevice) {
-					NotifyDevice notiDevice = NotifyDevice.builder()
-							.deviceToken(_item.getDeviceToken())
-							.notifyId(noti.getId())
-							.createdDate(new Timestamp(System.currentTimeMillis()))
-							.createdBy(noti.getCreatedBy())
+		if (!check.getPresent()) { // Vắng mặt
+			new Thread(() -> {
+				List<UserDevice> lstDevice = jStudentRepository.findParentDeviceByStudentId(check.getStudentId());
+				if(lstDevice.size() > 0) {
+					String title = "Thông báo điểm danh";
+					Notify noti = Notify.builder()
+							.title(title)
+							.content(student.get().getName() + "đã điểm danh vắng trong buổi học " + lession.get().getTitle() + "!")
 							.status(Status.PENDING)
-							.userId(_item.getUserId())
+							.createdBy(getCurrentId())
+							.createdDate(new Timestamp(System.currentTimeMillis()))
 							.build();
-					lstNotifyDevice.add(notiDevice);
+					noti = notifyRepository.saveAndFlush(noti);
+
+					List<NotifyDevice> lstNotifyDevice = new ArrayList<>();
+					for(UserDevice _item : lstDevice) {
+						NotifyDevice notiDevice = NotifyDevice.builder()
+								.deviceToken(_item.getDeviceToken())
+								.notifyId(noti.getId())
+								.createdDate(new Timestamp(System.currentTimeMillis()))
+								.createdBy(noti.getCreatedBy())
+								.status(Status.PENDING)
+								.userId(_item.getUserId())
+								.isRead(false)
+								.build();
+						lstNotifyDevice.add(notiDevice);
+					}
+					notifyDeviceRepository.saveAll(lstNotifyDevice);
 				}
-				notifyDeviceRepository.saveAll(lstNotifyDevice);	
-			}
+			}).start();
 		}
 		
 		check.setCreatedDate(new Timestamp(System.currentTimeMillis()));
@@ -75,28 +75,39 @@ public class CheckinService extends BaseService{
 	}
 
 	public List<CheckinDTO> getAll(CheckinFilterDTO filter) {
-		Map<Long, String> mapGroup = getCurrentGroupClass()
-				.stream().collect(Collectors.toMap(GroupClass::getId, GroupClass::getName));
-		
-		Map<Long, String> mapClass = new HashMap<>();
+		List<Long> classIds = new ArrayList<>();
 		if(filter.getClassId() != null) {
 			Optional<Classes> clazz = classRepository.findById(filter.getClassId());
-			if(clazz.isPresent()) mapClass.put(clazz.get().getId(), clazz.get().getName());
+			if(clazz.isPresent()) classIds.add(clazz.get().getId());
 		}else {
-			if(mapGroup.keySet().size() == 0) return new ArrayList<>();
-			mapClass = classRepository.findByGroupId(new ArrayList<>(mapGroup.keySet()))
-					.stream().collect(Collectors.toMap(Classes::getId, Classes::getName));
+			classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
 		}
-		
-		List<CheckinDTO> lstRes = jCheckinRepository.getAllCheckin(filter.getLessionId(), new ArrayList<>(mapClass.keySet()), filter.getCreatedDate());
+		List<StudentDTO> lstStudent = jStudentRepository.findByClassId(classIds, null);
+		List<Long> studentIds = lstStudent.stream().map(StudentDTO::getId).collect(Collectors.toList());
 
-		for(CheckinDTO _item : lstRes) {
-			if(mapClass.containsKey(_item.getClassId())) _item.setClassName(mapClass.get(_item.getClassId()));
-		}
-		return lstRes;
+		return jCheckinRepository.getAllCheckin(filter.getLessionId(), studentIds, filter.getCreatedDate());
 	}
 
-	public List<CheckinDTO> getCheckin(Checkin c){
-		return jCheckinRepository.getDetailCheckin(c.getClassId(), c.getLessionId(), c.getCreatedDate());
+	public Collection<CheckinDTO> getCheckin(Checkin c){
+		Timestamp createdDate = c.getCreatedDate() != null ? c.getCreatedDate() : new Timestamp(System.currentTimeMillis());
+		List<StudentDTO> lstStudent = jStudentRepository.findByClassId(Collections.singletonList(c.getClassId()), null);
+		List<Long> studentIds = lstStudent.stream().map(StudentDTO::getId).collect(Collectors.toList());
+		String studentIdString = StringUtils.stringFromList(studentIds);
+		Optional<Classes> cl = classRepository.findById(c.getClassId());
+		List<CheckinDTO> lstCheckinDTO = jCheckinRepository.getDetailCheckin(studentIdString, c.getLessionId(), createdDate);
+		Map<Long, CheckinDTO> mapRes = lstCheckinDTO.stream().collect(Collectors.toMap(CheckinDTO::getStudentId, _c -> _c));
+		lstStudent.forEach(_student ->{
+			if (!mapRes.containsKey(_student.getId())){
+				CheckinDTO dto = CheckinDTO.builder()
+						.studentId(_student.getId())
+						.studentName(_student.getName())
+						.studentCode(_student.getStudentCode())
+						.classId(c.getClassId())
+						.className(cl.isPresent() ? cl.get().getName() : "")
+						.build();
+				mapRes.put(_student.getId(), dto);
+			}
+		});
+		return mapRes.values();
 	}
 }

@@ -402,8 +402,7 @@
 
     /* ============================================ */
     function CheckinController($scope, $http, $location, $filter, Restangular) {
-        $scope.submitCheckin = submitCheckin;
-        $scope.selectClass = selectClass;
+        $scope.loadCheckin = loadCheckin;
         $scope.view = view;
         $scope.checkin = $scope.filter = {};
         $scope.filterCheckin = filterCheckin;
@@ -418,9 +417,64 @@
         Restangular.one('/api/organization/get-by-user').get().then(function (response) { $scope.lstOrganization = response.data; });
         Restangular.one('/api/lession/getAll').get().then(function (response) { $scope.lstLession = response.data; });
 
-        function selectClass() {
-            Restangular.one("/api/student/getAll?classId=" +$scope.checkin.classId).get().then(function (response) { $scope.lstStudent = response.data; });
+        function loadCheckin() {
+            if(!$scope.checkin.classId) return;
             Restangular.one('/api/lession/get-by-class?id='+$scope.checkin.classId).get().then(function (response) { $scope.lstLession = response.data; });
+            if (!$scope.checkin.lessionId) return;
+            $("#jsGrid").jsGrid({
+                width: "100%",
+                autoload: true,
+                pageSize: 10,
+                editing: true,
+                controller: {
+                    loadData: function() {
+                        var d = $.Deferred();
+                        Restangular.all("/api/checkin/get").post($scope.checkin).then(function (response) {
+                            d.resolve(response.data);
+                        }, function () {
+                            d.reject();
+                        }); 
+                        return d.promise();
+                    },
+                    updateItem: function(item) {
+                        var d = $.Deferred();
+                        $scope.checkin.studentId = item.studentId;
+                        $scope.checkin.present = item.present;  
+                        $scope.checkin.note = item.note;
+                        Restangular.all('/api/checkin/insert').post($scope.checkin).then(function (response) {
+                            if (response.code == 200) {
+                                toastr.success(response.message);
+                                $("#jsGrid").jsGrid("loadData");
+                                d.resolve(response.data);
+                            }else{
+                                toastr.error(response.message);
+                                d.reject();
+                            }
+                        }, function () {
+                            d.reject();
+                        });   
+                        return d.promise(); 
+                    }
+                },
+                fields: [
+                    { name: "studentCode", title: "Mã học sinh", width: 50},
+                    { name: "studentName", title: "Tên học sinh"},
+                    { name: "note", title: "Ghi chú", type: "text"},
+                    { 
+                        name: "present", 
+                        title: "Điểm danh", 
+                        type: "select",
+                        items: [
+                            { text: "Chưa điểm danh", value: null },
+                            { text: "Đi học", value: true },
+                            { text: "Vắng mặt", value: false }
+                        ],
+                        valueField: "value",
+                        textField: "text",
+                    },
+                    { type: "control", deleteButton: false}
+                ]
+            });
         }
 
         function view(checkinItem) {
@@ -437,20 +491,6 @@
                     $scope.lstCheckinDTO = response.data;
                 }else{
                     toastr.error(response.message);
-                }
-            });
-        }
-
-        function submitCheckin(studentId, status) {  
-            $scope.checkin.studentId = studentId;
-            $scope.checkin.present = status;  
-            Restangular.all('/api/checkin/insert').post($scope.checkin).then(function (response) {
-                if(response.code == 200){
-                    toastr.success(response.message);
-                }else{
-                    toastr.error(response.message); 
-                    $scope.checkin.present = null;
-                    
                 }
             });
         }
@@ -491,13 +531,13 @@
 
         function remove(id){
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Xóa thông báo!',
+                text: "Chỉ có thể xóa thông báo chưa được gửi!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Đồng ý xóa!'
             }).then((result) => {
                 if (result.value) {
                     Restangular.one('/api/notify/delete', id).get().then(function (response) {
@@ -751,7 +791,7 @@ function TeacherController($scope, $http, Restangular) {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Đồng ý xóa!'
         }).then((result) => {
             if (result.value) {
                 Restangular.one('/api/organization/delete-teacher', teacherId).get().then(function (response) {
@@ -875,9 +915,7 @@ function PointController($scope,$location, Restangular) {
             window.location.href = response.data;
         }, function function_name(response) {
             toastr.error(response.message);
-        });
-        
+        });   
     }
-    
 }
 })();

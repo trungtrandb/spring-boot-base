@@ -21,7 +21,7 @@ public class JStudentRepository {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public List<StudentDTO> findStudentByClassId(List<Long> classIds, String name) {
+    public List<StudentDTO> findByClassId(List<Long> classIds, String name) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("classIds", classIds);
         StringBuilder sql = new StringBuilder(

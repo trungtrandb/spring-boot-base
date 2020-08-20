@@ -2,12 +2,7 @@ package site.code4fun.entity;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,22 +19,24 @@ public class Checkin {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	protected Long id;
 	
 	@Column(name = "student_id")
-	private Long studentId;
+	protected Long studentId;
 	
 	@Column(name = "lession_id")
-	private Long lessionId;
+	protected Long lessionId;
 	
-	@Column(name = "class_id")
-	private Long classId;
+	@Transient
+	protected Long classId;
 	
 	@Column(name = "created_by")
-	private Long createdBy;
+	protected Long createdBy;
+
+	protected String note;
 	
 	@Column(name = "created_date")
-	private Timestamp createdDate;
-	
-	private boolean present;
+	protected Timestamp createdDate;
+
+	protected Boolean present;
 }

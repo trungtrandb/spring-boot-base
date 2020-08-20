@@ -80,7 +80,7 @@ public class OrganizationService extends BaseService{
     	List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
 		mapRes.put("totalClass", classIds.size());
 
-    	List<StudentDTO> lstStudent = jStudentRepository.findStudentByClassId(classIds, null);
+    	List<StudentDTO> lstStudent = jStudentRepository.findByClassId(classIds, null);
 		mapRes.put("totalStudent", lstStudent.size());
 
 		Organization org = getCurrentOrganization();

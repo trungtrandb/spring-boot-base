@@ -37,7 +37,7 @@ public class StudentService extends BaseService{
 			if (!idsClass.contains(classId)) return new ArrayList<>();
 			idsClass = Collections.singletonList(classId);
 		}
-		return jStudentRepository.findStudentByClassId(idsClass, name);
+		return jStudentRepository.findByClassId(idsClass, name);
 	}
 
 	public StudentDTO getById(Long id) throws Exception {
