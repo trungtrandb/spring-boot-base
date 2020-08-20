@@ -63,20 +63,103 @@
                     <td>{{ x.className }}</td>
                     <td>{{ x.note }}</td>
                     <td>
-                      <a href="#!edit-student/{{ x.id }}" class="btn btn-sm btn-primary" ng-click=""><i class="fas fa-pencil-alt"></i> Sửa</a>
-                      <button class="btn btn-sm btn-danger" ng-click="remove(x)"><i class="fas fa-trash"></i> Xóa</button>
+                      <a href="javascript:;" class="btn btn-sm btn-primary"  ng-click="viewDetail(x)"><i class="fas fa-eye"></i></a>
+                      <a href="#!edit-student/{{ x.id }}" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></a>
+                      <button class="btn btn-sm btn-danger" ng-click="remove(x)"><i class="fas fa-trash"></i></button>
                     </td>
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
             </div>
-            <!-- /.card-body -->
+            <!-- /.card -->
           </div>
-          <!-- /.card -->
+          <!-- /.col -->
         </div>
-        <!-- /.col -->
+        <!-- /.row -->
       </div>
-      <!-- /.row -->
+      <!-- /.container-fluid -->
+    </section>
+  </div>
+
+  <!-- The Modal -->
+  <div class="modal fade" id="modalDetailStudent">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+        <div class="card-header p-2">
+          <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link active" href="javascript:;" data-target="#settings" data-toggle="tab">Settings</a></li>
+            <li class="nav-item"><a class="nav-link" href="javascript:;" data-target="#settings" data-toggle="tab">Settings</a></li>
+            <li class="nav-item"><a class="nav-link" href="javascript:;" data-target="#settings" data-toggle="tab">Settings</a></li>
+          </ul>
+        </div><!-- /.card-header -->
+        <div class="card-body">
+          <div class="tab-content">
+            <div class="tab-pane active" id="settings">
+              <form class="form-horizontal" ng-submit="submitForm()">
+                <div class="form-group row">
+                  <label for="" class="col-sm-2 col-form-label">Ảnh đại diện</label>
+                  <div class="col-sm-10">
+                    <input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inputName" class="col-sm-2 col-form-label">Họ và tên</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputName" ng-model="user.fullName" placeholder="Name">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control" id="inputEmail" ng-model="user.email" placeholder="Email">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="identity" class="col-sm-2 col-form-label">Số CMT</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="identity" ng-model="user.identityCard" placeholder="Identity">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="phone" class="col-sm-2 col-form-label">Số điện thoại</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="phone" ng-model="user.phone" placeholder="Phone">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="address" class="col-sm-2 col-form-label">Địa chỉ</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="address" ng-model="user.address" placeholder="Address">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="password" class="col-sm-2 col-form-label">Mật khẩu</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" autocomplete="true" id="password" ng-model="user.password" placeholder="Password">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="repass" class="col-sm-2 col-form-label">Nhập lại mật khẩu</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" id="repass" autocomplete="true" ng-model="user.rePass" placeholder="Repass">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="offset-sm-2 col-sm-10">
+                    <button type="submit" class="btn btn-danger">Lưu</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- /.tab-pane -->
+          </div>
+          <!-- /.tab-content -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
-    <!-- /.container-fluid -->
-  </section>
-</div>
+  </div>

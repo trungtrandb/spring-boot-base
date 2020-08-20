@@ -210,6 +210,7 @@
         $scope.student = {};
         $scope.filter = $location.search();
         $scope.loadLstStudent = loadLstStudent;
+        $scope.viewDetail = viewDetail;
 
         loadLstStudent();
         Restangular.one("/api/class/get-by-group?status=ACTIVE").get().then(function (response) {$scope.lstClass = response.data;});
@@ -277,6 +278,10 @@
                 toastr.error(response.data.message);
             })
         };
+
+        function viewDetail(id) {
+            $("#modalDetailStudent").modal("show");
+        }
     }
 
 
