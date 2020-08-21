@@ -216,6 +216,7 @@ public class ClassService extends BaseService {
         int rowNum = 0;
         Organization org = getCurrentOrganization();
         Optional<Classes> clazz = getById(classId);
+        Optional<Subject> subject = subjectRepository.findById(subjectId);
 
         sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, 1));
         sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 6));
@@ -254,9 +255,9 @@ public class ClassService extends BaseService {
         sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 6));
         row = sheet.createRow(rowNum);
         cell = row.createCell(0);
-        cell.setCellValue("Kỳ học:");
-        cell = row.createCell(sem);
-        cell.setCellValue(numOfTest);
+        cell.setCellValue("Môn học:");
+        cell = row.createCell(2);
+        cell.setCellValue(subject.get().getName());
 
         sheet.addMergedRegion(new CellRangeAddress(++rowNum, rowNum, 0, 6));
         row = sheet.createRow(rowNum);
@@ -269,7 +270,7 @@ public class ClassService extends BaseService {
         style.setFont(font);
         cell = row.createCell(0);
         cell.setCellStyle(style);
-        cell.setCellValue("Điểm");
+        cell.setCellValue("Điểm môn học");
 
         row = sheet.createRow(++rowNum); // Hàng tiêu đề cột
         CellStyle styleHeader = workbook.createCellStyle();
@@ -346,7 +347,7 @@ public class ClassService extends BaseService {
             cell.setCellStyle(styleCell);
 
             cell = row.createCell(6);
-            cell.setCellValue(_item.getPointAvg());
+            cell.setCellValue(_item.getPointAvg() != null ? _item.getPointAvg() : 0);
             cell.setCellStyle(styleCell);
         }
 

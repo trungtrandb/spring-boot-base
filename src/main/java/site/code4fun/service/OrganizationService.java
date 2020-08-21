@@ -1,6 +1,7 @@
 package site.code4fun.service;
 
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -30,7 +31,8 @@ public class OrganizationService extends BaseService{
 	}
 	
 	public Organization create(Organization item) throws Exception {
-		if(StringUtils.isNull(item.getName())) throw new Exception("Tên trường không được bỏ trống");		
+		if(StringUtils.isNull(item.getName())) throw new Exception("Tên trường không được bỏ trống");
+		if(!StringUtils.isNull(item.getPhone()) && !Pattern.matches("^(09|012|08|016|03|07|08|05|02)\\d{8,}", item.getPhone())) throw new Exception("Số điện thoại không đúng định dạng!");
 		Optional<User> user = userRepository.findById(getCurrentId());
 		user.ifPresent(item::setUser);
 		user.ifPresent(value -> item.setCreatedBy(value.getId()));

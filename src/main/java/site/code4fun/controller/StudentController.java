@@ -151,4 +151,14 @@ public class StudentController {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
 	}
+
+	@RequestMapping(value = "/export-point-and-checkin/{studentId}", method = RequestMethod.GET )
+	public ResponseEntity<?> exportExcel(@PathVariable Long studentId){
+		try {
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, studentService.exportExcel(studentId)));
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
 }

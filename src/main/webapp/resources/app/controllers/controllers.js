@@ -211,6 +211,7 @@
         $scope.filter = $location.search();
         $scope.loadLstStudent = loadLstStudent;
         $scope.viewDetail = viewDetail;
+        $scope.exportExcel = exportExcel;
 
         loadLstStudent();
         Restangular.one("/api/class/get-by-group?status=ACTIVE").get().then(function (response) {$scope.lstClass = response.data;});
@@ -280,6 +281,7 @@
         };
 
         function viewDetail(id) {
+            $scope.studentId = id;
             Restangular.one("/api/student/view-detail-point",id).get().then(function (response) { 
                 var total = 0;
                 var numOfSubject = 0;
@@ -332,8 +334,20 @@
                     textField: "text",
                 }
                 ]
+            });   
+        }
+
+        function exportExcel() {
+            Restangular.one("/api/student/export-point-and-checkin", $scope.studentId).get()
+            .then(function (response) { 
+                if (response.code == 200) {
+                    window.location.href = response.data;
+                }else{
+                    toastr.error("Lỗi khi tạo file");
+                }
+            }, function function_name(response) {
+                toastr.error(response.message);
             });
-            
         }
     }
 

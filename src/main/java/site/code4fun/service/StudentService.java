@@ -1,18 +1,21 @@
 package site.code4fun.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,7 @@ import site.code4fun.constant.Status;
 import site.code4fun.entity.*;
 import site.code4fun.entity.dto.CheckinDTO;
 import site.code4fun.entity.dto.ChooseStudentDTO;
+import site.code4fun.entity.dto.PointDTO;
 import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.util.CalculatorUtil;
 import site.code4fun.util.StringUtils;
@@ -225,12 +229,11 @@ public class StudentService extends BaseService{
 		return studentRepository.saveAndFlush(student);
 	}
 
-    public Object viewPoint(Long studentId) {
+    public List<HashMap<String, Object>> viewPoint(Long studentId) {
 		List<Point> lstPoint = pointRepository.findByStudentId(studentId);
 		List<Long> subjectIds = lstPoint.stream().map(Point::getSubjectId).collect(Collectors.toList());
 		List<Subject> lstSubject = subjectRepository.findAllById(subjectIds);
-		
-		
+
 		Map<Long, HashMap<String, List<Float>>> mapSubject = new HashMap<>();
 		lstPoint.forEach(_point -> {
 			HashMap<String, List<Float>> mapPoint = new HashMap<>();
@@ -300,7 +303,7 @@ public class StudentService extends BaseService{
 		lstSubject.forEach(_subject -> {
 			HashMap<String, List<Float>> mapPoint = mapSubject.get(_subject.getId());
 
-			HashMap<String, Object> mapRes = new HashMap<String, Object>();
+			HashMap<String, Object> mapRes = new HashMap<>();
 			double totalPoint = 0;
 			totalPoint += CalculatorUtil.sumPointFromList(mapPoint.get("pointMulti1Sem1"), 1);
 			totalPoint += CalculatorUtil.sumPointFromList(mapPoint.get("pointMulti2Sem1"), 2);
@@ -341,5 +344,284 @@ public class StudentService extends BaseService{
 		int offset = 0;
 		return jCheckinRepository.getCheckinByStudentId(studentId, limit, offset);
 		
+	}
+
+	public String exportExcel(Long studentId) throws IOException {
+		String path = "src/main/webapp/resources/excel/";
+		File file = new File(path);
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("Điểm");
+		Cell cell;
+		Row row;
+		int rowNum = 0;
+		Optional<Student> st = studentRepository.findById(studentId);
+		if (!st.isPresent()) return null;
+
+		sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, 1));
+		sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 6));
+		row = sheet.createRow(rowNum);
+		cell = row.createCell(0);
+		cell.setCellValue("Mã học sinh:");
+		cell = row.createCell(2);
+		cell.setCellValue(st.get().getStudentCode());
+
+		sheet.addMergedRegion(new CellRangeAddress(++rowNum, rowNum, 0, 1));
+		sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 6));
+		row = sheet.createRow(rowNum);
+		cell = row.createCell(0);
+		cell.setCellValue("Tên học sinh:");
+		cell = row.createCell(2);
+		cell.setCellValue(st.get().getName());
+
+		sheet.addMergedRegion(new CellRangeAddress(++rowNum, rowNum, 0, 6));
+		row = sheet.createRow(rowNum);
+		Font font = workbook.createFont();
+		font.setFontHeightInPoints((short) 14);
+		font.setBold(true);
+
+		CellStyle style = workbook.createCellStyle();
+		style.setAlignment(HorizontalAlignment.CENTER);
+		style.setVerticalAlignment(VerticalAlignment.CENTER);
+		style.setFont(font);
+		cell = row.createCell(0);
+		cell.setCellStyle(style);
+		cell.setCellValue("Sổ điểm");
+
+		CellStyle styleHeader = workbook.createCellStyle();
+		font = workbook.createFont();
+		font.setBold(true);
+		styleHeader.setFont(font);
+		styleHeader.setBorderTop(BorderStyle.THIN);
+		styleHeader.setBorderRight(BorderStyle.THIN);
+		styleHeader.setBorderBottom(BorderStyle.THIN);
+		styleHeader.setBorderLeft(BorderStyle.THIN);
+		styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+		styleHeader.setAlignment(HorizontalAlignment.CENTER);
+
+		row = sheet.createRow(++rowNum); // Hàng tiêu đề cột
+		sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum + 1, 0, 0));
+		cell = row.createCell(0);
+		cell.setCellValue("Tên môn học");
+		cell.setCellStyle(styleHeader);
+
+		sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 1, 4));
+		cell = row.createCell(1);
+		cell.setCellValue("Học kỳ 1");
+		cell.setCellStyle(styleHeader);
+
+		sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 5, 8));
+		cell = row.createCell(5);
+		cell.setCellValue("Học kỳ 2");
+		cell.setCellStyle(styleHeader);
+
+		sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum + 1, 9, 9));
+		cell = row.createCell(9);
+		cell.setCellValue("Cả năm");
+		cell.setCellStyle(styleHeader);
+
+		row = sheet.createRow(++rowNum); // Hàng tiêu đề cột
+		cell = row.createCell(1);
+		cell.setCellValue("Hệ số 1");
+		cell.setCellStyle(styleHeader);
+
+		cell = row.createCell(2);
+		cell.setCellValue("Hệ số 2");
+		cell.setCellStyle(styleHeader);
+
+		cell = row.createCell(3);
+		cell.setCellValue("Hệ số 3");
+		cell.setCellStyle(styleHeader);
+
+		cell = row.createCell(4);
+		cell.setCellValue("TB kỳ 1");
+		cell.setCellStyle(styleHeader);
+
+		cell = row.createCell(5);
+		cell.setCellValue("Hệ số 1");
+		cell.setCellStyle(styleHeader);
+
+		cell = row.createCell(6);
+		cell.setCellValue("Hệ số 2");
+		cell.setCellStyle(styleHeader);
+
+		cell = row.createCell(7);
+		cell.setCellValue("Hệ số 3");
+		cell.setCellStyle(styleHeader);
+
+		cell = row.createCell(8);
+		cell.setCellValue("TB kỳ 2");
+		cell.setCellStyle(styleHeader);
+
+
+		CellStyle styleCell = workbook.createCellStyle();
+		styleCell.setBorderTop(BorderStyle.THIN);
+		styleCell.setBorderRight(BorderStyle.THIN);
+		styleCell.setBorderBottom(BorderStyle.THIN);
+		styleCell.setBorderLeft(BorderStyle.THIN);
+
+		List<HashMap<String, Object>> lstPoint = viewPoint(studentId);
+		for (HashMap<String, Object> mapPoint : lstPoint) {
+			row = sheet.createRow(++rowNum);
+
+			cell = row.createCell(0);
+			cell.setCellValue(mapPoint.get("subjectName").toString());
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(1);
+			cell.setCellValue(mapPoint.get("pointMulti1Sem1").toString());
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(2);
+			cell.setCellValue(mapPoint.get("pointMulti2Sem1").toString());
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(3);
+			cell.setCellValue(mapPoint.get("pointMulti3Sem1").toString());
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(4);
+			cell.setCellValue(mapPoint.get("pointAvgSem1").toString());
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(5);
+			cell.setCellValue(mapPoint.get("pointMulti1Sem2").toString());
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(6);
+			cell.setCellValue(mapPoint.get("pointMulti2Sem2").toString());
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(7);
+			cell.setCellValue(mapPoint.get("pointMulti3Sem2").toString());
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(8);
+			cell.setCellValue(mapPoint.get("pointAvgSem2").toString());
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(9);
+			cell.setCellValue(mapPoint.get("pointAvgTotal").toString());
+			cell.setCellStyle(styleCell);
+		}
+
+		List<CellRangeAddress> mergedRegions = sheet.getMergedRegions();
+		for (CellRangeAddress rangeAddress : mergedRegions) {
+			if (rangeAddress.containsRow(3) || rangeAddress.containsRow(4)){
+				RegionUtil.setBorderTop(BorderStyle.THIN, rangeAddress, sheet);
+				RegionUtil.setBorderLeft(BorderStyle.THIN, rangeAddress, sheet);
+				RegionUtil.setBorderRight(BorderStyle.THIN, rangeAddress, sheet);
+				RegionUtil.setBorderBottom(BorderStyle.THIN, rangeAddress, sheet);
+			}
+		}
+
+		// Điểm danh
+		sheet = workbook.createSheet("Điểm danh");
+		rowNum = 0;
+
+		sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, 1));
+		sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 6));
+		row = sheet.createRow(rowNum);
+		cell = row.createCell(0);
+		cell.setCellValue("Mã học sinh:");
+		cell = row.createCell(2);
+		cell.setCellValue(st.get().getStudentCode());
+
+		sheet.addMergedRegion(new CellRangeAddress(++rowNum, rowNum, 0, 1));
+		sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 6));
+		row = sheet.createRow(rowNum);
+		cell = row.createCell(0);
+		cell.setCellValue("Tên học sinh:");
+		cell = row.createCell(2);
+		cell.setCellValue(st.get().getName());
+
+		sheet.addMergedRegion(new CellRangeAddress(++rowNum, rowNum, 0, 6));
+		row = sheet.createRow(rowNum);
+		font = workbook.createFont();
+		font.setFontHeightInPoints((short) 14);
+		font.setBold(true);
+
+		style = workbook.createCellStyle();
+		style.setAlignment(HorizontalAlignment.CENTER);
+		style.setVerticalAlignment(VerticalAlignment.CENTER);
+		style.setFont(font);
+		cell = row.createCell(0);
+		cell.setCellStyle(style);
+		cell.setCellValue("Điểm danh");
+
+		styleHeader = workbook.createCellStyle();
+		font = workbook.createFont();
+		font.setBold(true);
+		styleHeader.setFont(font);
+		styleHeader.setBorderTop(BorderStyle.THIN);
+		styleHeader.setBorderRight(BorderStyle.THIN);
+		styleHeader.setBorderBottom(BorderStyle.THIN);
+		styleHeader.setBorderLeft(BorderStyle.THIN);
+		styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+		styleHeader.setAlignment(HorizontalAlignment.CENTER);
+
+		row = sheet.createRow(++rowNum); // Hàng tiêu đề cột
+		cell = row.createCell(0);
+		cell.setCellValue("Buổi học");
+		cell.setCellStyle(styleHeader);
+
+		cell = row.createCell(1);
+		cell.setCellValue("Ngày học");
+		cell.setCellStyle(styleHeader);
+
+		cell = row.createCell(2);
+		cell.setCellValue("Giáo viên điểm danh");
+		cell.setCellStyle(styleHeader);
+
+		cell = row.createCell(3);
+		cell.setCellValue("Ghi chú");
+		cell.setCellStyle(styleHeader);
+
+		cell = row.createCell(4);
+		cell.setCellValue("Điểm danh");
+		cell.setCellStyle(styleHeader);
+
+		styleCell = workbook.createCellStyle();
+		styleCell.setBorderTop(BorderStyle.THIN);
+		styleCell.setBorderRight(BorderStyle.THIN);
+		styleCell.setBorderBottom(BorderStyle.THIN);
+		styleCell.setBorderLeft(BorderStyle.THIN);
+
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		List<CheckinDTO> lstCheckin = viewCheckin(studentId);
+		for (CheckinDTO _item : lstCheckin) {
+			row = sheet.createRow(++rowNum);
+
+			cell = row.createCell(0);
+			cell.setCellValue(_item.getLessionName());
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(1);
+			cell.setCellValue(sf.format(_item.getCreatedDate()));
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(2);
+			cell.setCellValue(_item.getCreatedName());
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(3);
+			cell.setCellValue(_item.getNote());
+			cell.setCellStyle(styleCell);
+
+			cell = row.createCell(4);
+			cell.setCellValue(null != _item.getPresent() ? _item.getPresent() ? "Đi học" : "Vắng mặt" : "Chưa điểm danh");
+			cell.setCellStyle(styleCell);
+		}
+
+
+		if (!file.exists()) file.mkdirs();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+		file = new java.io.File(path + df.format(new Date()) + ".xlsx");
+		file.createNewFile();
+
+		FileOutputStream outFile = new FileOutputStream(file);
+		workbook.write(outFile);
+		workbook.close();
+		outFile.close();
+		return "/resources/excel/" + file.getName();
 	}
 }
