@@ -43,10 +43,4 @@ public class Point {
 	
 	@Column(name = "created_date")
 	protected Timestamp createdDate;
-	
-	@Column(name = "updated_by")
-	protected Long updatedBy;
-	
-	@Column(name = "updated_date")
-	protected Timestamp updatedDate;
 }

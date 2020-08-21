@@ -607,6 +607,17 @@
     /* ============================================ */
     function DashboardController($scope, $rootScope, Restangular, ChatService) {
         Restangular.one('/api/organization/get-report-overview').get().then(function (response) { $scope.overview = response.data; });
+
+        var formattedDate = new Date();
+        var d = formattedDate.getDate();
+        var m =  formattedDate.getMonth() + 1;
+        if (m < 10) {
+            m = "0" + m;
+        }
+        var y = formattedDate.getFullYear();
+        var strDate = y + "-" + m + "-" + d; 
+
+        Restangular.one('/api/lession/getAll?startTime=' + strDate).get().then(function (response) { $scope.overview = response.data; });  
     }
 
     /* ============================================ */

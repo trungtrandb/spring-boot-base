@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import site.code4fun.constant.ResponseMessage;
 import site.code4fun.entity.Response;
@@ -25,15 +24,6 @@ public class SubjectController {
 	public ResponseEntity<?> getAll(){
 		try {
 			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, subjectService.getAll()));
-		}catch(Exception e) {
-			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
-		}
-	}
-
-	@RequestMapping(value = "/get-subject-by-school-id", method = RequestMethod.GET)
-	public ResponseEntity<?> getSubjectBySchoolId(@RequestParam(required = false) Long id){
-		try {
-			return ResponseEntity.ok(new Response(200, "success", subjectService.getSubjectBySchoolId(id)));
 		}catch(Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}

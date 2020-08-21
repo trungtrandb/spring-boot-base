@@ -55,5 +55,8 @@ public class Lession {
 	private String className;
 	
 	@Transient
+	private String teacherName;
+	
+	@Transient
 	private String subjectName;
 }

@@ -24,9 +24,10 @@ public class JLessionRepository {
         parameters.addValue("classIds", classIds);
         parameters.addValue("subjectId", subjectId);
         parameters.addValue("name", "%" + name + "%");
-        StringBuilder sql = new StringBuilder("SELECT ls.*, c.name as class_name, s.name as subject_name FROM tblLession ls ");
+        StringBuilder sql = new StringBuilder("SELECT ls.*, u.full_name, c.name as class_name, s.name as subject_name FROM tblLession ls ");
         sql.append("JOIN tblClass c on ls.class_id = c.id ");
         sql.append("JOIN tblSubject s ON ls.subject_id = s.id ");
+        sql.append("JOIN tblUser u ON ls.user_id = u.id ");
         sql.append("WHERE ls.class_id IN (:classIds) ");
 
         if(startTime != null) {
@@ -34,7 +35,8 @@ public class JLessionRepository {
         	parameters.addValue("startTime", startTime.toString());
         }
         if(subjectId != null) sql.append("AND ls.subject_id = :subjectId ");
-        if(!StringUtils.isNull(name)) sql.append("AND ls.title LIKE :name");
+        if(!StringUtils.isNull(name)) sql.append("AND ls.title LIKE :name ");
+        sql.append("ORDER BY ls.start_time DESC");
         if (classIds.size() == 0) return new ArrayList<>();
         return jdbcTemplate.query(sql.toString(), parameters, (rs, numRow) ->
              Lession.builder()
@@ -46,6 +48,7 @@ public class JLessionRepository {
                     .startTime(rs.getTimestamp("start_time"))
                     .subjectId(rs.getLong("subject_id"))
                     .userId(rs.getLong("user_id"))
+                    .teacherName(rs.getString("full_name"))
                     .classId(rs.getLong("class_id"))
                     .subjectName(rs.getNString("subject_name"))
                     .build()

@@ -1,7 +1,5 @@
 package site.code4fun.entity;
 
-import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,24 +20,11 @@ public class Subject {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	protected Long id;
 	
-	private String name;
-	private String note;
+	protected String name;
+	protected String note;
 	@Column(name = "organization_id")
-	private Long organizationId;
-	private String status;
-	
-	@Column(name = "created_by")
-	private Long createdBy;
-	
-	@Column(name = "created_date")
-	private Timestamp createdDate;
-
-	@Column(name = "updated_by")
-	private Long updated_by;
-	
-	@Column(name = "updated_time")
-	private Timestamp updatedTime;
-	
+	protected Long organizationId;
+	protected String status;	
 }
