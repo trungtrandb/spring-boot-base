@@ -894,7 +894,7 @@ function PointController($scope,$location, Restangular) {
                 { name: "pointMulti1", title: "Điểm hệ số 1", type: "text"},
                 { name: "pointMulti2", title: "Điểm hệ số 2", type: "text"},
                 { name: "pointMulti3", title: "Điểm hệ số 3", type: "text"},
-                { name: "pointAvg", title: "Điểm trung bình"},
+                { name: "pointAvg", title: "Điểm trung bình môn"},
                 { type: "control", deleteButton: false}
             ]
         });

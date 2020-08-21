@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import site.code4fun.constant.Status;
+import site.code4fun.entity.Lession;
 import site.code4fun.entity.Organization;
 import site.code4fun.entity.Subject;
 import site.code4fun.entity.dto.SubjectDTO;
@@ -44,6 +45,8 @@ public class SubjectService extends BaseService{
 	public boolean delete(Long id) throws Exception {
 		Optional<Subject> item = subjectRepository.findById(id);
 		if(item.isPresent()) {
+			List<Lession> lstLession = lessionRepository.findBySubjectId(id);
+			if(lstLession.size() > 0 ) throw new Exception("Không thể xóa môn học đã có lịch học");
 			subjectRepository.deleteById(id);
 			return true;
 		}

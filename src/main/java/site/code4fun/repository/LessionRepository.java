@@ -10,5 +10,7 @@ public interface LessionRepository extends JpaRepository<Lession, Long>{
 	
 	@Query(value = "Select s from Lession s where s.classId in :classIds")
 	List<Lession> findByClassIds(List<Long> classIds);
+
+	List<Lession> findBySubjectId(Long id);
 	
 }

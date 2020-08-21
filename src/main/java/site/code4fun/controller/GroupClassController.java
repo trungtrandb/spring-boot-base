@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import site.code4fun.constant.ResponseMessage;
 import site.code4fun.entity.Response;
 import site.code4fun.entity.dto.GroupClassDTO;
 import site.code4fun.service.GroupClassService;
@@ -22,7 +23,7 @@ public class GroupClassController {
 	@RequestMapping(path = "/get-all", method = RequestMethod.GET)
 	public ResponseEntity<?> getAll(){
 		try {
-			return ResponseEntity.ok(new Response(200, "success", groupClassService.getAll()));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, groupClassService.getAll()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
@@ -32,7 +33,7 @@ public class GroupClassController {
 	@RequestMapping(path = "/get/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getById(@PathVariable Long id){
 		try {
-			return ResponseEntity.ok(new Response(200, "success", groupClassService.getById(id)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, groupClassService.getById(id)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
@@ -42,7 +43,7 @@ public class GroupClassController {
 	@RequestMapping(path = "/insert", method = RequestMethod.POST)
 	public ResponseEntity<?> insert(@RequestBody GroupClassDTO item){
 		try {
-			return ResponseEntity.ok(new Response(200, "success", groupClassService.create(item)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.ADD_SUCCESS, groupClassService.create(item)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
@@ -52,7 +53,7 @@ public class GroupClassController {
 	@RequestMapping(path = "/delete/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> insert(@PathVariable Long id){
 		try {
-			return ResponseEntity.ok(new Response(200, "success", groupClassService.deleteById(id)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.DELETE_SUCCESS, groupClassService.deleteById(id)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));

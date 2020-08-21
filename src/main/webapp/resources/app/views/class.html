@@ -48,7 +48,7 @@
                     <td>{{ x.schoolYear }}</td>
                     <td>{{ x.owner.fullName }}</td>
                     <td>{{ x.note }}</td>
-                    <td style="text-align: center;"><span class="badge badge-secondary">{{ x.status }}</span></td>
+                    <td style="text-align: center;"><span class="badge badge-secondary">{{ x.status == 'ACTIVE' ? 'Đang học' : 'Đã hoàn thành'}}</span></td>
                     <td>
                       <a href="#!student?classId={{ x.id }}" class="btn btn-sm btn-primary"><i class="fas fa-user-graduate"></i></a>
                       <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>

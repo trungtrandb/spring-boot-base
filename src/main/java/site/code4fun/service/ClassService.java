@@ -59,6 +59,10 @@ public class ClassService extends BaseService {
     }
 
     public void delete(Long id) throws Exception {
+    	List<Student> lstStudent = studentRepository.findByClassId(id);
+    	List<Lession> lstLession = lessionRepository.findByClassIds(Collections.singletonList(id));
+    	if(lstLession.size() > 0) throw new Exception("Không thể xóa lớp có lịch học!");
+    	if(lstStudent.size() > 0) throw new Exception("Không thể xóa lớp có học sinh!");
         Optional<Classes> item = classRepository.findById(id);
         if (!item.isPresent()) throw new Exception("Class not found!");
         classRepository.deleteById(id);

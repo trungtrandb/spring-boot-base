@@ -36,7 +36,7 @@ public class CheckinService extends BaseService{
 		// Update nếu điểm danh lại
 		Optional<Checkin> checked = checkinRepository.checkExist(check.getStudentId(), check.getLessionId());
 		checked.ifPresent(checkin -> check.setId(checkin.getId()));
-		
+		if(null == check.getPresent()) throw new Exception("Chưa chọn trạng thái điểm danh");
 		if (!check.getPresent()) { // Vắng mặt
 			new Thread(() -> {
 				List<UserDevice> lstDevice = jStudentRepository.findParentDeviceByStudentId(check.getStudentId());

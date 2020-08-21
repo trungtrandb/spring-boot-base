@@ -30,12 +30,9 @@ public class OrganizationService extends BaseService{
 	}
 	
 	public Organization create(Organization item) throws Exception {
-		if(StringUtils.isNull(item.getName())) throw new Exception("Tên trường không được bỏ trống");
-		if(null != item.getUser() && !item.getUser().getId().equals(getCurrentId()))
-			throw new Exception("Item not found!");
-		
+		if(StringUtils.isNull(item.getName())) throw new Exception("Tên trường không được bỏ trống");		
 		Optional<User> user = userRepository.findById(getCurrentId());
-//		user.ifPresent(item::setUser);
+		user.ifPresent(item::setUser);
 		user.ifPresent(value -> item.setCreatedBy(value.getId()));
 		return organizationRepository.saveAndFlush(item);
 	}

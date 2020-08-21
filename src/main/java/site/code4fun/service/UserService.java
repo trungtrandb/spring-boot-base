@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,11 @@ public class UserService extends BaseService{
 			if(org == null) throw new Exception("Tạo trường trước khi thêm giáo viên!");
 			
 			u.setOrganizationId(org.getId());
+			
 			if(StringUtils.isNull(u.getEmail())) throw new Exception("Email không được bỏ trống");
+			Pattern pattern = Pattern.compile("^[\\\\w!#$%&'*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$");
+			if(!StringUtils.isNull(u.getEmail()) || !pattern.matcher(u.getEmail()).matches()) throw new Exception("Email không đúng định dạng!");
+			
 			User existUser = userRepository.findByUserName(u.getEmail());
 			if(existUser != null) {
 				u = existUser;
@@ -87,6 +92,9 @@ public class UserService extends BaseService{
 	public User updateUser(User u) throws Exception {
 		if(null != u.getPassword() && !u.getPassword().equals(u.getRePass())) 
 			throw new Exception("Mật khẩu nhập lại không đúng!");
+		
+		Pattern pattern = Pattern.compile("^[\\\\w!#$%&'*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$");
+		if((!StringUtils.isNull(u.getEmail()) && !pattern.matcher(u.getEmail()).matches())) throw new Exception("Email không đúng định dạng!");
 		
 		Optional<User> optUser = userRepository.findById(getCurrentId());
 		

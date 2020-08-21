@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -59,7 +60,11 @@ public class StudentService extends BaseService{
 	public Student create(StudentDTO s) throws Exception {
 		if (StringUtils.isNull(s.getName())) throw new Exception("Tên học sinh không được bỏ trống!");
 		if (StringUtils.isNull(s.getStudentCode())) throw new Exception("Mã học sinh không được bỏ trống!");	
+		
 		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Email phụ huynh không được bỏ trống!");
+		Pattern pattern = Pattern.compile("^[\\\\w!#$%&'*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$");
+		if((!StringUtils.isNull(s.getEmail()) && !pattern.matcher(s.getEmail()).matches()) || !pattern.matcher(s.getParentPhoneOrEmail()).matches()) throw new Exception("Email không đúng định dạng!");
+		
 		if (s.getClassId() == null) throw new Exception("Chưa chọn lớp cho học sinh!");
 		
 		
@@ -121,8 +126,12 @@ public class StudentService extends BaseService{
 			throw new Exception("Student not found!");
 		
 		if (StringUtils.isNull(s.getName())) throw new Exception("Tên học sinh không được bỏ trống!");
-		if (StringUtils.isNull(s.getStudentCode())) throw new Exception("Mã học sinh không được bỏ trống!");	
+		if (StringUtils.isNull(s.getStudentCode())) throw new Exception("Mã học sinh không được bỏ trống!");
+		
 		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Email phụ huynh không được bỏ trống!");
+		Pattern pattern = Pattern.compile("^[\\\\w!#$%&'*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$");
+		if((!StringUtils.isNull(s.getEmail()) && !pattern.matcher(s.getEmail()).matches()) || !pattern.matcher(s.getParentPhoneOrEmail()).matches()) throw new Exception("Email không đúng định dạng!");
+		
 		if (s.getClassId() == null) throw new Exception("Chưa chọn lớp cho học sinh!");
 		
 		
