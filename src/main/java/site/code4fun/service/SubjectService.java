@@ -19,6 +19,11 @@ public class SubjectService extends BaseService{
 		Organization org = getCurrentOrganization();
 		return null != org ? subjectRepository.findByOrganizationId(org.getId()) : new ArrayList<>();
 	}
+	
+	public List<Subject> getSubjectBySchoolId(Long id){
+		return subjectRepository.findByOrganizationId(id);
+	}
+
 
 	public Subject insert(Subject s) throws Exception {
 		if(StringUtils.isNull(s.getName())) throw new Exception("Tên môn học không được bỏ trống!");

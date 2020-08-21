@@ -1,10 +1,8 @@
 package site.code4fun.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import site.code4fun.constant.ResponseMessage;
@@ -19,13 +17,13 @@ import java.text.SimpleDateFormat;
 @Controller
 @RequestMapping("/api/lession")
 public class LessionController {
-
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		dateFormat.setLenient(false);
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
-	}
+//
+//	@InitBinder
+//	public void initBinder(WebDataBinder binder) {
+//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//		dateFormat.setLenient(false);
+//		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+//	}
 
 	@Autowired
 	LessionService lessionService;
@@ -41,8 +39,7 @@ public class LessionController {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 				startDate = (Date) dateFormat.parse(startTime);
 			}
-			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS,
-					lessionService.getAll(classId, startDate, subjectId, name)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, lessionService.getAll(classId, startDate, subjectId, name)));
 		} catch (Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
