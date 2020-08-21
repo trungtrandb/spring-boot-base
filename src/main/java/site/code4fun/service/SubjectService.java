@@ -30,6 +30,16 @@ public class SubjectService extends BaseService{
 		return lstDTO;
 	}
 	
+	public List<SubjectDTO> getSubjectBySchoolId(Long id){
+		List<Subject> lstSubject = subjectRepository.findByOrganizationId(id);
+		List<SubjectDTO> lstDTO  = new ArrayList<SubjectDTO>();
+		lstSubject.forEach(_item -> {
+			SubjectDTO dto = SubjectDTO.fromEntity(_item);
+			lstDTO.add(dto);
+		});
+		return lstDTO;
+	}
+	
 	public Subject insert(Subject s) throws Exception {
 		if(StringUtils.isNull(s.getName())) throw new Exception("Tên môn học không được bỏ trống!");
 		Organization org = getCurrentOrganization();

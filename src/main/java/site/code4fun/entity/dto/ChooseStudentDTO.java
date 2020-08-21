@@ -14,4 +14,5 @@ public class ChooseStudentDTO extends Student{
 	private String className;
 	private String groupClassName;
 	private String schoolName;
+	private Long schoolId;
 }
