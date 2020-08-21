@@ -75,4 +75,23 @@ public class JCheckinRepository {
 						.build()
 		);
 	}
+	
+	public List<CheckinDTO> getCheckinByStudentId(Long studentId, int limit, int offset){
+		String sql = "CALL getCheckinByStudent(:studentId, :limit, :offset)";
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("studentId", studentId);
+		parameters.addValue("limit", limit);
+		parameters.addValue("offset", offset);
+		return jdbcTemplate.query(sql, parameters, (rs, numRow) ->
+				CheckinDTO.builder()
+						.lessionId(rs.getLong("lession_id"))
+						.studentId(rs.getLong("student_id"))
+						.lessionName(rs.getString("title"))
+						.present(rs.getBoolean("present"))
+						.createdDate(rs.getTimestamp("created_date"))
+						.createdName(rs.getString("full_name"))
+						.note(rs.getString("note"))
+						.build()
+		);
+	}
 }

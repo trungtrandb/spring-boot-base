@@ -22,6 +22,7 @@ import site.code4fun.constant.Queue;
 import site.code4fun.constant.Role;
 import site.code4fun.constant.Status;
 import site.code4fun.entity.*;
+import site.code4fun.entity.dto.CheckinDTO;
 import site.code4fun.entity.dto.ChooseStudentDTO;
 import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.util.CalculatorUtil;
@@ -298,9 +299,7 @@ public class StudentService extends BaseService{
 		List<HashMap<String, Object>> lstRes = new ArrayList<>();
 		lstSubject.forEach(_subject -> {
 			HashMap<String, List<Float>> mapPoint = mapSubject.get(_subject.getId());
-			
-			
-			
+
 			HashMap<String, Object> mapRes = new HashMap<String, Object>();
 			double totalPoint = 0;
 			totalPoint += CalculatorUtil.sumPointFromList(mapPoint.get("pointMulti1Sem1"), 1);
@@ -328,11 +327,19 @@ public class StudentService extends BaseService{
 			mapRes.put("pointMulti3Sem2", StringUtils.stringFromList(mapPoint.get("pointMulti3Sem2")));
 			mapRes.put("pointAvgSem2", bd2.doubleValue());
 			
-			avg2 += avg1;
-			bd2 = new BigDecimal(avg2 / 2).setScale(2, RoundingMode.HALF_UP);
+			avg2 = avg2 == 0 || avg1 == 0 ? avg2 += avg1 : (avg2 += avg1) / 2;
+			
+			bd2 = new BigDecimal(avg2).setScale(2, RoundingMode.HALF_UP);
 			mapRes.put("pointAvgTotal",bd2.doubleValue() );
 			lstRes.add(mapRes);
 		});
 		return lstRes;
     }
+
+	public List<CheckinDTO> viewCheckin(Long studentId) {
+		int limit = 10;
+		int offset = 0;
+		return jCheckinRepository.getCheckinByStudentId(studentId, limit, offset);
+		
+	}
 }

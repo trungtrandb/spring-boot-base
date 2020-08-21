@@ -95,7 +95,7 @@
         <div class="modal-body">
           <div class="tab-content">
             <div class="tab-pane active" id="point">
-              <table id="example1" class="table table-bordered table-striped">
+              <table class="table table-bordered table-striped">
                 <thead class="text-center my-auto">
                   <tr>
                     <th class="pb-4" rowspan="2">Tên môn học</th>
@@ -120,28 +120,31 @@
                     <td>{{ x.pointMulti1Sem1 }}</td>
                     <td>{{ x.pointMulti2Sem1 }}</td>
                     <td>{{ x.pointMulti3Sem1 }}</td>
-                    <td>{{ x.pointAvgSem1 }}</td>
+                    <td class="text-center">{{ x.pointAvgSem1 }}</td>
                     <td>{{ x.pointMulti1Sem2 }}</td>
                     <td>{{ x.pointMulti2Sem2 }}</td>
                     <td>{{ x.pointMulti3Sem2 }}</td>
-                    <td>{{ x.pointAvgSem2 }}</td>
-                    <td>{{ x.pointAvgTotal }}</td>
+                    <td class="text-center">{{ x.pointAvgSem2 }}</td>
+                    <td class="text-center">{{ x.pointAvgTotal }}</td>
                   </tr>
                   <tr ng-show="!lstPoint.length > 0" class="text-center">
                     <td colspan="10"> Chưa có dữ liệu</td>
+                  </tr>
+                  <tr ng-show="lstPoint.length > 0" class="text-center">
+                    <td colspan="9">Tổng: </td>
+                    <td>{{ avgPoint }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <div class="tab-pane active" id="checkin">
-              
+              <div id="jsGrid" style="margin-bottom: 1rem"></div>
             </div>
             <!-- /.tab-pane -->
           </div>
           <!-- /.tab-content -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary float-right" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary float-right mr-3" ng-show="lstPoint.length > 0">Xuất file Excel</button>
         </div>
       </div>
     </div>

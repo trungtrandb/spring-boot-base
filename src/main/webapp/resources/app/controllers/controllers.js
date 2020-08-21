@@ -281,8 +281,53 @@
 
         function viewDetail(id) {
             Restangular.one("/api/student/view-detail-point",id).get().then(function (response) { 
+                var total = 0;
+                var numOfSubject = 0;
                 $scope.lstPoint = response.data; 
+                $.each(response.data, function (idx, item) {
+                    numOfSubject++;
+                    total+= item.pointAvgTotal;
+                })
+                $scope.avgPoint = total / numOfSubject;
                 $("#modalDetailStudent").modal("show");
+            });
+
+            $("#jsGrid").jsGrid({
+                width: "100%",
+                autoload: true,
+                pageIndex: 1,
+                pageSize: 1,
+                paging: true,
+                pageLoading: false,
+                editing: false,
+                controller: {
+                    loadData: function() {
+                        var d = $.Deferred();
+                        Restangular.one("/api/student/view-detail-checkin", id).get().then(function (response) {
+                            d.resolve(response.data);
+                        }, function () {
+                            d.reject();
+                        }); 
+                        return d.promise();
+                    }
+                },
+                fields: [
+                { name: "studentCode", title: "Mã học sinh", width: 50},
+                { name: "studentName", title: "Tên học sinh"},
+                { name: "note", title: "Ghi chú", type: "text"},
+                { 
+                    name: "present", 
+                    title: "Điểm danh", 
+                    type: "select",
+                    items: [
+                    { text: "Chưa điểm danh", value: null },
+                    { text: "Đi học", value: true },
+                    { text: "Vắng mặt", value: false }
+                    ],
+                    valueField: "value",
+                    textField: "text",
+                }
+                ]
             });
             
         }
@@ -359,7 +404,7 @@
 
         function loadLstLession() {
             if ($scope.filter.startTime == '') {$scope.filter.startTime = null}
-            Restangular.one("/api/lession/getAll").get($scope.filter).then(function (response) { $scope.lstLession = response.data; });  
+                Restangular.one("/api/lession/getAll").get($scope.filter).then(function (response) { $scope.lstLession = response.data; });  
         }
 
 
@@ -466,22 +511,22 @@
                     }
                 },
                 fields: [
-                    { name: "studentCode", title: "Mã học sinh", width: 50},
-                    { name: "studentName", title: "Tên học sinh"},
-                    { name: "note", title: "Ghi chú", type: "text"},
-                    { 
-                        name: "present", 
-                        title: "Điểm danh", 
-                        type: "select",
-                        items: [
-                            { text: "Chưa điểm danh", value: null },
-                            { text: "Đi học", value: true },
-                            { text: "Vắng mặt", value: false }
-                        ],
-                        valueField: "value",
-                        textField: "text",
-                    },
-                    { type: "control", deleteButton: false}
+                { name: "studentCode", title: "Mã học sinh", width: 50},
+                { name: "studentName", title: "Tên học sinh"},
+                { name: "note", title: "Ghi chú", type: "text"},
+                { 
+                    name: "present", 
+                    title: "Điểm danh", 
+                    type: "select",
+                    items: [
+                    { text: "Chưa điểm danh", value: null },
+                    { text: "Đi học", value: true },
+                    { text: "Vắng mặt", value: false }
+                    ],
+                    valueField: "value",
+                    textField: "text",
+                },
+                { type: "control", deleteButton: false}
                 ]
             });
         }
@@ -904,13 +949,13 @@ function PointController($scope,$location, Restangular) {
                 }
             },
             fields: [
-                { name: "studentCode", title: "Mã học sinh", width: 50},
-                { name: "studentName", title: "Tên học sinh"},
-                { name: "pointMulti1", title: "Điểm hệ số 1", type: "text"},
-                { name: "pointMulti2", title: "Điểm hệ số 2", type: "text"},
-                { name: "pointMulti3", title: "Điểm hệ số 3", type: "text"},
-                { name: "pointAvg", title: "Điểm trung bình môn"},
-                { type: "control", deleteButton: false}
+            { name: "studentCode", title: "Mã học sinh", width: 50},
+            { name: "studentName", title: "Tên học sinh"},
+            { name: "pointMulti1", title: "Điểm hệ số 1", type: "text"},
+            { name: "pointMulti2", title: "Điểm hệ số 2", type: "text"},
+            { name: "pointMulti3", title: "Điểm hệ số 3", type: "text"},
+            { name: "pointAvg", title: "Điểm trung bình môn"},
+            { type: "control", deleteButton: false}
             ]
         });
     }

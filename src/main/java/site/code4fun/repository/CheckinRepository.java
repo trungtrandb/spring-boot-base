@@ -21,4 +21,6 @@ public interface CheckinRepository extends JpaRepository<Checkin, Long>{
     void deleteByStudentId(Long studentId);
 
 	List<Checkin> findByLessionId(Long id);
+
+	List<Checkin> findByStudentId(Long studentId);
 }
