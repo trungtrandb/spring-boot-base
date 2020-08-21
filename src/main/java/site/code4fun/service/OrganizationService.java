@@ -14,14 +14,10 @@ import site.code4fun.util.StringUtils;
 @Service
 public class OrganizationService extends BaseService{
 	
-	public boolean authorizeOrg(Long orgId, boolean required) {
-		if(!required && orgId == null) {
-			return true;
-		}else {
-			if(orgId == null) return false;
-			Optional<Organization> org = organizationRepository.findById(orgId);
-			return !org.isPresent() || !org.get().getUser().getId().equals(getCurrentId());
-		}
+	public boolean authorizeOrg(Long orgId) {
+		if(orgId == null) return true;
+		Organization org = getCurrentOrganization();
+		return org.getUser().getId().equals(orgId);
 	}
 
 	

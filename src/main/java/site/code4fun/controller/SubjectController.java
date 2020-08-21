@@ -22,9 +22,9 @@ public class SubjectController {
 	SubjectService subjectService;
 	
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
-	public ResponseEntity<?> getAll(){
+	public ResponseEntity<?> getAll(@RequestParam(required = false) String status){
 		try {
-			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, subjectService.getAll()));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, subjectService.getAll(status)));
 		}catch(Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}

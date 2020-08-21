@@ -66,12 +66,13 @@ public class StudentService extends BaseService{
 	public Student create(StudentDTO s) throws Exception {
 		if (StringUtils.isNull(s.getName())) throw new Exception("Tên học sinh không được bỏ trống!");
 		if (StringUtils.isNull(s.getStudentCode())) throw new Exception("Mã học sinh không được bỏ trống!");	
-		
+
 		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Email phụ huynh không được bỏ trống!");
 		Pattern pattern = Pattern.compile("^[a-zA-Z0-9][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$");
 		if((!StringUtils.isNull(s.getEmail()) && !pattern.matcher(s.getEmail()).matches()) || !pattern.matcher(s.getParentPhoneOrEmail()).matches()) throw new Exception("Email không đúng định dạng!");
 		if(!StringUtils.isNull(s.getPhone()) && !Pattern.matches("^(09|012|08|016|03|07|08|05)\\d{8,}", s.getPhone())) throw new Exception("Số điện thoại không đúng định dạng!");
 		if (s.getClassId() == null) throw new Exception("Chưa chọn lớp cho học sinh!");
+		if (null != s.getDateOfBirth() && s.getDateOfBirth().after(new Timestamp(System.currentTimeMillis()))) throw new Exception("Ngày sinh không được lớn hơn ngày hiện tại!");
 		
 		
         String normalizeCode = Normalizer.normalize(s.getStudentCode(), Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "").replace(" ", "");
@@ -139,7 +140,7 @@ public class StudentService extends BaseService{
 		if((!StringUtils.isNull(s.getEmail()) && !pattern.matcher(s.getEmail()).matches()) || !pattern.matcher(s.getParentPhoneOrEmail()).matches()) throw new Exception("Email không đúng định dạng!");
 		
 		if (s.getClassId() == null) throw new Exception("Chưa chọn lớp cho học sinh!");
-		
+		if (null != s.getDateOfBirth() && s.getDateOfBirth().after(new Timestamp(System.currentTimeMillis()))) throw new Exception("Ngày sinh không được lớn hơn ngày hiện tại!");
 		
         String normalizeCode = Normalizer.normalize(s.getStudentCode(), Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "").replace(" ", "");
         List<Long> idsClass = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());

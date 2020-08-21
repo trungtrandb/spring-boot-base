@@ -46,7 +46,7 @@
                     <td>{{ x.content.substr(0,300) }}</td>
                     <td>{{ x.createdDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
                     <td>{{ x.createdName }}</td>
-                    <td>{{ x.status }}</td>
+                    <td>{{ x.status == 'ACTIVE' ? 'Đã gửi' : 'Nháp' }}</td>
                     <td>
                       <button class="btn btn-sm btn-primary" ng-click="edit(x.id)"><i class="fas fa-pencil-alt"></i></button>
                       <button class="btn btn-sm btn-danger" ng-click="remove(x.id)"><i class="fas fa-trash"></i></button>

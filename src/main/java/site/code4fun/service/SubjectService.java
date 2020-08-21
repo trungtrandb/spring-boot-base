@@ -15,9 +15,13 @@ import site.code4fun.util.StringUtils;
 @Service
 public class SubjectService extends BaseService{
 	
-	public List<Subject> getAll(){
+	public List<Subject> getAll(String status){
 		Organization org = getCurrentOrganization();
-		return null != org ? subjectRepository.findByOrganizationId(org.getId()) : new ArrayList<>();
+		List<Subject> lstSubject = null != org ? subjectRepository.findByOrganizationId(org.getId()) : new ArrayList<>();
+		if (!StringUtils.isNull(status)){
+			lstSubject.removeIf(_x -> !_x.getStatus().equalsIgnoreCase(status));
+		}
+		return lstSubject;
 	}
 	
 	public List<Subject> getSubjectBySchoolId(Long id){

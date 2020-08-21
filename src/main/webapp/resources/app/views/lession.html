@@ -43,7 +43,7 @@
                   <label for="class">Môn học: </label>
                   <select class="form-control" ng-model="filter.subjectId" ng-change="loadLstLession()">
                     <option value="">-- Tất cả --</option>
-                    <option ng-repeat="x in lstSubject" value="{{x.id}}">{{x.name}}</option>
+                    <option ng-repeat="x in lstSubjectFilter" value="{{x.id}}">{{x.name}}</option>
                   </select>
                 </div>
                 <div class="col-md-2">

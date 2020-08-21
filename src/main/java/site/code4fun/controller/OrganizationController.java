@@ -2,6 +2,7 @@ package site.code4fun.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,6 @@ public class OrganizationController {
 	@Autowired
 	OrganizationService organizationService;
 	
-	
 	@RequestMapping(path = "/get-by-user", method = RequestMethod.GET)
 	public ResponseEntity<?> getByUserId(){
 		try {
@@ -29,7 +29,8 @@ public class OrganizationController {
 			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
 		}
 	}
-	
+
+	@PreAuthorize("@organizationService.authorizeOrg(#item.getId())")
 	@RequestMapping(path = "/insert", method = RequestMethod.POST)
 	public ResponseEntity<?> insert(@RequestBody Organization item){
 		try {
@@ -68,9 +69,10 @@ public class OrganizationController {
 			return ResponseEntity.ok(new Response(null, e.getMessage(), null));
 		}
 	}
-	
+
+	@PreAuthorize("@organizationService.authorizeOrg(#id)")
 	@RequestMapping(path = "/delete/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> insert(@PathVariable Long id){
+	public ResponseEntity<?> delete(@PathVariable Long id){
 		try {
 			organizationService.deleteById(id);
 			return ResponseEntity.ok(new Response(200, ResponseMessage.DELETE_SUCCESS, null));

@@ -1,15 +1,15 @@
 <div class="login-page" ng-controller="LoginController">
 	<div class="login-box">
     <div class="login-logo">
-      <a href="../../index2.html"><b>Admin</b>LTE</a>
+      <a href="../../index2.html"><b>I</b>School</a>
     </div>
     <!-- /.login-logo -->
     <div class="card">
       <div class="card-body login-card-body">
-        <p class="login-box-msg">Sign in to start your session</p>
+        <p class="login-box-msg">Hệ thống quản lý trường học trực tuyến</p>
         <form>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Username" value="{{user.username}}" ng-model="username">
+            <input type="text" class="form-control" placeholder="Tên đăng nhập hoặc email" value="{{ user.username }}" ng-model="username">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-envelope"></span>
@@ -17,7 +17,7 @@
             </div>
           </div>
           <div class="input-group mb-3">
-            <input type="password" class="form-control" autocomplete="true" value="{{user.password}}" placeholder="Password" ng-model="password">
+            <input type="password" class="form-control" autocomplete="true" value="{{user.password}}" placeholder="Mật khẩu" ng-model="password">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>
@@ -52,15 +52,15 @@
           <form ng-submit="signUp()">
             <div class="form-group">
               <label for="fullName">Họ tên:</label>
-              <input type="text" class="form-control" id="fullName" placeholder="FullName" ng-model="user.fullName">
+              <input type="text" class="form-control" id="fullName" placeholder="Họ và tên" ng-model="user.fullName">
             </div>
             <div class="form-group">
               <label for="username">Tên đăng nhập:</label>
-              <input type="text" class="form-control" id="username" placeholder="UserName" ng-model="user.username" ng-change="changeUserName()">
+              <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập" ng-model="user.username" ng-change="changeUserName()">
             </div>
             <div class="form-group">
               <label for="phone">Số điện thoại:</label>
-              <input type="text" class="form-control" id="phone" placeholder="Phone" ng-model="user.phone">
+              <input type="text" class="form-control" id="phone" placeholder="Số điện thoại" ng-model="user.phone">
             </div>
             <div class="form-group">
               <label for="email">Email:</label>
@@ -68,17 +68,17 @@
             </div>
             <div class="form-group">
               <label for="address">Địa chỉ:</label>
-              <input type="text" class="form-control" id="address" placeholder="Address" ng-model="user.address">
+              <input type="text" class="form-control" id="address" placeholder="Địa chỉ" ng-model="user.address">
             </div>
             <div class="form-group">
               <label for="pwd">Mật khẩu:</label>
-              <input type="password" class="form-control" id="pwd" placeholder="Enter password" ng-model="user.password" autocomplete="true" ng-change="changePassword()">
+              <input type="password" class="form-control" id="pwd" placeholder="Mật khẩu" ng-model="user.password" autocomplete="true" ng-change="changePassword()">
             </div>
             <div class="form-group">
               <label for="rpwd">Nhập lại mật khẩu:</label>
-              <input type="password" class="form-control" id="rpwd" placeholder="Enter password" ng-model="user.rePass" autocomplete="true">
+              <input type="password" class="form-control" id="rpwd" placeholder="Nhập lại mật khẩu" ng-model="user.rePass" autocomplete="true">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Đăng ký</button>
           </form>
         </div>
       </div>
@@ -104,7 +104,7 @@
               <label for="email">Tên đăng nhập:<span class="text-danger">*</span></label>
               <input type="text" class="form-control" id="email" placeholder="Email" ng-model="email">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Gửi</button>
           </form>
         </div>
       </div>

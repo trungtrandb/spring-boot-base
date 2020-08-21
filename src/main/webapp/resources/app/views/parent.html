@@ -45,7 +45,7 @@
                     <td>{{ x.phone }}</td>
                     <td>{{ x.address }}</td>
                     <td>{{ x.email }}</td>
-                    <td>{{ x.status }}</td>
+                    <td>{{ x.status == 'ACTIVE' ? 'Đã kích hoạt' : 'Chưa kích hoạt' }}</td>
                     <td>
                       <a href="#!chat?user={{ x.username }}" class="btn btn-sm btn-primary"><i class="fas fa-comment"></i></a>
                     </td>

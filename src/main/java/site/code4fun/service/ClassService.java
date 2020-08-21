@@ -8,6 +8,7 @@ import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.*;
@@ -32,8 +33,10 @@ public class ClassService extends BaseService {
         return lstClass;
     }
 
-    public Boolean authorizeClass(Long groupClassId) {
-        return true;
+    public Boolean authorizeClass(Long classId) {
+        if (classId == null) return true;
+        List<Long> classIds = getCurrentClasses().stream().map(Classes::getId).collect(Collectors.toList());
+        return classIds.contains(classId);
     }
 
     public Classes insert(ClassDTO c) throws Exception {
@@ -149,7 +152,12 @@ public class ClassService extends BaseService {
     public List<Point> updatePoint(PointDTO point) throws Exception {
         List<Long> lstActive = getCurrentActiveClasses().stream().map(Classes::getId).collect(Collectors.toList());
         Optional<Student> s = studentRepository.findById(point.getStudentId());
-        if (s.isPresent() && !lstActive.contains(s.get().getClassId())) throw new Exception("Không được sửa điểm của lớp đã hoàn thành!");
+        if(!s.isPresent() || !lstActive.contains(s.get().getClassId())) throw new Exception("Không được phép sửa!");
+
+        if ((!StringUtils.isNull(point.getPointMulti1()) && !Pattern.matches("[\\d\\s.]+", point.getPointMulti1()))
+        || (!StringUtils.isNull(point.getPointMulti2()) && !Pattern.matches("[\\d\\s.]+", point.getPointMulti2()))
+        || (!StringUtils.isNull(point.getPointMulti3()) && !Pattern.matches("[\\d\\s.]+", point.getPointMulti3()))) throw new Exception("Chỉ được phép nhập ký tự số, dấu . và khoảng trắng!");
+
         String multi1 = StringUtils.cleanToFloat(point.getPointMulti1());
         String multi2 = StringUtils.cleanToFloat(point.getPointMulti2());
         String multi3 = StringUtils.cleanToFloat(point.getPointMulti3());
@@ -208,7 +216,7 @@ public class ClassService extends BaseService {
         return classRepository.findById(id);
     }
 
-    public String exportPointClass(Long classId, Long subjectId, Byte sem, Byte numOfTest) throws IOException {
+    public String exportPointClass(Long classId, Long subjectId, Byte sem) throws IOException {
         String path = "src/main/webapp/resources/excel/";
         File file = new File(path);
         Workbook workbook = new XSSFWorkbook();

@@ -418,7 +418,8 @@
         Restangular.one("/api/class/get-by-group?status=ACTIVE").get().then(function (response) { $scope.lstClass = response.data; });
         Restangular.one("/api/class/get-by-group").get().then(function (response) { $scope.lstClassFilter = response.data; });
         Restangular.one("/api/organization/get-teacher").get().then(function (response) { $scope.lstTeacher = response.data; });
-        Restangular.one("/api/subject/getAll").get().then(function (response) { $scope.lstSubject = response.data; });  
+        Restangular.one("/api/subject/getAll").get().then(function (response) { $scope.lstSubjectFilter = response.data; });
+        Restangular.one("/api/subject/getAll?status=ACTIVE").get().then(function (response) { $scope.lstSubject = response.data; });  
 
         function loadLstLession() {
             if ($scope.filter.startTime == '') {$scope.filter.startTime = null}
