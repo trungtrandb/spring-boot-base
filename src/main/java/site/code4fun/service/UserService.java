@@ -27,6 +27,7 @@ import site.code4fun.entity.OutputMessage;
 public class UserService extends BaseService{
 	
 	public User create(User u, String type) throws Exception {
+		if(!StringUtils.isNull(u.getPhone()) && !Pattern.matches("^(09|012|08|016|03|07|08|05)\\d{8,}", u.getPhone())) throw new Exception("Số điện thoại không đúng định dạng!");
 		if("TEACHER".equalsIgnoreCase(type)) {
 			Organization org = getCurrentOrganization();
 			if(org == null) throw new Exception("Tạo trường trước khi thêm giáo viên!");
@@ -95,7 +96,7 @@ public class UserService extends BaseService{
 		
 		Pattern pattern = Pattern.compile("^[a-zA-Z0-9][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$");
 		if((!StringUtils.isNull(u.getEmail()) && !pattern.matcher(u.getEmail()).matches())) throw new Exception("Email không đúng định dạng!");
-		
+		if(!StringUtils.isNull(u.getPhone()) && !Pattern.matches("^(09|012|08|016|03|07|08|05)\\d{8,}", u.getPhone())) throw new Exception("Số điện thoại không đúng định dạng!");
 		Optional<User> optUser = userRepository.findById(getCurrentId());
 		
 		User user = optUser.get();

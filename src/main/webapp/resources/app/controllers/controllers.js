@@ -202,7 +202,7 @@
 
 
     /* ============================================ */
-    function StudentController($scope, $http, $location, Restangular) {
+    function StudentController($scope, $http, $location, Restangular ,$filter) {
         $scope.submitStudent = submitAddStudent;
         $scope.remove = remove;
         bsCustomFileInput.init();
@@ -296,7 +296,7 @@
                 width: "100%",
                 autoload: true,
                 pageIndex: 1,
-                pageSize: 1,
+                pageSize: 20,
                 paging: true,
                 pageLoading: false,
                 editing: false,
@@ -304,6 +304,9 @@
                     loadData: function() {
                         var d = $.Deferred();
                         Restangular.one("/api/student/view-detail-checkin", id).get().then(function (response) {
+                            $.each(response.data, function (idx, item) {
+                                item.createdDate = $filter('date')(new Date(item.createdDate),'yyyy-MM-dd HH:mm');
+                            })
                             d.resolve(response.data);
                         }, function () {
                             d.reject();
@@ -312,8 +315,9 @@
                     }
                 },
                 fields: [
-                { name: "studentCode", title: "Mã học sinh", width: 50},
-                { name: "studentName", title: "Tên học sinh"},
+                { name: "lessionName", title: "Buổi học"},
+                { name: "createdDate", title: "Ngày học"},
+                { name: "createdName", title: "Giáo viên điểm danh"},
                 { name: "note", title: "Ghi chú", type: "text"},
                 { 
                     name: "present", 
