@@ -19,9 +19,7 @@ import com.google.gson.Gson;
 import site.code4fun.constant.Queue;
 import site.code4fun.constant.Role;
 import site.code4fun.constant.Status;
-import site.code4fun.entity.Classes;
-import site.code4fun.entity.Student;
-import site.code4fun.entity.User;
+import site.code4fun.entity.*;
 import site.code4fun.entity.dto.ChooseStudentDTO;
 import site.code4fun.entity.dto.StudentDTO;
 import site.code4fun.util.StringUtils;
@@ -62,7 +60,7 @@ public class StudentService extends BaseService{
 		if (StringUtils.isNull(s.getStudentCode())) throw new Exception("Mã học sinh không được bỏ trống!");	
 		
 		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Email phụ huynh không được bỏ trống!");
-		Pattern pattern = Pattern.compile("^[\\\\w!#$%&'*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$");
+		Pattern pattern = Pattern.compile("^[a-zA-Z0-9][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$");
 		if((!StringUtils.isNull(s.getEmail()) && !pattern.matcher(s.getEmail()).matches()) || !pattern.matcher(s.getParentPhoneOrEmail()).matches()) throw new Exception("Email không đúng định dạng!");
 		
 		if (s.getClassId() == null) throw new Exception("Chưa chọn lớp cho học sinh!");
@@ -129,7 +127,7 @@ public class StudentService extends BaseService{
 		if (StringUtils.isNull(s.getStudentCode())) throw new Exception("Mã học sinh không được bỏ trống!");
 		
 		if (StringUtils.isNull(s.getParentPhoneOrEmail())) throw new Exception("Email phụ huynh không được bỏ trống!");
-		Pattern pattern = Pattern.compile("^[\\\\w!#$%&'*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$");
+		Pattern pattern = Pattern.compile("^[a-zA-Z0-9][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$");
 		if((!StringUtils.isNull(s.getEmail()) && !pattern.matcher(s.getEmail()).matches()) || !pattern.matcher(s.getParentPhoneOrEmail()).matches()) throw new Exception("Email không đúng định dạng!");
 		
 		if (s.getClassId() == null) throw new Exception("Chưa chọn lớp cho học sinh!");
@@ -206,8 +204,7 @@ public class StudentService extends BaseService{
 
 	public Student updateStudent(Student s) throws Exception {
 		Optional<Student> item = studentRepository.findById(s.getId());
-		if (!item.isPresent())
-			throw new Exception("Student not found!");
+		if (!item.isPresent()) throw new Exception("Student not found!");
 
 		Student student = Student.builder()
 				.id(s.getId())
@@ -223,4 +220,12 @@ public class StudentService extends BaseService{
 				.note(s.getNote()).build();
 		return studentRepository.saveAndFlush(student);
 	}
+
+    public Object viewPointAndCheckin(Long studentId) {
+		List<Point> lstPoint = pointRepository.findByStudentId(studentId);
+		List<Long> subjectIds = lstPoint.stream().map(Point::getSubjectId).collect(Collectors.toList());
+		List<Subject> lstSubject = subjectRepository.findAllById(subjectIds);
+		//Map<Long, Subject> lstSubject.stream().collect(Collectors.toMap(Subject::getId, x->x));
+		return null;
+    }
 }

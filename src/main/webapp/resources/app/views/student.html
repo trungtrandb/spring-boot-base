@@ -63,7 +63,7 @@
                     <td>{{ x.className }}</td>
                     <td>{{ x.note }}</td>
                     <td>
-                      <a href="javascript:;" class="btn btn-sm btn-primary"  ng-click="viewDetail(x)"><i class="fas fa-eye"></i></a>
+                      <a href="javascript:;" class="btn btn-sm btn-primary"  ng-click="viewDetail(x.id)"><i class="fas fa-eye"></i></a>
                       <a href="#!edit-student/{{ x.id }}" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></a>
                       <button class="btn btn-sm btn-danger" ng-click="remove(x)"><i class="fas fa-trash"></i></button>
                     </td>
@@ -84,9 +84,8 @@
 
   <!-- The Modal -->
   <div class="modal fade" id="modalDetailStudent">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
       <div class="modal-content">
-
         <div class="modal-header p-2">
           <ul class="nav nav-tabs">
             <li class="nav-item"><a class="nav-link active" href="javascript:;" data-target="#point" data-toggle="tab">Điểm</a></li>
@@ -96,56 +95,31 @@
         <div class="modal-body">
           <div class="tab-content">
             <div class="tab-pane active" id="point">
-              <form class="form-horizontal" ng-submit="submitForm()">
-                <div class="form-group row">
-                  <label for="" class="col-sm-2 col-form-label">Ảnh đại diện</label>
-                  <div class="col-sm-10">
-                    <input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="inputName" class="col-sm-2 col-form-label">Họ và tên</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputName" ng-model="user.fullName" placeholder="Name">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                  <div class="col-sm-10">
-                    <input type="email" class="form-control" id="inputEmail" ng-model="user.email" placeholder="Email">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="identity" class="col-sm-2 col-form-label">Số CMT</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="identity" ng-model="user.identityCard" placeholder="Identity">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="phone" class="col-sm-2 col-form-label">Số điện thoại</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="phone" ng-model="user.phone" placeholder="Phone">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="address" class="col-sm-2 col-form-label">Địa chỉ</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="address" ng-model="user.address" placeholder="Address">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="password" class="col-sm-2 col-form-label">Mật khẩu</label>
-                  <div class="col-sm-10">
-                    <input type="password" class="form-control" autocomplete="true" id="password" ng-model="user.password" placeholder="Password">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="repass" class="col-sm-2 col-form-label">Nhập lại mật khẩu</label>
-                  <div class="col-sm-10">
-                    <input type="password" class="form-control" id="repass" autocomplete="true" ng-model="user.rePass" placeholder="Repass">
-                  </div>
-                </div>
-              </form>
+              <table id="example1" class="table table-bordered table-striped">
+                <thead class="text-center my-auto">
+                  <tr>
+                    <th class="pb-4" rowspan="2">Tên môn học</th>
+                    <th colspan="3">Điểm kỳ 1</th>
+                    <th colspan="3">Điểm kỳ 2</th>
+                    <th class="pb-4" rowspan="2">Cả năm</th>
+                  </tr>
+                  <tr>
+                    <th>Hệ số 1</th>
+                    <th>Hệ số 2</th>
+                    <th>Hệ số 3</th>
+                    <th>Hệ số 1</th>
+                    <th>Hệ số 2</th>
+                    <th>Hệ số 3</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="x in lstPoint">
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
             <div class="tab-pane active" id="checkin">
               

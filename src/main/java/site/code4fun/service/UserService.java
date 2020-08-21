@@ -34,7 +34,7 @@ public class UserService extends BaseService{
 			u.setOrganizationId(org.getId());
 			
 			if(StringUtils.isNull(u.getEmail())) throw new Exception("Email không được bỏ trống");
-			Pattern pattern = Pattern.compile("^[\\\\w!#$%&'*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$");
+			Pattern pattern = Pattern.compile("^[a-zA-Z0-9][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$");
 			if(!StringUtils.isNull(u.getEmail()) || !pattern.matcher(u.getEmail()).matches()) throw new Exception("Email không đúng định dạng!");
 			
 			User existUser = userRepository.findByUserName(u.getEmail());
@@ -93,7 +93,7 @@ public class UserService extends BaseService{
 		if(null != u.getPassword() && !u.getPassword().equals(u.getRePass())) 
 			throw new Exception("Mật khẩu nhập lại không đúng!");
 		
-		Pattern pattern = Pattern.compile("^[\\\\w!#$%&'*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$");
+		Pattern pattern = Pattern.compile("^[a-zA-Z0-9][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$");
 		if((!StringUtils.isNull(u.getEmail()) && !pattern.matcher(u.getEmail()).matches())) throw new Exception("Email không đúng định dạng!");
 		
 		Optional<User> optUser = userRepository.findById(getCurrentId());

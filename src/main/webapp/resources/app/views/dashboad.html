@@ -16,7 +16,7 @@
 			<div class="row">
 				<div class="col-md-3 col-sm-6 col-12">
 					<div class="info-box">
-						<span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+						<span class="info-box-icon bg-info"><i class="fas fa-user-graduate"></i></span>
 
 						<div class="info-box-content">
 							<span class="info-box-text">Số học sinh</span>
@@ -29,7 +29,7 @@
 				<!-- /.col -->
 				<div class="col-md-3 col-sm-6 col-12">
 					<div class="info-box">
-						<span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+						<span class="info-box-icon bg-success"><i class="fas fa-house-user"></i></span>
 
 						<div class="info-box-content">
 							<span class="info-box-text">Số lớp học</span>
@@ -42,7 +42,7 @@
 				<!-- /.col -->
 				<div class="col-md-3 col-sm-6 col-12">
 					<div class="info-box">
-						<span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+						<span class="info-box-icon bg-primary"><i class="fas fa-users"></i></span>
 
 						<div class="info-box-content">
 							<span class="info-box-text">Số giáo viên</span>
@@ -55,7 +55,7 @@
 				<!-- /.col -->
 				<div class="col-md-3 col-sm-6 col-12">
 					<div class="info-box">
-						<span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
+						<span class="info-box-icon bg-danger"><i class=" fas fa-user-tie"></i></span>
 
 						<div class="info-box-content">
 							<span class="info-box-text">Phụ huynh đã sử dụng app</span>
@@ -96,13 +96,12 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td><a href="pages/examples/invoice.html">OR9842</a></td>
-											<td>Call of Duty IV</td>
-											<td><span class="badge badge-success">Shipped</span></td>
-											<td>
-												<div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
-											</td>
+										<tr ng-repeat="x in lstLession">
+											<td>{{ x.className }}</td>
+											<td>{{ x.title }}</td>
+											<td>{{ x.teacherName }}</td>
+											<td>{{ x.startTime }}</td>
+											<td>{{ x.endTime }}</td>
 										</tr>
 									</tbody>
 								</table>
@@ -111,8 +110,7 @@
 						</div>
 						<!-- /.card-body -->
 						<div class="card-footer clearfix" style="display: block;">
-							<a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Place New Order</a>
-							<a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All Orders</a>
+							<a href="#!lession" class="btn btn-sm btn-info float-right">Xem thêm</a>
 						</div>
 						<!-- /.card-footer -->
 					</div>

@@ -280,6 +280,7 @@
         };
 
         function viewDetail(id) {
+            Restangular.one("/api/student/view-detail-point-checkin",id).get().then(function (response) { $scope.lstPoint = response.data; });
             $("#modalDetailStudent").modal("show");
         }
     }
@@ -617,7 +618,7 @@
         var y = formattedDate.getFullYear();
         var strDate = y + "-" + m + "-" + d; 
 
-        Restangular.one('/api/lession/getAll?startTime=' + strDate).get().then(function (response) { $scope.overview = response.data; });  
+        Restangular.one('/api/lession/getAll?startTime=' + strDate).get().then(function (response) { $scope.lstLession = response.data; });  
     }
 
     /* ============================================ */

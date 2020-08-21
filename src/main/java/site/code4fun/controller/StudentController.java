@@ -99,7 +99,7 @@ public class StudentController {
 	@RequestMapping(value = "/update-student", method = RequestMethod.POST )
 	public ResponseEntity<?> updateStudent(@RequestBody Student student){
 		try {
-			return ResponseEntity.ok(new Response(200, "Successful", studentService.updateStudent(student)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.UPDATE_SUCCESS, studentService.updateStudent(student)));
 		}catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
@@ -127,6 +127,16 @@ public class StudentController {
 			Files.write(path, file.getBytes(), StandardOpenOption.CREATE);
 			return ResponseEntity.ok(new Response(200, "Success", imagePath));
 		} catch (IOException e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
+		}
+	}
+
+	@RequestMapping(value = "/view-detail-point-checkin/{studentId}", method = RequestMethod.GET )
+	public ResponseEntity<?> viewPointAndCheckin(@PathVariable Long studentId){
+		try {
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, studentService.viewPointAndCheckin(studentId)));
+		}catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));
 		}
