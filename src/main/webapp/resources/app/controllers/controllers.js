@@ -280,8 +280,11 @@
         };
 
         function viewDetail(id) {
-            Restangular.one("/api/student/view-detail-point-checkin",id).get().then(function (response) { $scope.lstPoint = response.data; });
-            $("#modalDetailStudent").modal("show");
+            Restangular.one("/api/student/view-detail-point",id).get().then(function (response) { 
+                $scope.lstPoint = response.data; 
+                $("#modalDetailStudent").modal("show");
+            });
+            
         }
     }
 

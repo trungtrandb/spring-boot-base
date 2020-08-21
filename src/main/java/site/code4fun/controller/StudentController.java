@@ -132,10 +132,10 @@ public class StudentController {
 		}
 	}
 
-	@RequestMapping(value = "/view-detail-point-checkin/{studentId}", method = RequestMethod.GET )
+	@RequestMapping(value = "/view-detail-point/{studentId}", method = RequestMethod.GET )
 	public ResponseEntity<?> viewPointAndCheckin(@PathVariable Long studentId){
 		try {
-			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, studentService.viewPointAndCheckin(studentId)));
+			return ResponseEntity.ok(new Response(200, ResponseMessage.QUERY_SUCCESS, studentService.viewPoint(studentId)));
 		}catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new Response(500, e.getMessage(), null));

@@ -28,8 +28,8 @@ public class StringUtils {
 		StringBuffer sb = new StringBuffer("");
 		for (int i = 0; i < lst.size();  i ++)
 		{	
-			if(i != 0) sb.append(",");
-		    sb.append(lst.get(i).toString());
+			if(i != 0) sb.append(", ");
+		    sb.append(lst.get(i).toString().replace(".0", ""));
 		}
 		return sb.toString();
 	}

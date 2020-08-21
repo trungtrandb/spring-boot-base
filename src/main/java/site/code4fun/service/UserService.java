@@ -35,7 +35,7 @@ public class UserService extends BaseService{
 			
 			if(StringUtils.isNull(u.getEmail())) throw new Exception("Email không được bỏ trống");
 			Pattern pattern = Pattern.compile("^[a-zA-Z0-9][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$");
-			if(!StringUtils.isNull(u.getEmail()) || !pattern.matcher(u.getEmail()).matches()) throw new Exception("Email không đúng định dạng!");
+			if(!pattern.matcher(u.getEmail()).matches()) throw new Exception("Email không đúng định dạng!");
 			
 			User existUser = userRepository.findByUserName(u.getEmail());
 			if(existUser != null) {

@@ -1,5 +1,7 @@
 package site.code4fun.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import site.code4fun.constant.Status;
 import site.code4fun.entity.*;
 import site.code4fun.entity.dto.ChooseStudentDTO;
 import site.code4fun.entity.dto.StudentDTO;
+import site.code4fun.util.CalculatorUtil;
 import site.code4fun.util.StringUtils;
 
 @Service
@@ -221,11 +224,115 @@ public class StudentService extends BaseService{
 		return studentRepository.saveAndFlush(student);
 	}
 
-    public Object viewPointAndCheckin(Long studentId) {
+    public Object viewPoint(Long studentId) {
 		List<Point> lstPoint = pointRepository.findByStudentId(studentId);
 		List<Long> subjectIds = lstPoint.stream().map(Point::getSubjectId).collect(Collectors.toList());
 		List<Subject> lstSubject = subjectRepository.findAllById(subjectIds);
-		//Map<Long, Subject> lstSubject.stream().collect(Collectors.toMap(Subject::getId, x->x));
-		return null;
+		
+		
+		Map<Long, HashMap<String, List<Float>>> mapSubject = new HashMap<>();
+		lstPoint.forEach(_point -> {
+			HashMap<String, List<Float>> mapPoint = new HashMap<>();
+			List<Float> pointMulti1Sem1 = new ArrayList<>();
+			List<Float> pointMulti2Sem1 = new ArrayList<>();
+			List<Float> pointMulti3Sem1 = new ArrayList<>();
+			List<Float> pointMulti2Sem2 = new ArrayList<>();
+			List<Float> pointMulti3Sem2 = new ArrayList<>();
+			List<Float> pointMulti1Sem2 = new ArrayList<>();
+			if(!mapSubject.containsKey(_point.getSubjectId())) {
+				if(_point.getSem() == 1) {
+					if(_point.getMultiple() == 1) pointMulti1Sem1.add(_point.getPoint());
+					if(_point.getMultiple() == 2) pointMulti2Sem1.add(_point.getPoint());
+					if(_point.getMultiple() == 3) pointMulti3Sem1.add(_point.getPoint());
+				}else {
+					if(_point.getMultiple() == 1) pointMulti1Sem2.add(_point.getPoint());
+					if(_point.getMultiple() == 2) pointMulti2Sem2.add(_point.getPoint());
+					if(_point.getMultiple() == 3) pointMulti3Sem2.add(_point.getPoint());
+				}
+				mapPoint.put("pointMulti1Sem1", pointMulti1Sem1);
+				mapPoint.put("pointMulti2Sem1", pointMulti2Sem1);
+				mapPoint.put("pointMulti3Sem1", pointMulti3Sem1);
+				mapPoint.put("pointMulti1Sem2", pointMulti1Sem2);
+				mapPoint.put("pointMulti2Sem2", pointMulti2Sem2);
+				mapPoint.put("pointMulti3Sem2", pointMulti3Sem2);
+			}else {
+				mapPoint = mapSubject.get(_point.getSubjectId());
+				if(_point.getSem() == 1) {
+					if(_point.getMultiple() == 1) {
+						pointMulti1Sem1 = mapPoint.get("pointMulti1Sem1");
+						pointMulti1Sem1.add(_point.getPoint());
+						mapPoint.put("pointMulti1Sem1", pointMulti1Sem1);
+					}
+					
+					if(_point.getMultiple() == 2) {
+						pointMulti2Sem1 = mapPoint.get("pointMulti2Sem1");
+						pointMulti2Sem1.add(_point.getPoint());
+						mapPoint.put("pointMulti2Sem1", pointMulti2Sem1);
+					}
+					if(_point.getMultiple() == 3) {
+						pointMulti3Sem1 = mapPoint.get("pointMulti3Sem1");
+						pointMulti3Sem1.add(_point.getPoint());
+						mapPoint.put("pointMulti3Sem1", pointMulti3Sem1);
+					}
+				}else {
+					if(_point.getMultiple() == 1) {
+						pointMulti1Sem2 = mapPoint.get("pointMulti1Sem2");
+						pointMulti1Sem2.add(_point.getPoint());
+						mapPoint.put("pointMulti1Sem2", pointMulti1Sem2);
+					}
+					if(_point.getMultiple() == 2) {
+						pointMulti2Sem2 = mapPoint.get("pointMulti2Sem2");
+						pointMulti2Sem2.add(_point.getPoint());
+						mapPoint.put("pointMulti2Sem2", pointMulti2Sem2);
+					}
+					if(_point.getMultiple() == 3) {
+						pointMulti3Sem2 = mapPoint.get("pointMulti3Sem2");
+						pointMulti3Sem2.add(_point.getPoint());
+						mapPoint.put("pointMulti3Sem2", pointMulti3Sem2);
+					}
+				}
+			}
+			mapSubject.put(_point.getSubjectId(), mapPoint);
+		});
+		
+		List<HashMap<String, Object>> lstRes = new ArrayList<>();
+		lstSubject.forEach(_subject -> {
+			HashMap<String, List<Float>> mapPoint = mapSubject.get(_subject.getId());
+			
+			
+			
+			HashMap<String, Object> mapRes = new HashMap<String, Object>();
+			double totalPoint = 0;
+			totalPoint += CalculatorUtil.sumPointFromList(mapPoint.get("pointMulti1Sem1"), 1);
+			totalPoint += CalculatorUtil.sumPointFromList(mapPoint.get("pointMulti2Sem1"), 2);
+			totalPoint += CalculatorUtil.sumPointFromList(mapPoint.get("pointMulti3Sem1"), 3);
+			
+			double avg1 = totalPoint / (mapPoint.get("pointMulti1Sem1").size() + mapPoint.get("pointMulti2Sem1").size() * 2 + mapPoint.get("pointMulti3Sem1").size() * 3);
+	        BigDecimal bd1 = new BigDecimal(avg1).setScale(2, RoundingMode.HALF_UP);
+	        
+			mapRes.put("subjectName", _subject.getName());
+			mapRes.put("pointMulti1Sem1", StringUtils.stringFromList(mapPoint.get("pointMulti1Sem1")));
+			mapRes.put("pointMulti2Sem1", StringUtils.stringFromList(mapPoint.get("pointMulti2Sem1")));
+			mapRes.put("pointMulti3Sem1", StringUtils.stringFromList(mapPoint.get("pointMulti3Sem1")));
+			mapRes.put("pointAvgSem1", bd1.doubleValue());
+			
+			totalPoint = 0;
+			totalPoint += CalculatorUtil.sumPointFromList(mapPoint.get("pointMulti1Sem2"), 1);
+			totalPoint += CalculatorUtil.sumPointFromList(mapPoint.get("pointMulti2Sem2"), 2);
+			totalPoint += CalculatorUtil.sumPointFromList(mapPoint.get("pointMulti3Sem2"), 3);
+			double avg2 = totalPoint / (mapPoint.get("pointMulti1Sem1").size() + mapPoint.get("pointMulti2Sem1").size() * 2 + mapPoint.get("pointMulti3Sem1").size() * 3);
+			BigDecimal bd2 = new BigDecimal(avg2).setScale(2, RoundingMode.HALF_UP);
+
+			mapRes.put("pointMulti1Sem2", StringUtils.stringFromList(mapPoint.get("pointMulti1Sem2")));
+			mapRes.put("pointMulti2Sem2", StringUtils.stringFromList(mapPoint.get("pointMulti2Sem2")));
+			mapRes.put("pointMulti3Sem2", StringUtils.stringFromList(mapPoint.get("pointMulti3Sem2")));
+			mapRes.put("pointAvgSem2", bd2.doubleValue());
+			
+			avg2 += avg1;
+			bd2 = new BigDecimal(avg2 / 2).setScale(2, RoundingMode.HALF_UP);
+			mapRes.put("pointAvgTotal",bd2.doubleValue() );
+			lstRes.add(mapRes);
+		});
+		return lstRes;
     }
 }
