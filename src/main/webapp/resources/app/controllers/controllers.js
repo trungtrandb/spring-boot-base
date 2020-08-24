@@ -66,7 +66,7 @@
                 }else{
                     toastr.error(response.message);                   
                 }
-            },function (argument) {
+            },function (response) {
              toastr.error(response.message);
          });
         }

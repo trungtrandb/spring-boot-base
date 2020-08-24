@@ -17,7 +17,7 @@ public class OrganizationService extends BaseService{
 	public boolean authorizeOrg(Long orgId) {
 		if(orgId == null) return true;
 		Organization org = getCurrentOrganization();
-		return org.getUser().getId().equals(orgId);
+		return org.getUser().getId().equals(getCurrentId());
 	}
 
 	
