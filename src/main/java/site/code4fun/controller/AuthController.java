@@ -1,5 +1,6 @@
 package site.code4fun.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +28,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 @RestController
+@Slf4j
 public class AuthController {
 
 	private final AuthenticationManager authenticationManager;
@@ -63,8 +65,8 @@ public class AuthController {
 			Files.write(path, file.getBytes(), StandardOpenOption.CREATE);
 			return ResponseEntity.ok(new ResponseDTO(200, imagePath));
 		} catch (IOException e) {
-			e.printStackTrace();
-			return ResponseEntity.ok(new ResponseDTO(500, null));
+			log.error(e.getMessage());
+			return ResponseEntity.ok(new ResponseDTO(500, e.getMessage()));
 		}
 	}
 }

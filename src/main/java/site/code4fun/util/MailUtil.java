@@ -41,7 +41,6 @@ public class MailUtil{
 				Map<String, String> map = new Gson().fromJson(messageData, Map.class);
 				sendmail(map.get("receiver"), map.get("subject"), map.get("content"));
 			} catch (Exception e) {
-				e.printStackTrace();
 				sendmail("trungtrandb@gmail.com", "Lỗi send mail Edu", e.getMessage());
 			}
         }

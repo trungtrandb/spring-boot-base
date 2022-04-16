@@ -8,6 +8,7 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,9 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class FirebaseAdmin {
-	
+
 	private static FirebaseMessaging firebaseMessage;
 	static {
 		try {
@@ -31,7 +33,7 @@ public class FirebaseAdmin {
 			FirebaseApp app = FirebaseApp.initializeApp(options);
 			firebaseMessage = FirebaseMessaging.getInstance(app);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 	}
 	
