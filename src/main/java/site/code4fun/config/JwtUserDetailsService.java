@@ -12,16 +12,20 @@ import site.code4fun.repository.UserRepository;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService{
-	
+
+	private final UserRepository userRepository;
+
 	@Autowired
-	UserRepository userRepository;
+	public JwtUserDetailsService(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		site.code4fun.entity.User user = userRepository.findByUserName(userName);
 		if(user == null) throw new UsernameNotFoundException(userName);
-		if(user.getStatus().equalsIgnoreCase(Status.PENDING)) {
-			user.setStatus(Status.ACTIVE);
+		if(user.getStatus().equalsIgnoreCase(Status.PENDING.name())) {
+			user.setStatus(Status.ACTIVE.name());
 			userRepository.save(user);
 		}
 		

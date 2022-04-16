@@ -1,30 +1,36 @@
 server:
-  port: 8000
+  port: 80
 
-springdoc:
-  swagger-ui:
-    path: /doc/api
-  api-docs: 
-    path: /doc/api-docs
+#springdoc:
+#  swagger-ui:
+#    path: /doc/api
+#  api-docs:
+#    path: /doc/api-docs
 
 spring:
   application:
-    name: spring-cloud-service
+    name: spring-boot-auth
+  main:
+    allow-circular-references: true
+  sql:
+    init:
+      mode: never #ALWAYS, EMBEDDED, NEVER; change to always to auto generation data.sql
   jpa:
+    defer-datasource-initialization: true
     properties:
       hibernate.format_sql: true
-#      hibernate.dialect: org.hibernate.dialect.MySQL55Dialect
+      hibernate.dialect: org.hibernate.dialect.MySQL55Dialect
     show-sql: true
     open-in-view: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://35.240.181.244:3306/test?noAccessToProcedureBodies=true&useSSL=false
-    username: demo
-    password: ruFrV4S`]`_)?xJ%q{^F
+    url: jdbc:mysql://localhost:3306/mySchema?noAccessToProcedureBodies=true&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: password
 #  activemq:
 #    user: admin
 #    password: admin

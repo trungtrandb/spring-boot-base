@@ -1,34 +1,26 @@
 package site.code4fun.entity;
 
-import java.sql.Timestamp;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import java.sql.Timestamp;
 
 @Entity 
 @Table(name = "tblUser")
 @Data
 @AllArgsConstructor
 @SuperBuilder
+@NoArgsConstructor
 public class User{
-	
-	public User() {}
-	
+
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
@@ -49,7 +41,9 @@ public class User{
     @Email
     @NotBlank(message = "Email không đúng định dạng")
     protected String email;
-    protected int gender;    
+
+    @Column(columnDefinition = "int default 0")
+    protected Integer gender;
     protected String address;    
     protected String phone;
     
@@ -80,10 +74,4 @@ public class User{
     
     @Column(name = "avatar")
     protected String avatar;
-    
-    @Transient
-    protected Long organizationId;
-    
-    @Transient
-    protected String rePass;
 }

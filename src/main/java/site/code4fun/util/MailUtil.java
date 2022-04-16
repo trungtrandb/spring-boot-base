@@ -29,7 +29,7 @@ public class MailUtil{
     }
 
 	@JmsListener(destination = "mail.queue")
-    private void sendMail(final javax.jms.Message jsonMessage) throws JMSException {
+    private void sendMailFromQueue(final javax.jms.Message jsonMessage) throws JMSException {
         if(jsonMessage instanceof TextMessage) {
             try {
             	TextMessage textMessage = (TextMessage)jsonMessage;

@@ -1,27 +1,25 @@
 package site.code4fun.util;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
+import site.code4fun.entity.UserPrincipal;
+import site.code4fun.entity.dto.AccessTokenResponseDTO;
+
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import site.code4fun.entity.AccessTokenResponse;
-import site.code4fun.entity.UserPrincipal;
-
 @Component
 public class JwtTokenUtil implements Serializable {
 	private static final long serialVersionUID = -2550185165626007488L;
-	public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
-	private String secret = "2550185165626007488L";
+	public static final int JWT_TOKEN_VALIDITY = 5 * 3600;
+	private static final String SECRET = "2550185165626007488L";
 
 	public String getUsernameFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
@@ -37,7 +35,7 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	private Claims getAllClaimsFromToken(String token) {
-		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+		return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
 	}
 
 	public Boolean isTokenExpired(String token) {
@@ -45,7 +43,7 @@ public class JwtTokenUtil implements Serializable {
 		return expiration.before(new Date());
 	}
 
-	public AccessTokenResponse generateToken(UserPrincipal user) {
+	public AccessTokenResponseDTO generateToken(UserPrincipal user) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("id", user.getId());
 		claims.put("fullName", user.getFullName());
@@ -57,26 +55,25 @@ public class JwtTokenUtil implements Serializable {
 				.setSubject(user.getUsername())
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-				.signWith(SignatureAlgorithm.HS512, secret)
+				.signWith(SignatureAlgorithm.HS512, SECRET)
 				.compact();
 		
-		return AccessTokenResponse.builder()
+		return AccessTokenResponseDTO.builder()
 				.token(token)
 				.build();
 	}
 
 
-	public Boolean validateToken(String token, UserDetails userDetails) {
-		final String username = getUsernameFromToken(token);
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+	public Boolean isValidToken(String token) {
+		return !isTokenExpired(token);
 	}
 	
 	public UserPrincipal getUserPrincipalFromToken(String token) {
-		Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+		Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
 		
 		return UserPrincipal.builder()
 				.id(((Number) claims.get("id")).longValue())
-				.authorities(Arrays.asList(new SimpleGrantedAuthority(claims.get("role").toString())))
+				.authorities(Collections.singletonList(new SimpleGrantedAuthority(claims.get("role").toString())))
 				.role(claims.get("role").toString())
 				.username(claims.getSubject())
 				.build();

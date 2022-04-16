@@ -1,15 +1,14 @@
 package site.code4fun.mapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
-
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import site.code4fun.constant.Status;
 import site.code4fun.entity.User;
 import site.code4fun.entity.UserPrincipal;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
 
 public class UserMapper implements RowMapper<User>{
 	
@@ -20,7 +19,7 @@ public class UserMapper implements RowMapper<User>{
 				.id(user.getId())
 				.fullName(user.getFullName())
 				.avatar(user.getAvatar())
-				.authorities(Arrays.asList(new SimpleGrantedAuthority(user.getRole().toString())))
+				.authorities(Collections.singletonList(new SimpleGrantedAuthority(user.getRole())))
 				.role(user.getRole())
 				.isAccountNonLocked(!user.getStatus().equals(Status.LOCK))
 				.build();
@@ -39,7 +38,6 @@ public class UserMapper implements RowMapper<User>{
 				.fullName(rs.getString("full_name"))
 				.phone(rs.getString("phone"))
 				.username(rs.getString("user_name"))
-				.organizationId(rs.getLong("organization_id"))
 				.build();
 	}
 }

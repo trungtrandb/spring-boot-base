@@ -19,8 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import site.code4fun.filter.JwtRequestFilter;
-
 @Configuration
 @EnableWebSecurity
 @EnableCaching
@@ -28,14 +26,20 @@ import site.code4fun.filter.JwtRequestFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Autowired
-	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	
-	@Autowired
-	private UserDetailsService userDetailsService;
+	private final UserDetailsService userDetailsService;
 	
+	private final JwtRequestFilter jwtRequestFilter;
+
 	@Autowired
-	private JwtRequestFilter jwtRequestFilter;
+	public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+						  UserDetailsService userDetailsService,
+						  JwtRequestFilter jwtRequestFilter){
+		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+		this.userDetailsService = userDetailsService;
+		this.jwtRequestFilter = jwtRequestFilter;
+	}
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -63,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.csrf().disable()
 			.authorizeRequests()
-			.antMatchers("/api/**").authenticated()	
+//			.antMatchers("/api/**").authenticated()
 			.anyRequest().permitAll().and()
 			.formLogin().disable()
 			.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
