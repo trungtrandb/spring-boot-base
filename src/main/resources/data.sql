@@ -1,3 +1,5 @@
-# INSERT into tblUser(address, avatar, created_by, created_date, email, full_name, gender, identity_card, oauth2_id, oauth2_provider, pass_word, phone, role, status, updated_by, updated_date, user_name) VALUES
-# (null, null, null, NOW(), 'trungtrandb@gmail.com', 'TrungTQ', 1, null, null, null, '$2a$10$TlALWvTp2CWGzNET9bJUwe13UPZraNkQGoyfzqiZynJVIt1wa1Ktm', null, 'ROLE_ADMIN', 'ACTIVE', null, NOW(), 'root')
-INSERT INTO tblUser(user_name, pass_word, role, status, created_date, full_name, email) value ('trungtq', '$2a$10$TlALWvTp2CWGzNET9bJUwe13UPZraNkQGoyfzqiZynJVIt1wa1Ktm','ROLE_ADMIN', 'ACTIVE',NOW(), 'TrungTQ', 'trungtrandb@gmail.com')
+INSERT INTO Role(name) values ('ROLE_ADMIN'), ('ROLE_USER');
+INSERT INTO Privilege(name) values ('READ'), ('WRITE'), ('DELETE');
+INSERT INTO roles_privileges(role_id, privilege_id) values (1, 1), (1, 2);
+INSERT INTO User(username, password, status, created, full_name, email) value ('trungtrandb@gmail.com', '$2a$10$TlALWvTp2CWGzNET9bJUwe13UPZraNkQGoyfzqiZynJVIt1wa1Ktm', 'ACTIVE',NOW(), 'TrungTQ', 'trungtrandb@gmail.com');
+INSERT INTO users_roles(user_id, role_id) values (1, 1), (1, 2);

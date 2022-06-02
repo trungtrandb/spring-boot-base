@@ -1,11 +1,11 @@
 package site.code4fun;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class BcryptTest {
 	public static void main(String[] args) {

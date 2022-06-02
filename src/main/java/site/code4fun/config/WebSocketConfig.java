@@ -101,6 +101,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 			return true;
 		}
 		return false;
-
 	}
 }

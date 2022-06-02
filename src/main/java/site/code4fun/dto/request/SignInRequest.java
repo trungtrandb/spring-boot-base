@@ -1,11 +1,10 @@
-package site.code4fun.entity;
+package site.code4fun.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class SignInRequest {
-	private String username;
+	private String email;
 	private String password;
-	private String deviceToken;
 }

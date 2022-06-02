@@ -1,16 +1,15 @@
-package site.code4fun.entity;
-
-import java.util.Collection;
-import java.util.Collections;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+package site.code4fun.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import site.code4fun.model.Role;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /* Author: TrungTQ
  * Chỉ dùng để phần quyền authen, không dùng cho việc khác
@@ -36,20 +35,20 @@ public class UserPrincipal implements UserDetails {
 	
 	@Builder.Default
 	private Collection<? extends GrantedAuthority> authorities = Collections.emptyList();
-	
+
 	@Builder.Default
 	private boolean isAccountNonExpired = true;
-	
+
 	@Builder.Default
 	private boolean isEnabled = true;
-	
+
 	@Builder.Default
 	private boolean isAccountNonLocked = true ;
-	
+
 	@Builder.Default
 	private boolean isCredentialsNonExpired = true;
-	private String role;
-	
+	private Collection<Role> roles;
+
 	
 	public void setUsername(String username) {
 		this.username = username;
@@ -115,12 +114,12 @@ public class UserPrincipal implements UserDetails {
 	}
 
 
-	public String getRole() {
-		return role;
+	public Collection<Role> getRoles() {
+		return roles;
 	}
 	
-	public void setRole(String role) {
-		this.role = role;
+	public void setRoles(Collection<Role> role) {
+		this.roles = role;
 	}
 	
 	public Long getId() {
