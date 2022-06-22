@@ -37,6 +37,9 @@ public class UserDTO{
 	@JMap
 	private String address;
 
+	@JMap
+	private Integer gender;
+
 	@JMapConversion(from={"roles"}, to={"roles"})
 	public String conversion(Set<Role> roles){
 		this.roleIds = roles.stream().map(Role::getId).collect(Collectors.toList());

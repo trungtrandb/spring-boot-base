@@ -22,4 +22,5 @@ public class UserRequest {
     private String password;
     private String address;
     private List<Long> roles;
+    private Integer gender;
 }

@@ -144,6 +144,14 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>appengine-maven-plugin</artifactId>
+				<configuration>
+					<deploy.projectId>fir-auth-2ab97</deploy.projectId>
+					<deploy.version>something</deploy.version>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>
