@@ -16,7 +16,7 @@ public class UserDTO{
 	private Long id;
 
 	@JMap
-	private String userName;
+	private String username;
 
 	@JMap
 	private String fullName;

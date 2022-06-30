@@ -1,0 +1,59 @@
+<form [formGroup]="form">
+    <nb-card>
+        <nb-card-header>{{ isCreate ? "Create" : "Edit" }} Post</nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="label">Name</label>
+                        <input type="text" nbInput fullWidth required formControlName="name"/>
+                        <div *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)" class="text-danger">
+                            <div *ngIf="form.controls['name'].errors?.['required']">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="label">Slug</label>
+                        <input type="text" nbInput fullWidth formControlName="slug" readonly/>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="label">Category</label>
+                        <nb-select formControlName="categoryId" fullWidth>
+                            <nb-option *ngFor="let option of categorySelections | async" [value]="option.value">
+                                {{ option.label }}
+                            </nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="label">Status</label>
+                        <nb-radio-group formControlName="status">
+                            <nb-radio value='ACTIVE'>Active</nb-radio>
+                            <nb-radio value='DRAFT'>Draft</nb-radio>
+                        </nb-radio-group>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="label">Content</label>
+                        <ngx-tiny-mce [content]="form.controls['content'].value"
+                            (editorKeyup)="onContentChange($event)"></ngx-tiny-mce>
+                    </div>
+                </div>
+            </div>
+
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton outline shape="rectangle" (click)="save()" status="primary">Save</button>
+            <button nbButton outline shape="rectangle" (click)="delete()" status="danger"
+                [hidden]="isCreate">Delete</button>
+            <button nbButton outline shape="rectangle" (click)="close()" status="basic">Cancel</button>
+        </nb-card-footer>
+    </nb-card>
+</form>

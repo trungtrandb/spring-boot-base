@@ -6,7 +6,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import site.code4fun.model.User;
 import site.code4fun.repository.UserRepository;
-import site.code4fun.service.impl.UserServiceImpl;
 
 @ExtendWith(MockitoExtension.class) // JUnit 5
 class UserServiceTest {
@@ -15,7 +14,7 @@ class UserServiceTest {
     UserRepository repository;
 
     @InjectMocks
-    UserServiceImpl service;
+    UserService service;
 
     User user;
 

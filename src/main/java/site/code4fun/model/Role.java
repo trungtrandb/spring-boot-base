@@ -2,8 +2,10 @@ package site.code4fun.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import site.code4fun.constant.AppConstants;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -12,6 +14,8 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = AppConstants.TABLE_PREFIX + "Role")
+@Builder
 public class Role {
 
     @Id
@@ -26,7 +30,7 @@ public class Role {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "roles_privileges",
+            name = AppConstants.TABLE_PREFIX + "Roles_privileges",
             joinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(

@@ -1,20 +1,22 @@
 package site.code4fun.service;
 
-import org.springframework.data.domain.Page;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import site.code4fun.model.Role;
+import site.code4fun.repository.RoleRepository;
 
-import java.util.List;
 
-public interface RoleService {
-    List<Role> getAll();
+@Service
+@Slf4j
+public class RoleService implements BaseService<Role, Long>{
 
-    Page<Role> getPaging(int page, int size, String sortDir, String sort, String query);
+    @Getter
+    private final RoleRepository repository;
 
-    void update(Role role);
-
-    Role create(Role role);
-
-    boolean delete(Long id);
-
-    Role getById(Long id);
+    @Autowired
+    public RoleService(RoleRepository repository){
+        this.repository = repository;
+    }
 }

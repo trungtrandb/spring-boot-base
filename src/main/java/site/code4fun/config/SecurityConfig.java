@@ -1,13 +1,11 @@
 package site.code4fun.config;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
@@ -22,15 +20,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import site.code4fun.model.User;
 
 @Configuration
 @EnableWebSecurity
 //@EnableCaching
 //@EnableScheduling
+@EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -72,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.csrf().disable()
 			.authorizeRequests()
 			.antMatchers(HttpMethod.OPTIONS).permitAll()
-			.antMatchers("**/test/**").permitAll()
+			.antMatchers("/test/**").permitAll()
 			.antMatchers("/auth/**", "/doc/**").permitAll()
 			.anyRequest().authenticated().and()
 			.formLogin().disable()
@@ -85,36 +81,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new ModelMapper();
 	}
 
-}
-
-@Configuration
-@EnableWebMvc
-class WebConfig implements WebMvcConfigurer {
-
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedMethods("*");
-	}
-
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-		registry.addResourceHandler("swagger-ui.html")
-				.addResourceLocations("classpath:/META-INF/resources/");
-
-		registry.addResourceHandler("/webjars/**")
-				.addResourceLocations("classpath:/META-INF/resources/webjars/");
-	}
-
 	@Bean
-	public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
-		return new OpenAPI().info(new Info()
-				.title("Foobar API")
-				.version(appVersion)
-				.description("This is a sample Foobar server created using springdocs - " +
-						"a library for OpenAPI 3 with spring boot.")
-				.termsOfService("http://swagger.io/terms/")
-				.license(new License().name("Apache 2.0")
-						.url("http://springdoc.org")));
+	public AuditorAware<User> auditorProvider() {
+		return new AuditorAwareImpl();
 	}
 }

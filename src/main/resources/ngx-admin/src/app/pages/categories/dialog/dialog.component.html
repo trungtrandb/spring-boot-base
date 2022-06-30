@@ -1,0 +1,32 @@
+<form [formGroup]="form">
+    <nb-card>
+        <nb-card-header>{{ isCreate ? "Create" : "Edit" }} Category</nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label class="label">Category Name</label>
+                        <input type="text" nbInput fullWidth formControlName="name"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="label">Status</label>
+                        <nb-radio-group formControlName="status">
+                            <nb-radio checked='true' value='ACTIVE'>Active</nb-radio>
+                            <nb-radio value='DRAFT'>Draft</nb-radio>
+                          </nb-radio-group>
+                    </div>
+                </div>
+            </div>
+
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton outline shape="rectangle" (click)="save()" status="primary">Save</button>
+            <button nbButton outline shape="rectangle" (click)="delete()" status="danger" [hidden]="isCreate" >Delete</button>
+            <button nbButton outline shape="rectangle" (click)="close()" status="basic">Cancel</button>
+        </nb-card-footer>
+    </nb-card>
+</form>

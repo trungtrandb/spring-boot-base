@@ -1,0 +1,31 @@
+<form [formGroup]="form">
+    <nb-card>
+        <nb-card-header>{{ isCreate ? "Create" : "Edit" }} Role</nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label class="label">Role Name</label>
+                        <input type="text" nbInput fullWidth formControlName="name" placeholder="ROLE_ADMIN" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label class="label">Privileges: </label>
+                        <nb-select formControlName="privilegeIds" multiple fullWidth placeholder="" [(selected)]="selectedIds">
+                            <nb-option *ngFor="let option of privilegeSelections | async" [value]="option.value">
+                                {{ option.label }}
+                            </nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+            </div>
+
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton outline shape="rectangle" (click)="delete()" status="danger" [hidden]="isCreate" >Delete</button>
+            <button nbButton outline shape="rectangle" (click)="save()" status="primary">Save</button>
+            <button nbButton outline shape="rectangle" (click)="close()" status="basic">Cancel</button>
+        </nb-card-footer>
+    </nb-card>
+</form>

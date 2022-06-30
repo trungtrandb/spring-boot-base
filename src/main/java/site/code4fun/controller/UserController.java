@@ -71,11 +71,6 @@ public class UserController {
 		return userMapper.getDestination(source);
 	}
 
-	private User convertToEntity(UserDTO source) {
-		JMapper<User, UserDTO> userMapper = new JMapper<>(User.class, UserDTO.class);
-		return userMapper.getDestination(source);
-	}
-
 	private User convertRequestToEntity(UserRequest source) {
 		User u = modelMapper.map(source, User.class);
 		if (isNotEmpty(source.getRoles())){

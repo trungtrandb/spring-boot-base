@@ -7,7 +7,7 @@ import site.code4fun.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 
-	User findByUserName(String userName);
+	User findByUsername(String userName);
 
-	Page<User> findByIdOrUserNameContainsOrFullNameContains(long id, String userName, String fullName, Pageable page);
+	Page<User> findByIdOrUsernameContainsOrFullNameContains(long id, String userName, String fullName, Pageable page);
 }

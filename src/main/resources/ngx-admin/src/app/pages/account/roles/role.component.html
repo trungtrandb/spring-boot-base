@@ -1,0 +1,18 @@
+<div class="btn-group">
+  <button nbButton status="primary" outline (click)="create()">
+    Create Role
+  </button>
+</div>
+<input
+  nbInput
+  #search
+  (keydown.enter)="onSearch(search.value)"
+  class="search"
+  type="text"
+  placeholder="Search..."
+/>
+<ng2-smart-table
+  [settings]="settings"
+  [source]="source"
+  (userRowSelect)="onRowSelect($event)"
+></ng2-smart-table>

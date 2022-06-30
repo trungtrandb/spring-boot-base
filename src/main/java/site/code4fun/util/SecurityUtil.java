@@ -1,15 +1,16 @@
 package site.code4fun.util;
 
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import site.code4fun.dto.UserPrincipal;
+import site.code4fun.model.User;
 
 public class SecurityUtil {
-    public synchronized static UserPrincipal getUser(){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public synchronized static User getUser(){
+        if (SecurityContextHolder.getContext().getAuthentication() != null){
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (principal instanceof UserDetails) {
-            return (UserPrincipal) principal;
+            if (principal instanceof User) {
+                return (User) principal;
+            }
         }
         return null;
     }

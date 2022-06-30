@@ -13,18 +13,17 @@ spring:
     name: spring-boot-auth
   main:
     allow-circular-references: true
-  sql:
-    init:
-      mode: always #ALWAYS, EMBEDDED, NEVER; change to always to auto generation data.sql
+#  sql:
+#    init:
+#      mode: never #ALWAYS, EMBEDDED, NEVER; change to always to auto generation data.sql
   jpa:
-    defer-datasource-initialization: true
     properties:
       hibernate.format_sql: true
       hibernate.dialect: org.hibernate.dialect.MySQL55Dialect
     show-sql: true
     open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   datasource:
@@ -32,10 +31,7 @@ spring:
     url: jdbc:mysql://35.232.15.111:3306/mySchema?noAccessToProcedureBodies=true&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: password
-#  activemq:
-#    user: admin
-#    password: admin
-#    broker-url: tcp://localhost:61616
+
   security:
     oauth2:
       client:
@@ -59,10 +55,3 @@ spring:
 vnpay:
   terminalId: 12186H5A
   secretKey: FMVUVYBYKIMOYLLMPJBBJVKEEKHWXPCS
-#logging:
-#    level:
-#      root: WARN
-  
-#    org.springframework: warn
-#    SpringBoot: warn
-#    org.apache.activemq: warn

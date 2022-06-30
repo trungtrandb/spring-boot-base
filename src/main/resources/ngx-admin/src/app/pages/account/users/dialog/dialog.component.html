@@ -1,0 +1,60 @@
+<form [formGroup]="form">
+    <nb-card>
+        <nb-card-header>{{ isCreate ? "Create" : "Edit" }} Role</nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="label">Full Name</label>
+                        <input type="text" nbInput fullWidth formControlName="fullName" placeholder="" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="label">Email</label>
+                        <input type="text" nbInput fullWidth formControlName="email" placeholder="" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="label">Password</label>
+                        <input type="password" nbInput fullWidth formControlName="password" placeholder="" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="label">Address</label>
+                        <input type="text" nbInput fullWidth formControlName="address" placeholder="" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="label">Gender</label>
+                        <nb-radio-group formControlName="gender">
+                            <nb-radio value='0'>Male</nb-radio>
+                            <nb-radio value='1'>Female</nb-radio>
+                          </nb-radio-group>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="label">Role</label>
+                        <nb-select formControlName="roles" multiple fullWidth placeholder="" [disabled]="!editableRole"
+                            [(selected)]="roleIds">
+                            <nb-option *ngFor="let option of roleSelections | async" [value]="option.value">
+                                {{ option.label }}
+                            </nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+
+            </div>
+
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton outline shape="rectangle" (click)="save()" status="primary">Save</button>
+            <button nbButton outline shape="rectangle" (click)="close()" status="basic">Cancel</button>
+            <button nbButton outline shape="rectangle" (click)="delete()" status="danger" [hidden]="isCreate">Delete</button>
+        </nb-card-footer>
+    </nb-card>
+</form>

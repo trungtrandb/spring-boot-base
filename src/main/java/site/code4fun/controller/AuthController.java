@@ -18,10 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 import site.code4fun.constant.AppConstants;
 import site.code4fun.dto.AccessTokenResponseDTO;
 import site.code4fun.dto.RoleDTO;
-import site.code4fun.dto.UserPrincipal;
 import site.code4fun.dto.request.SignInRequest;
 import site.code4fun.model.Privilege;
 import site.code4fun.model.Role;
+import site.code4fun.model.User;
 import site.code4fun.service.PrivilegeService;
 import site.code4fun.service.RoleService;
 import site.code4fun.util.JwtTokenUtil;
@@ -71,7 +71,7 @@ public class AuthController {
     public ResponseEntity<AccessTokenResponseDTO> createAuthenticationToken(@RequestBody SignInRequest authenticationRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        User userPrincipal = (User) authentication.getPrincipal();
         return ResponseEntity.ok(jwtTokenUtil.generateToken(userPrincipal));
     }
 
@@ -79,7 +79,7 @@ public class AuthController {
     public ResponseEntity<AccessTokenResponseDTO> usingResponseEntityBuilderAndHttpHeaders(@RequestBody SignInRequest authenticationRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        User userPrincipal = (User) authentication.getPrincipal();
         AccessTokenResponseDTO responseDTO = jwtTokenUtil.generateToken(userPrincipal);
 
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -143,7 +143,7 @@ public class AuthController {
     }
 
     private Role convertToEntity(RoleDTO postDto) {
-        Role r = modelMapper.map(postDto, Role.class);;
+        Role r = modelMapper.map(postDto, Role.class);
         if (isNotEmpty(postDto.getPrivilegeIds())){
             Collection<Privilege> privileges = postDto.getPrivilegeIds().stream().map(Privilege::new).collect(Collectors.toCollection(HashSet::new));
             r.setPrivileges(privileges);

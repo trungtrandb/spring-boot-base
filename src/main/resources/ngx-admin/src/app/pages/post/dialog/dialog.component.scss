@@ -1,0 +1,12 @@
+nb-card {
+    width: 90vw;
+    height: 70vh;
+    
+    nb-card-footer {
+      display: flex;
+      justify-content: flex-end;
+      button {
+        margin-left: 10px;
+      }
+    }
+  }

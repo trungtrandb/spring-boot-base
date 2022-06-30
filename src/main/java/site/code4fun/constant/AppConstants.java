@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public interface AppConstants {
+    String TABLE_PREFIX = "";
     String TOKEN_COOKIE_NAME = "Token";
     int DEFAULT_PAGE_SIZE = 20;
     String DEFAULT_SORT_COLUMN = "id";
-    String DEFAULT_SORT_DIRECTION = "ASC";
     List<String> SORT_LIST = Arrays.asList("ASC", "DESC");
 }

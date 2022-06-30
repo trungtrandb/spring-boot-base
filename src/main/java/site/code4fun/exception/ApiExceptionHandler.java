@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import site.code4fun.dto.ErrorDTO;
+import site.code4fun.dto.ResponseDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -22,36 +22,36 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(IndexOutOfBoundsException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorDTO handleIndexOutOfBoundsException(Exception ex) {
-        return new ErrorDTO(ErrorDTO.Type.danger, "Error", 400, ex.getMessage(), null);
+    public ResponseDTO handleIndexOutOfBoundsException(Exception ex) {
+        return new ResponseDTO(ResponseDTO.Type.danger, "Error", 400, ex.getMessage(), null);
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorDTO handleNotFoundException(NotFoundException ex) {
-        return new ErrorDTO(null, "Not found", 404, ex.getMessage(), null);
+    public ResponseDTO handleNotFoundException(NotFoundException ex) {
+        return new ResponseDTO(ResponseDTO.Type.danger, "Not found", 404, ex.getMessage(), null);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorDTO handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseDTO handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
         List<FieldError> fieldErrors = result.getFieldErrors();
         Map<String, String> errorMess = fieldErrors.stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-        return new ErrorDTO(ErrorDTO.Type.danger, "Validation", 404, errorMess.toString(), null);
+        return new ResponseDTO(ResponseDTO.Type.danger, "Validation", 404, errorMess.toString(), null);
     }
 
     @ExceptionHandler({ValidationException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorDTO handleValidationException(ValidationException ex) {
-        return new ErrorDTO(ErrorDTO.Type.danger, "Validation", 404, ex.getMessage(), null);
+    public ResponseDTO handleValidationException(ValidationException ex) {
+        return new ResponseDTO(ResponseDTO.Type.danger, "Validation", 404, ex.getMessage(), null);
     }
 
 
     @ExceptionHandler(DuplicateException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorDTO handleDuplicateException(DuplicateException ex) {
-        return new ErrorDTO(ErrorDTO.Type.danger, "Duplicate", 404, ex.getMessage(), null);
+    public ResponseDTO handleDuplicateException(DuplicateException ex) {
+        return new ResponseDTO(ResponseDTO.Type.danger, "Duplicate", 404, ex.getMessage(), null);
     }
 
     /**
@@ -59,8 +59,8 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorDTO handleAllException(Exception ex, WebRequest request) {
+    public ResponseDTO handleAllException(Exception ex, WebRequest request) {
         ex.printStackTrace();
-        return new ErrorDTO(null, "Error", null, ex.getMessage(), null);
+        return new ResponseDTO(null, "Error", null, ex.getMessage(), null);
     }
 }
