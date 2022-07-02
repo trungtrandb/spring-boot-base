@@ -28,7 +28,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://35.232.15.111:3306/mySchema?noAccessToProcedureBodies=true&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/mySchema?noAccessToProcedureBodies=true&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: password
 
